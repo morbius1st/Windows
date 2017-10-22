@@ -1,20 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RevitAddIns>
   <AddIn Type="Command">
-    <Text>Command Windows</Text>
-    <Description>Some description for Windows</Description>
+    <Text>Windows</Text>
+    <Description>Windows</Description>
     <Assembly>Windows.dll</Assembly>
     <FullClassName>Windows.Command</FullClassName>
-    <ClientId>cddc371d-b4fa-4e4e-99df-42a2b0c9004b</ClientId>
-    <VendorId>com.typepad.thebuildingcoder</VendorId>
-    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+    <AddInId>3F7846DE-F843-418A-ABEA-A9F9A62E12E2</AddInId>
+    <VendorId>pro.cyberstudio</VendorId>
+    <VendorDescription>CyberStudio</VendorDescription>
+    <VisibilityMode>AlwaysVisible</VisibilityMode>
+    <Discipline>Any</Discipline>
   </AddIn>
-  <AddIn Type="Application">
-    <Name>Application Windows</Name>
-    <Assembly>Windows.dll</Assembly>
-    <FullClassName>Windows.App</FullClassName>
-    <ClientId>205119e0-9ac2-4809-a5ca-66a91b0feb45</ClientId>
-    <VendorId>com.typepad.thebuildingcoder</VendorId>
-    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
-  </AddIn>
+<!--  <AddIn Type="Application">-->
+<!--    <Name>Application Windows</Name>-->
+<!--    <Assembly>Windows.dll</Assembly>-->
+<!--    <FullClassName>Windows.App</FullClassName>-->
+<!--    <ClientId>205119e0-9ac2-4809-a5ca-66a91b0feb45</ClientId>-->
+<!--    <VendorId>com.typepad.thebuildingcoder</VendorId>-->
+<!--    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>-->
+<!--  </AddIn>-->
 </RevitAddIns>
