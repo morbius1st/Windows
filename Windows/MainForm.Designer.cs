@@ -82,6 +82,7 @@
 			this.Opacity = 0.7D;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "MainForm";
+			this.Activated += new System.EventHandler(this.MainForm_Activated);
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

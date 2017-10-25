@@ -1,12 +1,8 @@
 ﻿#region Using directives
-using System;
-using System.Collections.Generic;
+
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+
+using static Windows.WindowApiUtilities;
 
 #endregion
 
@@ -17,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Windows
 {
-//	class Extensions
-//	{
-//	}
+	//	class Extensions
+	//	{
+	//	}
 
-	static class RectangleExtensions
+	internal static class RectangleExtensions
 	{
 		// adjusts the size of the rectangle by a set amount
 		// adjustment is made so that a negative number is a
@@ -51,6 +47,15 @@ namespace Windows
 			r.Height = bottom - r.Top;
 
 			return r;
+		}
+	}
+
+	internal static class RectExtensions
+	{
+
+		public static Rectangle AsRectangle(this RECT r)
+		{
+			return new Rectangle(r.Left, r.Top, r.Right - r.Left, r.Bottom - r.Top);
 		}
 	}
 }

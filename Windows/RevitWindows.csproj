@@ -43,7 +43,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
       <HintPath>$(ProgramW6432)\Autodesk\Revit 2017\RevitAPI.dll</HintPath>
       <Private>False</Private>
@@ -53,10 +52,8 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -75,7 +72,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RevitWindow.cs" />
+    <Compile Include="WindowListingUtilities.cs" />
     <Compile Include="WindowManager.cs" />
+    <Compile Include="WindowApiUtilities.cs" />
+    <Compile Include="WindowUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Windows.addin">

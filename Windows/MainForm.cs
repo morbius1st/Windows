@@ -1,24 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlTypes;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Forms;
-
-using static Windows.Command;
 using Label = System.Windows.Forms.Label;
-using SystemColors = System.Windows.SystemColors;
+
+using static Windows.WindowListingUtilities;
 
 namespace Windows
 {
 	public partial class MainForm : Form
 	{
-		internal Screen screen = null;
+//		internal Screen screen = null;
 
 		// this is the "theoritical box for the form - includes 
 		// a non-used area outside of the client area
@@ -31,17 +23,10 @@ namespace Windows
 		private WindowInfo[] _WiCurr;
 		private WindowInfo[] _WiProp;
 
-//		private Rectangle[] WinsCurr;
-//		private Label[] LblsCurr;
-//
-//		private Rectangle[] WinsProp;
-//		private Label[] LblsProp;
-
 		private struct WindowInfo
 		{
-			internal Rectangle rect;
-			internal Label label;
-			internal bool ismin;
+			internal Rectangle Rect;
+			internal Label Label;
 		}
 
 
@@ -87,11 +72,11 @@ namespace Windows
 			private Color ColorTransparent(int i)
 			{
 
-				return Color.FromArgb(128, colors[i]);
+				return Color.FromArgb(ALPHA, colors[i]);
 			}
 		}
 
-		private const int alpha = 64;
+		private const int ALPHA = 64;
 
 		internal static Color[] _colorsCurrent =
 		{
@@ -130,16 +115,23 @@ namespace Windows
 		public MainForm()
 		{
 			InitializeComponent();
-
-			screen = Screen.FromControl(this);
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			this.Location = new Point(0, 0);
-			this.Size = new Size(1920, 1200);
+			this.Location = new Point(Command.ScreenLayout.Left, Command.ScreenLayout.Top);
+			this.Size = new Size(Command.ScreenLayout.Width, Command.ScreenLayout.Height);
 
 			label1.Text = "";
+		}
+
+
+		private void MainForm_Activated(object sender, EventArgs e)
+		{
+//			this.Location = new Point(Command.ScreenLayout.Left, Command.ScreenLayout.Top);
+//			this.Size = new Size(Command.ScreenLayout.Width, Command.ScreenLayout.Height);
+//
+//			label1.Text = "";
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -156,11 +148,11 @@ namespace Windows
 
 			if (useCurrent)
 			{
-				sb.Append(ListChildrenCurrent(g));
+				sb.Append(ShowChildrenCurrent(g));
 			}
 			else
 			{
-				sb.Append(ListChildrenProposed(g));
+				sb.Append(ShowChildrenProposed(g));
 			}
 
 			label1.Text = sb.ToString();
@@ -172,97 +164,6 @@ namespace Windows
 			set { this.Text = value; }
 		}
 
-
-		string  ListChildrenCurrent(Graphics g)
-		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append("children windows| current|").Append(nl);
-
-			// draw the child rectangles
-			sb.Append(ListChildren(_WiCurr, g, _colorsCurr));
-			return sb.ToString();
-		}
-
-		string ListChildrenProposed(Graphics g)
-		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append("children windows| proposed|").Append(nl);
-
-			// draw the child rectangles
-			sb.Append(ListChildren(_WiProp, g, _colorsProp));
-
-			return sb.ToString();
-		}
-
-		StringBuilder ListChildren(WindowInfo[] wInfos, Graphics g, ColorChart cc)
-		{
-			StringBuilder sb = new StringBuilder();
-			Color color = cc.GetActiveAsTransparent;
-
-			cc.Reset();
-
-			foreach (WindowInfo wi in wInfos)
-			{
-				if (wi.rect.Width == 0) { continue; }
-
-				PlaceLabel(wi, color);
-				color = cc.Next();
-
-				sb.Append("      child rect|").Append(ListRect(wi.rect)).Append(nl);
-			}
-
-			return sb;
-		}
-
-		void PlaceLabel(WindowInfo wi, Color backColor)
-		{
-			Label l = wi.label;
-			Rectangle r = wi.rect;
-
-			l.Location = new Point(r.Left, r.Top);
-			l.BackColor = backColor;
-			l.Size = new Size(r.Width, r.Height);
-			l.Visible = true;
-		}
-
-		internal void SetChildCurr(int idx, Rectangle rect, string text, bool isMinimized)
-		{
-			VerifySize(rect);
-
-			if (idx >= _WiCurr.Length) { return; }
-			SetChildInfo(ref _WiCurr[idx], rect, text, isMinimized);
-		}
-
-		internal void SetChildProp(int idx, Rectangle rect, string text, bool isMinimized)
-		{
-			VerifySize(rect);
-
-			if (idx >= _WiProp.Length) { return; }
-			SetChildInfo(ref _WiProp[idx], rect, text, isMinimized);
-		}
-
-		private void VerifySize(Rectangle r)
-		{
-			if (r.Right > ParentRectClient.Right)
-			{
-				r = r.SetRight(ParentRectClient.Right);
-			}
-
-			if (r.Bottom > ParentRectClient.Bottom)
-			{
-				r = r.SetBottom(ParentRectClient.Bottom);
-			}
-		}
-
-		private void SetChildInfo(ref WindowInfo wi, Rectangle rect, string text, bool isMinimized)
-		{
-			wi.rect = rect;
-			wi.label.Text = text;
-			wi.ismin = isMinimized;
-		}
-
 		internal void MakeChildrenLabels(int count)
 		{
 			_WiCurr = new WindowInfo[count];
@@ -270,16 +171,16 @@ namespace Windows
 
 			for (int i = 0; i < count; i++)
 			{
-				_WiCurr[i].label = new Label();
-				SetLabel(_WiCurr[i].label);
-				_WiCurr[i].label.Name = $"current_{i}";
+				_WiCurr[i].Label = new Label();
+				SetLabel(_WiCurr[i].Label);
+				_WiCurr[i].Label.Name = $"current_{i}";
 
-				_WiProp[i].label = new Label();
-				SetLabel(_WiProp[i].label);
-				_WiCurr[i].label.Name = $"proposed_{i}";
+				_WiProp[i].Label = new Label();
+				SetLabel(_WiProp[i].Label);
+				_WiCurr[i].Label.Name = $"proposed_{i}";
 
-				this.Controls.Add(_WiCurr[i].label);
-				this.Controls.Add(_WiProp[i].label);
+				this.Controls.Add(_WiCurr[i].Label);
+				this.Controls.Add(_WiProp[i].Label);
 			}
 		}
 
@@ -294,13 +195,96 @@ namespace Windows
 			l.Visible = false;
 		}
 
-		// make labels invisible and restore state
 		void SetLabelsDefault(WindowInfo[] wInfos)
 		{
 			foreach (WindowInfo wi in wInfos)
 			{
-				SetLabel(wi.label);
+				SetLabel(wi.Label);
 			}
+		}
+
+		void PlaceLabel(WindowInfo wi, Color backColor)
+		{
+			Label l = wi.Label;
+			Rectangle r = wi.Rect;
+
+			l.Location = new Point(r.Left - Command.ScreenLayout.Left, r.Top - Command.ScreenLayout.Top);
+			l.BackColor = backColor;
+			l.Size = new Size(r.Width, r.Height);
+			l.Visible = true;
+		}
+
+		internal void SetChildCurr(int idx, Rectangle rect, string text, bool moveToFront = false)
+		{
+			if (idx >= _WiCurr.Length) { return; }
+
+			if (moveToFront)
+			{
+				this.Controls.SetChildIndex(_WiCurr[idx].Label, 0);
+			}
+			SetChildInfo(ref _WiCurr[idx], rect, text);
+		}
+
+		internal void SetChildProp(int idx, Rectangle rect, string text, bool moveToFront = false)
+		{
+			if (idx >= _WiProp.Length) { return; }
+
+			if (moveToFront)
+			{
+				this.Controls.SetChildIndex(_WiProp[idx].Label, 0);
+			}
+			SetChildInfo(ref _WiProp[idx], rect, text);
+		}
+
+		private void SetChildInfo(ref WindowInfo wi, Rectangle rect, string text)
+		{
+			wi.Rect = rect;
+			wi.Label.Text = text;
+		}
+
+		// make labels invisible and restore state
+
+		string  ShowChildrenCurrent(Graphics g)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append("children windows| current|").Append(nl);
+
+			// draw the child rectangles
+			sb.Append(ShowChildren(_WiCurr, g, _colorsCurr));
+			return sb.ToString();
+		}
+
+		string ShowChildrenProposed(Graphics g)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append("children windows| proposed|").Append(nl);
+
+			// draw the child rectangles
+			sb.Append(ShowChildren(_WiProp, g, _colorsProp));
+
+			return sb.ToString();
+		}
+
+		StringBuilder ShowChildren(WindowInfo[] wInfos, Graphics g, ColorChart cc)
+		{
+			StringBuilder sb = new StringBuilder();
+			Color color = cc.GetActiveAsTransparent;
+
+			cc.Reset();
+
+			foreach (WindowInfo wi in wInfos)
+			{
+				if (wi.Rect.Width == 0) { continue; }
+
+				PlaceLabel(wi, color);
+				color = cc.NextAsTransparent();
+
+				sb.Append("      child rect|").Append(ListRect(wi.Rect)).Append(nl);
+			}
+
+			return sb;
 		}
 	}
 }
