@@ -212,7 +212,7 @@ namespace Windows
 
 			if (ActiveWindow != IntPtr.Zero)
 			{
-				ShowWindow(ActiveWindow, ShowWinCmds.SW_SHOWNOACTIVATE);
+				ShowWindow(ActiveWindow, ShowWinCmds.SW_SHOWNORMAL);
 			}
 		}
 

@@ -338,7 +338,7 @@ namespace Windows
 		internal enum ShowWinCmds
 		{
 			SW_HIDE				= 0,
-			SW_NORMAL			= 1,
+			SW_SHOWNORMAL		= 1,
 			SW_SHOWMINIMIZED	= 2,
 			SW_MAXIMIZE			= 3, // is this the right value?
 			SW_SHOWMAXIMIZED	= 3,
