@@ -2,13 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using Rectangle = System.Drawing.Rectangle;
 
 using static Windows.Command;
 using static Windows.WindowApiUtilities;
 using static Windows.WindowListingUtilities;
+using static Windows.RevitWindow;
 
 #endregion
 
@@ -22,64 +26,12 @@ namespace Windows
 	class WindowUtilities
 	{
 
-		internal static Process GetRevit()
-		{
-			string mainWinTitle = _doc.Title.ToLower();
+		private static Rectangle _parentClientWindow;
+		private static Rectangle _displayRect;
+		private static int _titleBarHeight;
+		private static int _minWindowWidth;
+		private static int _minWindowHeight;
 
-			Process[] revits = Process.GetProcessesByName("Revit");
-			Process foundRevit = null;
-
-			if (revits.Length > 0)
-			{
-				foreach (Process revit in revits)
-				{
-					if (revit.MainWindowTitle.ToLower().Contains(mainWinTitle))
-					{
-						foundRevit = revit;
-						break;
-					}
-				}
-			}
-			else
-			{
-				foundRevit = revits[0];
-			}
-
-			return foundRevit;
-		}
-
-		internal static void GetSystemInfo(IntPtr parent, int titlebarheight)
-		{
-			logMsgln("   get win|    title bar height| " + titlebarheight);
-
-			logMsgln("sys metric| caption area height| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CYCAPTION));
-			logMsgln("sys metric|   sm caption height| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CYSMCAPTION));
-			logMsgln("sys metric|        border width| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CXBORDER));
-			logMsgln("sys metric|       border height| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CYBORDER));
-			logMsgln("sys metric|  fixed frame| horiz| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CXFIXEDFRAME));
-			logMsgln("sys metric|  fixed frame|  vert| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CYFIXEDFRAME));
-			logMsgln("sys metric|   size frame| horiz| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CXSIZEFRAME));
-			logMsgln("sys metric|   size frame|  vert| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CYSIZEFRAME));
-			logMsgln("sys metric|  window min| height| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CYMIN));
-			logMsgln("sys metric|  window min|  width| " + GetSystemMetrics(WindowApiUtilities.SystemMetric.SM_CXMIN));
-
-			// this works for getting the correct monitor and the
-			// correct monitor location and size
-			IntPtr hMonitor = MonitorFromWindow(parent, 0);
-
-			WindowApiUtilities.MONITORINFOEX mi = new WindowApiUtilities.MONITORINFOEX();
-			mi.Init();
-			GetMonitorInfo(hMonitor, ref mi);
-
-			logMsgln("monitor info|       device name| " + mi.DeviceName);
-			logMsgln("monitor info|      monitor rect| " + ListRect(mi.rcMonitor));
-			logMsgln("monitor info|    work area rect| " + ListRect(mi.rcWorkArea));
-			logMsgln("monitor info|  primary monitor?| " +
-				(mi.Flags == WindowApiUtilities.dwFlags.MONITORINFO_PRIMARY));
-
-			ScreenLayout = mi.rcWorkArea.AsRectangle();
-
-		}
 
 		// an AutoDesk rectangle from a system rectangle
 		internal static Autodesk.Revit.DB.Rectangle ConvertTo(Rectangle r)
@@ -118,124 +70,6 @@ namespace Windows
 			logMsg(message + nl);
 		}
 
-		internal static IntPtr GetMainWinHandle(Process revitProcess)
-		{
-			IntPtr parent = revitProcess.MainWindowHandle;
-			ListMainWinInfo(parent);
-			return parent;
-		}
-
-		internal static List<IntPtr> GetChildWindows(
-			IntPtr parent)
-		{
-			List<IntPtr> result = new List<IntPtr>();
-			GCHandle listHandle = GCHandle.Alloc(result);
-			try
-			{
-				WindowApiUtilities.EnumWindowProc childProc = new WindowApiUtilities.EnumWindowProc(EnumWindow);
-				EnumChildWindows(parent, childProc, GCHandle.ToIntPtr(listHandle));
-			}
-			finally
-			{
-				if (listHandle.IsAllocated)
-					listHandle.Free();
-			}
-			return result;
-		}
-
-		internal static bool GetRevitChildWindows(IntPtr parent)
-		{
-			List<IntPtr> children = GetChildWindows(parent);
-
-			if (children == null || children.Count == 0) { return false; }
-
-			foreach (IntPtr child in children)
-			{
-				WindowApiUtilities.WINDOWINFO wi = new WindowApiUtilities.WINDOWINFO(true);
-				GetWindowInfo(child, ref wi);
-
-				if ((wi.dwExStyle & (uint) WindowApiUtilities.WinStyleEx.WS_EX_MDICHILD) == 0) { continue; }
-
-				bool isMin = IsIconic(child);
-
-				StringBuilder winTitle = new StringBuilder(255);
-				GetWindowText(child, winTitle, 255);
-
-				Rectangle rectCurr = ValidateWindow(NewRectangle(wi.rcWindow));
-
-				RevitWindow rw = new RevitWindow
-				{
-					sequence = -1, // flag as not specified
-					handle = child, // handle to the window
-					docTitle = _doc.Title,
-					winTitle = winTitle.ToString(),
-					IsMinimized = isMin,
-					current = rectCurr,
-					proposed = Rectangle.Empty
-				};
-
-				if (isMin)
-				{
-					MinWindows.Add(rw);
-				}
-				else
-				{
-					ActWindows.Add(rw);
-				}
-			}
-			return true;
-		}
-
-		internal static Rectangle ValidateWindow(Rectangle r)
-		{
-
-			if (r.Left < ParentClientWindow.Left)
-			{
-				r.X = ParentClientWindow.Left;
-			}
-
-			if (r.Top < ParentClientWindow.Top)
-			{
-				r.Y = ParentClientWindow.Top;
-
-			}
-
-			if (r.Right > ParentClientWindow.Right)
-			{
-
-				r = r.SetRight(ParentClientWindow.Right);
-			}
-
-			if (r.Bottom > ParentClientWindow.Bottom)
-			{
-				r = r.SetBottom(ParentClientWindow.Bottom);
-			}
-			return r;
-		}
-
-		internal static int GetTitleBarHeight(IntPtr window)
-		{
-			WindowApiUtilities.TITLEBARINFO ti = new WindowApiUtilities.TITLEBARINFO();
-			ti.cbSize = (uint) Marshal.SizeOf(typeof(WindowApiUtilities.TITLEBARINFO));
-			GetTitleBarInfo(window, ref ti);
-
-			return ti.rcTitleBar.Bottom - ti.rcTitleBar.Top;
-		}
-
-		// adjusts the dimensions of the by the amount specified
-		// adjustment is made thus: 
-		// top & left += amount
-		// bottom & right -= amount
-		internal static Rectangle AdjustWindowRectangle(WindowApiUtilities.RECT rect, int amount)
-		{
-			rect.Top += amount;
-			rect.Left += amount;
-			rect.Bottom -= amount;
-			rect.Right -= amount;
-
-			return NewRectangle(rect);
-		}
-
 		internal static void SetupForm(IntPtr parent, Rectangle mainClientRect)
 		{
 			SetupFormMainClientRect(parent, mainClientRect);
@@ -244,32 +78,237 @@ namespace Windows
 
 		internal static void SetupFormMainClientRect(IntPtr parent, Rectangle mainClientRect)
 		{
-			_form.RevitMainWorkArea = mainClientRect;
+			MForm.RevitMainWorkArea = mainClientRect;
 
-			WindowApiUtilities.WINDOWINFO wip = new WindowApiUtilities.WINDOWINFO(true);
+			WINDOWINFO wip = new WINDOWINFO(true);
 			GetWindowInfo(parent, ref wip);
 
 			logMsgln("      win info win rect| " + ListRect(wip.rcWindow));
 			logMsgln("   win info client rect| " + ListRect(wip.rcClient));
 
-			_form.ParentRectForm = NewRectangle(wip.rcWindow);
-			_form.ParentRectClient = NewRectangle(wip.rcClient);
+			MForm.ParentRectForm = NewRectangle(wip.rcWindow);
+			MForm.ParentRectClient = NewRectangle(wip.rcClient);
 		}
 
 		internal static void SetupFormChildCurr()
 		{
 			int idx = 0;
 
-			foreach (RevitWindow rw in ActWindows)
+			foreach (RevitWindow rw in ChildWindows)
 			{
-				_form.SetChildCurr(idx++, rw.current, rw.winTitle);
+				MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle);
 			}
 
-			foreach (RevitWindow rw in MinWindows)
+			foreach (RevitWindow rw in ChildWinMinimized)
 			{
-				_form.SetChildCurr(idx++, rw.current, rw.winTitle, true);
+				MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle, true);
 			}
+
+			foreach (RevitWindow rw in ChildWinOther)
+			{
+				MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle);
+			}
+
+
 		}
+
+		internal static int GetTitleBarHeight(IntPtr parent)
+		{
+			double dpi = GetDpiForWindow(parent) / 96.0f;
+			int captionHeight = GetSystemMetrics(SystemMetric.SM_CYCAPTION);
+			int frameHeight = GetSystemMetrics(SystemMetric.SM_CYFRAME);
+			int addedBorderHeight = GetSystemMetrics(SystemMetric.SM_CXPADDEDBORDER);
+			//
+			//			TITLEBARINFO ti = new TITLEBARINFO();
+			//			ti.cbSize = (uint) Marshal.SizeOf(typeof(TITLEBARINFO));
+			//			GetTitleBarInfo(parent, ref ti);
+			//			return ti.rcTitleBar.Bottom - ti.rcTitleBar.Top;
+			return ((int) ((captionHeight + frameHeight) * dpi)) + addedBorderHeight;
+
+		}
+
+		internal static void GetScreenMetrics(IntPtr parent)
+		{
+			// determine the main client rectangle - the repositioned
+			// view window go here
+			_parentClientWindow = NewRectangle(UiApp.DrawingAreaExtents).Adjust(-2);
+			_titleBarHeight = GetTitleBarHeight(parent);
+			_displayRect = GetScreenRectFromWindow(parent);
+
+			_minWindowHeight = GetSystemMetrics(SystemMetric.SM_CYMIN);
+			_minWindowWidth = GetSystemMetrics(SystemMetric.SM_CXMIN);
+
+		}
+
+		internal static Rectangle ParentClientWindow => _parentClientWindow;
+		internal static Rectangle DisplayRect => _displayRect;
+		internal static int TitleBarHeight => _titleBarHeight;
+		internal static int MinWindowHeight => _minWindowHeight;
+		internal static int MinWindowWidth => _minWindowWidth;
+
+
+
+		internal static bool GetRevitChildWindows(IntPtr parent)
+		{
+			List<IntPtr> children = GetChildWindows(parent);
+			IList<View> views = GetRevitChildViews(UiDoc);
+
+			bool activeSet = false;
+
+			if (children == null || children.Count == 0) { return false; }
+
+			foreach (IntPtr child in children)
+			{
+				WINDOWINFO wi = new WINDOWINFO(true);
+				GetWindowInfo(child, ref wi);
+
+				if ((wi.dwExStyle & (uint) WinStyleEx.WS_EX_MDICHILD) == 0) { continue; }
+
+				StringBuilder winTitle = new StringBuilder(255);
+				GetWindowText(child, winTitle, 255);
+
+				string wTitle = winTitle.ToString().ToLower();
+
+				View v = FindView(views, wTitle);
+
+				if (v == null) { continue; }
+
+				// got a good window - store it for later
+
+				// create the revit window data
+				RevitWindow rw = new RevitWindow(child, v);
+
+//				rw.current = ValidateWindow(NewRectangle(wi.rcWindow));
+
+				if (rw.IsMinimized)
+				{
+					ChildWinMinimized.Add(rw);
+				}
+				else
+				{
+					// save the active window for later
+					if (ActiveWindow == IntPtr.Zero) { ActiveWindow = child;}
+
+					ChildWindows.Add(rw);
+				}
+			}
+
+			return true;
+		}
+
+		internal static void SortChildWindows()
+		{
+			sortChildWindows(ChildWinMinimized);
+			sortChildWindows(ChildWindows);
+			sortChildWindows(ChildWinOther);
+		}
+
+		internal static void sortChildWindows(List<RevitWindow> w)
+		{
+			if (w.Count == 0 || w.Count == 1) { return; }
+			w.Sort((a, b) => a.Sequence.CompareTo(b.Sequence));
+		}
+
+//		// adjust the current rectangle to be with in the bounds of the 
+//		// parent window
+//		internal static Rectangle ValidateWindow(Rectangle r)
+//		{
+//
+//			if (r.Left < ParentClientWindow.Left)
+//			{
+//				r.X = ParentClientWindow.Left;
+//			}
+//
+//			if (r.Top < ParentClientWindow.Top)
+//			{
+//				r.Y = ParentClientWindow.Top;
+//
+//			}
+//
+//			if (r.Right > ParentClientWindow.Right)
+//			{
+//				r = r.SetRight(ParentClientWindow.Right);
+//			}
+//
+//			if (r.Bottom > ParentClientWindow.Bottom)
+//			{
+//				r = r.SetBottom(ParentClientWindow.Bottom);
+//			}
+//			return r;
+//		}
+
+		internal static IList<UIView> GetRevitChildUiViews(UIDocument uidoc)
+		{
+			return uidoc.GetOpenUIViews();
+		}
+
+		internal static IList<View> GetRevitChildViews(UIDocument uidoc)
+		{
+			IList<UIView> uiViews = GetRevitChildUiViews(uidoc);
+
+			IList<View> views = new List<View>(uiViews.Count);
+
+			foreach (UIView u in uiViews)
+			{
+				views.Add((View) Doc.GetElement(u.ViewId));
+			}
+			return views;
+		}
+
+		internal static View FindView(IList<View> views, string WinTitle)
+		{
+			string test = WinTitle.ToLower();
+
+			foreach (View v in views)
+			{
+				if (test.Contains(v.Title.ToLower()))
+				{
+					return v;
+				}
+			}
+			return null;
+		}
+
+
+		internal static Dictionary<ViewType, int> ViewTypeOrder = 
+			new Dictionary<ViewType, int>();
+
+		internal int IndexOf(ViewType vt)
+		{
+			int order;
+			return ViewTypeOrder.TryGetValue(vt, out order) ? order : -1;
+		}
+
+		internal static void InitViewTypeOrderList()
+		{
+			int idx = 0;
+
+			ViewTypeOrder.Add(ViewType.FloorPlan, idx++);			//Floor plan type of view. 
+			ViewTypeOrder.Add(ViewType.EngineeringPlan, idx++);		//a Structural plan or Engineering plan type of view.
+			ViewTypeOrder.Add(ViewType.CeilingPlan, idx++);			//Reflected ceiling plan type of view.
+			ViewTypeOrder.Add(ViewType.Elevation, idx++);			//Elevation type of view.
+			ViewTypeOrder.Add(ViewType.Section, idx++);				//a Cross section type of view. 
+			ViewTypeOrder.Add(ViewType.DraftingView, idx++);		//Drafting type of view.
+			ViewTypeOrder.Add(ViewType.Detail, idx++);				//Detail type of view.
+			ViewTypeOrder.Add(ViewType.ThreeD, idx++);				//3D type of view.
+			ViewTypeOrder.Add(ViewType.Walkthrough, idx++);			//Walk-Through type of 3D view.
+			ViewTypeOrder.Add(ViewType.AreaPlan, idx++);			//an Area plan type of view. 
+			ViewTypeOrder.Add(ViewType.Legend, idx++);				//a Legend type of view.
+			ViewTypeOrder.Add(ViewType.Schedule, idx++);			//a Schedule type of view.
+			ViewTypeOrder.Add(ViewType.ColumnSchedule, idx++);		//Column Schedule type of view. 
+			ViewTypeOrder.Add(ViewType.Rendering, idx++);			//Rendering type of view.
+			ViewTypeOrder.Add(ViewType.Report, idx++);				//Report type of view.
+			ViewTypeOrder.Add(ViewType.CostReport, idx++);			//Cost Report view. 
+			ViewTypeOrder.Add(ViewType.LoadsReport, idx++);			//Loads Report view. 
+			ViewTypeOrder.Add(ViewType.PresureLossReport, idx++);	//Pressure Loss Report view.
+			ViewTypeOrder.Add(ViewType.DrawingSheet, idx++);		//Drawing sheet type of view. 
+			ViewTypeOrder.Add(ViewType.ProjectBrowser, idx++);		//The project browser view.
+			ViewTypeOrder.Add(ViewType.SystemBrowser, idx++);		//The MEP system browser view. 
+			ViewTypeOrder.Add(ViewType.PanelSchedule, idx++);		//Panel Schedule Report view.
+			ViewTypeOrder.Add(ViewType.Undefined, idx++);			//an Undefined/ unspecified type of view.
+			ViewTypeOrder.Add(ViewType.Internal, idx++);			//Revit's internal type of view
+		}
+
 
 	}
 }

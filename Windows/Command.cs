@@ -9,6 +9,8 @@ using Rectangle = System.Drawing.Rectangle;
 
 using static Windows.WindowUtilities;
 using static Windows.WindowListingUtilities;
+using static Windows.WindowApiUtilities;
+using static Windows.RevitWindow;
 
 #endregion
 
@@ -18,23 +20,13 @@ namespace Windows
 	public class Command : IExternalCommand
 	{
 		private const string MAIN_WINDOW_KEY = "Main :: Window";
-		
-		
 
-		internal static UIApplication _uiapp;
-		internal static UIDocument _uidoc;
+		private static UIApplication _uiapp;
+		private static UIDocument _uidoc;
 //		internal static Application _app;
-		internal static Document _doc;
+		private static Document _doc;
 
-		internal static MainForm _form;
-
-		// found child windows - active and minimized
-		internal static List<RevitWindow> ActWindows;
-		internal static List<RevitWindow> MinWindows;
-
-		internal static Rectangle ParentClientWindow;
-
-		internal static Rectangle ScreenLayout;
+		private static MainForm _form;
 
 
 		public Result Execute(
@@ -47,65 +39,51 @@ namespace Windows
 //			_app = _uiapp.Application;
 			_doc = _uidoc.Document;
 
-			ActWindows = new List<RevitWindow>(5);
-			MinWindows = new List<RevitWindow>(5);
-
-			WindowManager winMgr;
-
-			int WindowLayoutStyle = 0;
-			int titleBarHeight;
-
-			bool result;
+			// must be here to insure a blank list
+			ChildWindows = new List<RevitWindow>(5);
+			ChildWinMinimized = new List<RevitWindow>(5);
+			ChildWinOther = new List<RevitWindow>(5);
 
 			_form = new MainForm();
 
-			// get the revit process
-			Process revitProcess = GetRevit();
-			if (revitProcess == null) { return Result.Failed; }
+			int WindowLayoutStyle = 0;
 
-			// from the process, get the parent window handle
-			IntPtr parent = GetMainWinHandle(revitProcess);
+			IntPtr parent = GetMainWinHandle();
+			if (parent == IntPtr.Zero) { return Result.Failed; }
 
-			// determine the main client rectangle - the repositioned
-			// view window go here
-			ParentClientWindow = NewRectangle(_uiapp.DrawingAreaExtents).Adjust(-2);
-			titleBarHeight = GetTitleBarHeight(parent);
-
-			GetSystemInfo(parent, titleBarHeight);
+			GetScreenMetrics(parent);
 
 			// get the list of child windows
-			result = GetRevitChildWindows(parent);
+			if (!GetRevitChildWindows(parent))
+			{
+				return Result.Failed;
+			}
 
-			_form.MakeChildrenLabels(ActWindows.Count + MinWindows.Count);
+			logMsgln("windows before sort");
 
-			// these are just testing routines
-			//			ShowInfo(revitWindows, form, parent, mainClientRect);
-			//			ListAllChildWindows(parent);
-			ShowInfo(parent, ParentClientWindow);
+			ListChildWindowInfo();
 
+//			return Result.Cancelled;
+
+			SortChildWindows();
+
+			logMsgln("windows after sort");
+
+			ListChildWindowInfo();
 
 			// process and adjust the windows
-			winMgr = new WindowManager(parent, ParentClientWindow, titleBarHeight);
+			WindowManager winMgr = 
+				new WindowManager(parent);
 			winMgr.AdjustWindowLayout(WindowLayoutStyle);
 
 			return Result.Succeeded;
 		}
 
+		internal static UIDocument UiDoc => _uidoc;
+		internal static UIApplication UiApp => _uiapp;
+		internal static Document Doc => _doc;
 
-		void ShowInfo(IntPtr parent, Rectangle mainClientRect)
-		{
-			// list the child windows
-			ListChildWindowInfo();
-
-			// setup the information for the form
-			// show the form
-			WindowUtilities.SetupForm(parent, mainClientRect);
-
-			_form.useCurrent = true;
-			_form.ShowDialog(new WindowApiUtilities.WinHandle(parent));
-		}
-
-
+		internal static MainForm MForm => _form;
 
 	}
 }

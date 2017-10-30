@@ -1,13 +1,16 @@
 ﻿#region Using directives
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autodesk.Revit.DB;
+using Rectangle = System.Drawing.Rectangle;
+
 using static Windows.WindowUtilities;
 using static Windows.WindowListingUtilities;
+using static Windows.WindowApiUtilities.SystemMetric;
 
 #endregion
 
@@ -20,6 +23,27 @@ namespace Windows
 {
 	class WindowApiUtilities
 	{
+		internal static int GetMinWindowHeight()
+		{
+			return GetSystemMetrics(SM_CYMIN);
+		}
+
+
+		internal static Rectangle GetScreenRectFromWindow(IntPtr parent)
+		{
+			return GetMonitorInfo(parent).rcWorkArea.AsRectangle();
+		}
+
+		internal static MONITORINFOEX GetMonitorInfo(IntPtr parent)
+		{
+			IntPtr hMonitor = MonitorFromWindow(parent, 0);
+
+			MONITORINFOEX mi = new MONITORINFOEX();
+			mi.Init();
+			GetMonitorInfo(hMonitor, ref mi);
+
+			return mi;
+		}
 
 		public class WinHandle : IWin32Window
 		{
@@ -33,6 +57,61 @@ namespace Windows
 			}
 
 			public IntPtr Handle { get; }
+		}
+
+		internal static IntPtr GetMainWinHandle()
+		{
+			Process revitProcess = GetRevit(Command.Doc);
+
+			if (revitProcess == null) { return IntPtr.Zero; }
+
+			IntPtr parent = revitProcess.MainWindowHandle;
+			ListMainWinInfo(parent);
+			return parent;
+		}
+
+		internal static List<IntPtr> GetChildWindows(
+			IntPtr parent)
+		{
+			List<IntPtr> result = new List<IntPtr>();
+			GCHandle listHandle = GCHandle.Alloc(result);
+			try
+			{
+				EnumWindowProc childProc = new WindowApiUtilities.EnumWindowProc(EnumWindow);
+				EnumChildWindows(parent, childProc, GCHandle.ToIntPtr(listHandle));
+			}
+			finally
+			{
+				if (listHandle.IsAllocated)
+					listHandle.Free();
+			}
+			return result;
+		}
+
+		internal static Process GetRevit(Document doc)
+		{
+			string mainWinTitle = doc.Title.ToLower();
+
+			Process[] revits = Process.GetProcessesByName("Revit");
+			Process foundRevit = null;
+
+			if (revits.Length > 0)
+			{
+				foreach (Process revit in revits)
+				{
+					if (revit.MainWindowTitle.ToLower().Contains(mainWinTitle))
+					{
+						foundRevit = revit;
+						break;
+					}
+				}
+			}
+			else
+			{
+				foundRevit = revits[0];
+			}
+
+			return foundRevit;
 		}
 
 
@@ -59,7 +138,18 @@ namespace Windows
 		internal static extern bool IsIconic(IntPtr hWnd);
 
 		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		internal static extern bool IsZoomed(IntPtr hWnd);
+
+		[DllImport("user32.dll")]
 		internal static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		internal static extern bool ShowWindow(IntPtr hWnd, ShowWinCmds nCmdShow);
+
+		[DllImport("user32.dll")]
+		internal static extern int GetDpiForWindow(IntPtr parent);
 
 		[DllImport("user32.dll")]
 		internal static extern int GetSystemMetrics(SystemMetric smIndex);
@@ -153,7 +243,7 @@ namespace Windows
 		{
 			public int Length;
 			public int Flags;
-			public ShowWindowCommands ShowCmd;
+			public ShowWinCmds ShowCmd;
 			public POINT MinPosition;
 			public POINT MaxPosition;
 			public RECT NormalPosition;
@@ -206,7 +296,7 @@ namespace Windows
 			public void Init()
 			{
 				this.cbSize = 40 + 2 * CCHDEVICENAME;
-				this.DeviceName = string.Empty;
+				this.DeviceName = String.Empty;
 			}
 		}
 
@@ -245,22 +335,21 @@ namespace Windows
 			SWP_NOSENDCHANGING	= 0x0400,
 		}
 
-
-		internal enum ShowWindowCommands
+		internal enum ShowWinCmds
 		{
-			HIDE = 0,
-			NORMAL = 1,
-			SHOWMINIMIZED = 2,
-			MAXIMIZE = 3, // is this the right value?
-			SHOWMAXIMIZED = 3,
-			SHOWNOACTIVATE = 4,
-			SHOW = 5,
-			MINIMIZE = 6,
-			SHOWMINNOACTIVE = 7,
-			SHOWNA = 8,
-			RESTORE = 9,
-			SHOWDEFAULT = 10,
-			FORCEMINIMIZE = 11
+			SW_HIDE				= 0,
+			SW_NORMAL			= 1,
+			SW_SHOWMINIMIZED	= 2,
+			SW_MAXIMIZE			= 3, // is this the right value?
+			SW_SHOWMAXIMIZED	= 3,
+			SW_SHOWNOACTIVATE	= 4,
+			SW_SHOW				= 5,
+			SW_MINIMIZE			= 6,
+			SW_SHOWMINNOACTIVE	= 7,
+			SW_SHOWNA			= 8,
+			SW_RESTORE			= 9,
+			SW_SHOWDEFAULT		= 10,
+			SW_FORCEMINIMIZE	= 11
 		}
 
 		[Flags]
@@ -510,9 +599,9 @@ namespace Windows
 
 			for (int j = 0; j < offset; j++)
 			{
-				patt = string.Format("{{0,{0}}}", (78 + 7 * j));
+				patt = String.Format("{{0,{0}}}", (78 + 7 * j));
 
-				logMsg(string.Format(patt, ">  "));
+				logMsg(String.Format(patt, ">  "));
 				for (int i = j; i < num; i += offset)
 				{
 					if (i >= names.Length) { continue; }

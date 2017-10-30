@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Label = System.Windows.Forms.Label;
 
 using static Windows.WindowListingUtilities;
+using static Windows.WindowUtilities;
 
 namespace Windows
 {
@@ -119,8 +120,8 @@ namespace Windows
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			this.Location = new Point(Command.ScreenLayout.Left, Command.ScreenLayout.Top);
-			this.Size = new Size(Command.ScreenLayout.Width, Command.ScreenLayout.Height);
+			this.Location = new Point(DisplayRect.Left, DisplayRect.Top);
+			this.Size = new Size(DisplayRect.Width, DisplayRect.Height);
 
 			label1.Text = "";
 		}
@@ -208,7 +209,7 @@ namespace Windows
 			Label l = wi.Label;
 			Rectangle r = wi.Rect;
 
-			l.Location = new Point(r.Left - Command.ScreenLayout.Left, r.Top - Command.ScreenLayout.Top);
+			l.Location = new Point(r.Left - DisplayRect.Left, r.Top - DisplayRect.Top);
 			l.BackColor = backColor;
 			l.Size = new Size(r.Width, r.Height);
 			l.Visible = true;
@@ -225,7 +226,7 @@ namespace Windows
 			SetChildInfo(ref _WiCurr[idx], rect, text);
 		}
 
-		internal void SetChildProp(int idx, Rectangle rect, string text, bool moveToFront = false)
+		internal void SetChildProp(int idx, Rectangle rect, string text, bool moveToFront)
 		{
 			if (idx >= _WiProp.Length) { return; }
 
