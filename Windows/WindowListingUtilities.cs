@@ -159,10 +159,20 @@ namespace Windows
 			logMsgln("listing of found revit windows| active|");
 			logMsg(nl);
 
+			logMsgln("normal windows");
+
 			foreach (RevitWindow rw in ChildWindows)
 			{
 				ListChildWinInfo2(rw);
 			}
+
+			logMsgln("minimized windows");
+			foreach (RevitWindow rw in ChildWinMinimized)
+			{
+				ListChildWinInfo2(rw);
+			}
+
+			logMsgln(nl + "active window| " + ActiveWindow);
 		}
 
 		internal static void ListChildWinInfo(RevitWindow rw)
@@ -181,6 +191,7 @@ namespace Windows
 		internal static void ListChildWinInfo2(RevitWindow rw)
 		{
 			logMsgln("        child title| " + rw.WindowTitle);
+			logMsgln("       child handle| " + rw.Handle);
 			logMsgln("     child sequence| " + rw.Sequence);
 			logMsgln("     child ViewType| " + Enum.GetName(typeof(ViewType), rw.ViewType)
 				+ "  viewtype value| " + (int) rw.ViewType);

@@ -179,6 +179,7 @@ namespace Windows
 				RevitWindow rw = new RevitWindow(child, v);
 
 //				rw.current = ValidateWindow(NewRectangle(wi.rcWindow));
+				rw.current = NewRectangle(wi.rcWindow);
 
 				if (rw.IsMinimized)
 				{
