@@ -1,0 +1,8 @@
+B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\bin\Debug\Windows.dll
+B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\bin\Debug\Windows.pdb
+B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\Windows.csprojResolveAssemblyReference.cache
+B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\Windows.dll
+B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\Windows.pdb
+B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\Windows.MainForm.resources
+B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\Windows.csproj.GenerateResource.Cache
+B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\Windows.Properties.Resources.resources
