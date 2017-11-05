@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RevitAddIns>
   <AddIn Type="Command">
-    <Text>Windows</Text>
-    <Description>Windows</Description>
-    <Assembly>Windows.dll</Assembly>
-    <FullClassName>Windows.Command</FullClassName>
+    <Text>RevitWindows</Text>
+    <Description>RevitWindows</Description>
+    <Assembly>RevitWindows.dll</Assembly>
+    <FullClassName>RevitWindows.Command</FullClassName>
     <AddInId>3F7846DE-F843-418A-ABEA-A9F9A62E12E2</AddInId>
     <VendorId>pro.cyberstudio</VendorId>
     <VendorDescription>CyberStudio</VendorDescription>

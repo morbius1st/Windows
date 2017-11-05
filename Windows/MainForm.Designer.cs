@@ -1,4 +1,4 @@
-﻿namespace Windows
+﻿namespace RevitWindows
 {
 	partial class MainForm
 	{

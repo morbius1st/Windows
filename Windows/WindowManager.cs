@@ -1,14 +1,15 @@
 ﻿#region Using directives
+
 using System;
 using System.Collections.Generic;
-using Autodesk.Revit.DB;
-using static Windows.Command;
-using static Windows.WindowUtilities;
-using static Windows.WindowApiUtilities.DeferWinPos;
 using Rectangle = System.Drawing.Rectangle;
 
-using static Windows.WindowApiUtilities;
-using static Windows.RevitWindow;
+using static RevitWindows.RevitWindow;
+using static RevitWindows.WindowApiUtilities;
+using static RevitWindows.WindowUtilities;
+using static RevitWindows.WindowListingUtilities;
+using static RevitWindows.WindowManagerUtilities;
+using static RevitWindows.WindowApiUtilities.DeferWinPos;
 
 #endregion
 
@@ -17,35 +18,24 @@ using static Windows.RevitWindow;
 // created:		10/19/2017 8:34:36 PM
 
 
-namespace Windows
+namespace RevitWindows
 {
 	class WindowManager
 	{
 		private IntPtr _parent;
 
-		// given tenporary values
-		private int _marginLeft;
-		private int _marginTop;
-		private int _marginRight;
-		private int _marginBottom;
-
-		private int _offset;
 
 		public WindowManager(IntPtr parent)
 		{
 			_parent = parent;
-
-			_offset = (int) (1.5 * TitleBarHeight);
-
-			_marginLeft = 20;
-			_marginTop = 20;
-			_marginRight = 20;
-			_marginBottom = 20;
 	}
 
 		internal bool AdjustWindowLayout(int windowLayoutStyle)
 		{
 			bool result = false;
+			int row = 0;
+
+			InsureOneChildWindow();
 
 			switch (windowLayoutStyle)
 			{
@@ -54,17 +44,29 @@ namespace Windows
 					SortChildWindows();
 
 					OrganizeByProperCascade();
-					OrganizeMinimized();
+
+					row = OrganizeSecondarynWindows(ChildWinMinimized, row);
+					OrganizeSecondarynWindows(ChildWinOther, ++row);
 
 					RepositionWindows();
 
+
 					break;
 				case 1:
-//					SortChildWindows();
-//
-//					OrganizeByBadCascade();
-//
-//					RepositionWindows();
+
+//					ListChildWin(ChildWindows, nl + "child windows before sort", 3);
+
+					// for this, sort the windows first
+					SortChildWindows();
+
+					OrganizeByBadCascade();
+
+//					ListChildWin(ChildWindows, nl + "child windows after sort and organize", 3);
+
+					row = OrganizeSecondarynWindows(ChildWinMinimized, row);
+					OrganizeSecondarynWindows(ChildWinOther, ++row);
+
+					RepositionWindows();
 
 					break;
 			}
@@ -73,41 +75,87 @@ namespace Windows
 		}
 
 		// organize the windows that have been minimized
-		void OrganizeMinimized()
+//		void OrganizeMinimized()
+//		{
+//			if (ChildWinMinimized.Count == 0) { return; }
+//
+//			int horizIdx = 0;
+//
+//			int height = ChildWinMinimized[0].current.Height;
+//			int top = ParentWindow.Height - height;
+//			int left = 0;
+//			int width = ChildWinMinimized[0].current.Width;
+//
+//			// determine the maximum number of minimized windows to place horizontally
+//			int maxHorizontal = ParentWindow.Width / width;
+//
+//			for (int i = 0; i < ChildWinMinimized.Count; i++)
+//			{
+//				if (horizIdx == maxHorizontal)
+//				{
+//					top -= height;
+//					left = ParentWindow.Left;
+//					horizIdx = 0;
+//				}
+//				ChildWinMinimized[i].proposed = new Rectangle(left, top, width, height);
+//
+//				left += width;
+//				horizIdx++;
+//			}
+//		}
+
+		// organize other windows to be minimized
+		// note that the height and width values are for  x / y position
+		// only the height / width is based on the minimized window size
+		// row is counted from the bottom up
+		int OrganizeSecondarynWindows(List<RevitWindow> rws, int row)
 		{
+			if (rws.Count == 0) { return -1; }
+
 			int horizIdx = 0;
 
-			int height = ChildWinMinimized[0].current.Height;
-			int top = ParentClientWindow.Height - height;
+			int height = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
 			int left = 0;
-			int width = ChildWinMinimized[0].current.Width;
+			int width = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
+
+			// adjust the top value to be the window height adjusted for the row number
+			int top = ParentWindow.Height - (height * (row + 1));
 
 			// determine the maximum number of minimized windows to place horizontally
-			int maxHorizontal = ParentClientWindow.Width / ChildWinMinimized[0].current.Width;
+			int maxHorizontal = ParentWindow.Width / width;
 
-			for (int i = 0; i < ChildWinMinimized.Count; i++)
-			{
+			foreach (RevitWindow rw in rws) {
 				if (horizIdx == maxHorizontal)
 				{
+					row++;
 					top -= height;
-					left = ParentClientWindow.Left;
+					left = 0;
 					horizIdx = 0;
 				}
+				rw.proposed = new Rectangle(left, top, width, height);
 
-				ChildWinMinimized[i].proposed = new Rectangle(left, top, width, height);
+				// set minimized if not already minimized
+				if (!rw.IsMinimized)
+				{
+					ShowWindow(rw.Handle, ShowWinCmds.SW_MINIMIZE);
+				}
 
 				left += width;
 				horizIdx++;
 			}
+
+			return row;
 		}
 
 		// organize method 0 - proper cascade
 		void OrganizeByProperCascade()
 		{
+			if (ChildWindows.Count == 0) { return; }
+
 			int top;
 			int left;
-			int right = ParentClientWindow.Width - _marginRight;
-			int bottom = ParentClientWindow.Height - _marginBottom;
+			int right = ParentWindow.Width - MarginRight;
+			int bottom = ParentWindow.Height - MarginBottom;
 			int inverseCount = 0;
 
 			int count = ChildWindows.Count;
@@ -117,8 +165,8 @@ namespace Windows
 			for (int i = 0; i < count; i++)
 			{
 				inverseCount = count - idx;
-				top = idx * TitleBarHeight + _marginTop;
-				left = _offset * inverseCount + _marginLeft;
+				top = idx * TitleBarHeight + MarginTop;
+				left = Offset * inverseCount + MarginLeft;
 
 				ChildWindows[i].proposed = NewRectangle(left, top, right, bottom);
 
@@ -126,118 +174,158 @@ namespace Windows
 			}
 		}
 
-//		// organize by windows stupid cascade method
-//		void OrganizeByBadCascade()
-//		{
-//			Rectangle rect;
-//
-//			int width = (int) (ParentClientWindow.Width * 0.6);
-//			int height = (int) (ParentClientWindow.Height * 0.6);
-//
-//			width = width > MinWindowWidth ? width : MinWindowWidth;
-//			height = height > MinWindowHeight ? height : MinWindowHeight;
-//
-//			int offset = TitleBarHeight;
-//
-//			int count = ChildWindows.Count;
-//
-//			int idx = 0;
-//
-//			for (int i = 0; i < count; i++)
-//			{
-//				rect = CalcBadCascadeRect(width, height, offset, ref idx);
-//
-//				ChildWindows[i].proposed = rect;
-//
-//				idx++;
-//
-//				if (ChildWindows[i].IsMinimized)
-//				{
-//					OrganizeMinimized(i);
-//					break;
-//				}
-//			}
-//		}
-
-		Rectangle CalcBadCascadeRect(int width, int height, int offset, ref int idx)
+		// organize by windows stupid cascade method
+		void OrganizeByBadCascade()
 		{
-			int left = idx * offset + +_marginLeft;
-			int top = idx * offset + _marginTop;
+			Rectangle rect;
 
-			int right = left + width;
-			int bottom = top + height;
+			int width = (int) (ParentWindow.Width * 0.6);
+			int height = (int) (ParentWindow.Height * 0.6);
 
-			if (right + _marginRight > ParentClientWindow.Right || bottom + _marginBottom > ParentClientWindow.Bottom)
+			width = width > MinWindowWidth ? width : MinWindowWidth;
+			height = height > MinWindowHeight ? height : MinWindowHeight;
+
+			int count = ChildWindows.Count;
+
+			// make sure there is enough height and width to actually cascade the windows
+			// allow for 3 times the offset amount
+			if (MarginTop + height + MarginBottom + Offset * 3 >= ParentWindow.Height
+				|| MarginLeft + width + MarginRight + Offset * 3 >= ParentWindow.Width)
 			{
-				idx = 0;
-				left = _marginLeft;
-				top = _marginTop;
+				return;
 			}
 
-			return new Rectangle(left, top, width, height);
+			int idx = 0;
+			int col = 0;
+
+			for (int i = 0; i < count; i++)
+			{
+				rect = CalcBadCascadeRect(width, height, ref idx, ref col);
+
+				ChildWindows[i].proposed = rect;
+
+				idx++;
+			}
 		}
-
-
 
 		// based on the adjusted list of windows, reposition all of the windows.
 		void RepositionWindows()
 		{
+			IntPtr insertAfter = HWND_BOTTOM;
+
 			IntPtr hWinPosInfo =
 				BeginDeferWindowPos(ChildWindows.Count);// + MinWindows.Count);
 
 			foreach (RevitWindow rw in ChildWindows)
 			{
+				if (rw.Handle.Equals(ActiveWindow))
+				{
+					insertAfter = HWND_TOP;
+				}
+
 				// process a non-minimized window
 				hWinPosInfo =
-					DeferWindowPos(hWinPosInfo, rw.Handle, ((IntPtr) 0),
+					DeferWindowPos(hWinPosInfo, rw.Handle, insertAfter,
 						rw.proposed.Left, rw.proposed.Top, rw.proposed.Width, rw.proposed.Height,
-						SWP_NOACTIVATE | SWP_SHOWWINDOW);
+						SWP_SHOWWINDOW);
+
+				insertAfter = HWND_BOTTOM;
 
 				if (hWinPosInfo.Equals(null)) { return; }
 			}
 
-			foreach (RevitWindow rw in ChildWinMinimized)
-			{
-				// process a minimized window
-				hWinPosInfo =
-					DeferWindowPos(hWinPosInfo, rw.Handle, ((IntPtr) 1),
-						rw.proposed.Left, rw.proposed.Top, rw.proposed.Width, rw.proposed.Height,
-						SWP_NOACTIVATE | SWP_NOSIZE | SWP_SHOWWINDOW);
+			hWinPosInfo = RepositionSecondaryWindows(hWinPosInfo, ChildWinMinimized);
 
+			if (hWinPosInfo == IntPtr.Zero) { return; }
 
-				if (hWinPosInfo.Equals(null)) { return; }
-			}
+			hWinPosInfo = RepositionSecondaryWindows(hWinPosInfo, ChildWinOther);
+
+			if (hWinPosInfo == IntPtr.Zero) { return; }
 
 			EndDeferWindowPos(hWinPosInfo);
 
-			if (ActiveWindow != IntPtr.Zero)
+		}
+
+		void RepositionSecondaryWindows(List<RevitWindow> rws)
+		{
+			foreach (RevitWindow rw in rws)
 			{
-				ShowWindow(ActiveWindow, ShowWinCmds.SW_SHOW);
+				ShowWindow(rw.Handle, ShowWinCmds.SW_MINIMIZE);
 			}
 		}
 
+		IntPtr RepositionSecondaryWindows(IntPtr hWinPosInfo, List<RevitWindow> rws)
+		{
+			foreach (RevitWindow rw in rws)
+			{
+				// process a minimized window
+				hWinPosInfo =
+					DeferWindowPos(hWinPosInfo, rw.Handle, HWND_BOTTOM,
+						rw.proposed.Left, rw.proposed.Top, rw.proposed.Width, rw.proposed.Height,
+						SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_NOSIZE);
+
+				if (hWinPosInfo.Equals(null)) { return IntPtr.Zero; }
+			}
+
+			return hWinPosInfo;
+		}
 
 
-//		// set up form with revised windows
-//		void SetupFormChildProp()
-//		{
-//			int idx = SetFormChildProposed(ActWindows, 0, false);
-//
-//			//			idx = SetFormChildProposed(MinWindows, idx, true);
-//
-//		}
-//
-//		int SetFormChildProposed(List<RevitWindow> rws, int idx, bool isMin)
-//		{
-//			foreach (RevitWindow rw in rws)
-//			{
-//				if (rw.proposed.Width == 0) { continue; }
-//
-//				MForm.SetChildProp(idx++, rw.proposed, rw.WindowTitle, isMin);
-//			}
-//
-//			return idx;
-//		}
+		/*
+		 * don't need maximized flag in rw
+		 
+		- create rw - set sequence using
+			- current document active = 0+
+			- current document normal = 100+
+			- current document minimized = 200+
+			- other document = 1000+
 
+		- insure have min 1 normal & active window
+
+		- organize
+			organize by sorting 
+				- current active = 0 to 99
+				- current normal = 100 to 199
+				- other = 200+
+
+			if window is a current document window
+			- set current flag = true
+				if not minimized
+				- set correct position & size
+				if minimized
+				- set correct position
+
+			if window is not current document
+			- set current flag = false
+			- set correct position - each document to its separate row
+
+		- reposition - don't use deferwindowpos
+			if current flag == true
+				if not minimized
+					if active window
+					yes
+						- show window normal (sw_show)
+						- set window position 
+							(hwnd_top)
+							(swp_showwindow)
+					no
+						-show window normal (sw_showna)
+						- set window position 
+							(hwnd_bottom)
+							(swp_showwindow | swp_noactivate)
+				
+				if minimized
+					- show window minimized (sw_showminimized)
+					- set window position
+						(hwnd_bottom)
+						(swp_nosize | swp_showwindow | swp+noactivate)
+			if current flag == false
+				- minimize all windows
+				- show window minimized (sw_showminimized)
+				- set window position
+					(hwnd_bottom)
+					(swp_nosize | swp_showwindow | swp+noactivate)
+
+		*/
 	}
 }

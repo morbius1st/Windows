@@ -1,18 +1,15 @@
 ﻿#region Using directives
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Rectangle = System.Drawing.Rectangle;
 
-using static Windows.Command;
-using static Windows.WindowApiUtilities;
-using static Windows.WindowListingUtilities;
-using static Windows.RevitWindow;
+using static RevitWindows.WindowApiUtilities;
+using static RevitWindows.WindowListingUtilities;
 
 #endregion
 
@@ -21,18 +18,10 @@ using static Windows.RevitWindow;
 // created:		10/23/2017 8:42:32 PM
 
 
-namespace Windows
+namespace RevitWindows
 {
 	class WindowUtilities
 	{
-
-		private static Rectangle _parentClientWindow;
-		private static Rectangle _displayRect;
-		private static int _titleBarHeight;
-		private static int _minWindowWidth;
-		private static int _minWindowHeight;
-
-
 		// an AutoDesk rectangle from a system rectangle
 		internal static Autodesk.Revit.DB.Rectangle ConvertTo(Rectangle r)
 		{
@@ -46,7 +35,7 @@ namespace Windows
 		}
 
 		// system rectangle from a RECT struct
-		internal static Rectangle NewRectangle(WindowApiUtilities.RECT r)
+		internal static Rectangle NewRectangle(RECT r)
 		{
 			return new Rectangle(r.Left, r.Top, r.Right - r.Left, r.Bottom - r.Top);
 		}
@@ -78,7 +67,7 @@ namespace Windows
 
 		internal static void SetupFormMainClientRect(IntPtr parent, Rectangle mainClientRect)
 		{
-			MForm.RevitMainWorkArea = mainClientRect;
+			Command.MForm.RevitMainWorkArea = mainClientRect;
 
 			WINDOWINFO wip = new WINDOWINFO(true);
 			GetWindowInfo(parent, ref wip);
@@ -86,33 +75,52 @@ namespace Windows
 			logMsgln("      win info win rect| " + ListRect(wip.rcWindow));
 			logMsgln("   win info client rect| " + ListRect(wip.rcClient));
 
-			MForm.ParentRectForm = NewRectangle(wip.rcWindow);
-			MForm.ParentRectClient = NewRectangle(wip.rcClient);
+			Command.MForm.ParentRectForm = NewRectangle(wip.rcWindow);
+			Command.MForm.ParentRectClient = NewRectangle(wip.rcClient);
 		}
 
 		internal static void SetupFormChildCurr()
 		{
 			int idx = 0;
 
-			foreach (RevitWindow rw in ChildWindows)
+			foreach (RevitWindow rw in RevitWindow.ChildWindows)
 			{
-				MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle);
+				Command.MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle);
 			}
 
-			foreach (RevitWindow rw in ChildWinMinimized)
+			foreach (RevitWindow rw in RevitWindow.ChildWinMinimized)
 			{
-				MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle, true);
+				Command.MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle, true);
 			}
 
-			foreach (RevitWindow rw in ChildWinOther)
+			foreach (RevitWindow rw in RevitWindow.ChildWinOther)
 			{
-				MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle);
+				Command.MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle);
 			}
 
 
 		}
 
-		internal static int GetTitleBarHeight(IntPtr parent)
+		internal static Rectangle ParentWindow { get; private set; }
+		internal static Rectangle DisplayScreenRect { get; private set; }
+		internal static int MinWindowHeight { get; private set; }
+		internal static int MinWindowWidth { get; private set; }
+		internal static int TitleBarHeight { get; private set; }
+
+		internal static void SortChildWindows()
+		{
+			sortChildWindows(RevitWindow.ChildWinMinimized);
+			sortChildWindows(RevitWindow.ChildWindows);
+			sortChildWindows(RevitWindow.ChildWinOther);
+		}
+
+		internal static void sortChildWindows(List<RevitWindow> w)
+		{
+			if (w.Count == 0 || w.Count == 1) { return; }
+			w.Sort((a, b) => a.Sequence.CompareTo(b.Sequence));
+		}
+
+		private static int GetTitleBarHeight(IntPtr parent)
 		{
 			double dpi = GetDpiForWindow(parent) / 96.0f;
 			int captionHeight = GetSystemMetrics(SystemMetric.SM_CYCAPTION);
@@ -131,27 +139,18 @@ namespace Windows
 		{
 			// determine the main client rectangle - the repositioned
 			// view window go here
-			_parentClientWindow = NewRectangle(UiApp.DrawingAreaExtents).Adjust(-2);
-			_titleBarHeight = GetTitleBarHeight(parent);
-			_displayRect = GetScreenRectFromWindow(parent);
+			ParentWindow = NewRectangle(Command.UiApp.DrawingAreaExtents).Adjust(-2);
+			TitleBarHeight = GetTitleBarHeight(parent);
+			DisplayScreenRect = GetScreenRectFromWindow(parent);
 
-			_minWindowHeight = GetSystemMetrics(SystemMetric.SM_CYMIN);
-			_minWindowWidth = GetSystemMetrics(SystemMetric.SM_CXMIN);
-
+			MinWindowHeight = GetSystemMetrics(SystemMetric.SM_CYMIN);
+			MinWindowWidth = GetSystemMetrics(SystemMetric.SM_CXMIN);
 		}
-
-		internal static Rectangle ParentClientWindow => _parentClientWindow;
-		internal static Rectangle DisplayRect => _displayRect;
-		internal static int TitleBarHeight => _titleBarHeight;
-		internal static int MinWindowHeight => _minWindowHeight;
-		internal static int MinWindowWidth => _minWindowWidth;
-
-
 
 		internal static bool GetRevitChildWindows(IntPtr parent)
 		{
 			List<IntPtr> children = GetChildWindows(parent);
-			IList<View> views = GetRevitChildViews(UiDoc);
+			IList<View> views = GetRevitChildViews(Command.UiDoc);
 
 			bool activeSet = false;
 
@@ -164,50 +163,48 @@ namespace Windows
 
 				if ((wi.dwExStyle & (uint) WinStyleEx.WS_EX_MDICHILD) == 0) { continue; }
 
-				StringBuilder winTitle = new StringBuilder(255);
-				GetWindowText(child, winTitle, 255);
-
-				string wTitle = winTitle.ToString().ToLower();
-
-				View v = FindView(views, wTitle);
-
-				if (v == null) { continue; }
-
 				// got a good window - store it for later
 
-				// create the revit window data
-				RevitWindow rw = new RevitWindow(child, v);
+				string winTitle = GetWindowTitle(child);
 
-//				rw.current = ValidateWindow(NewRectangle(wi.rcWindow));
+				View v = FindRevitView(views, winTitle);
+
+				// create the revit window data
+				RevitWindow rw = new RevitWindow(child, v, winTitle);
+
+				// rw.current = ValidateWindow(NewRectangle(wi.rcWindow));
 				rw.current = NewRectangle(wi.rcWindow);
 
-				if (rw.IsMinimized)
+				if (v == null)
 				{
-					ChildWinMinimized.Add(rw);
+					RevitWindow.ChildWinOther.Add(rw);
+				}
+				else if (rw.IsMinimized)
+				{
+					RevitWindow.ChildWinMinimized.Add(rw);
 				}
 				else
 				{
 					// save the active window for later
-					if (ActiveWindow == IntPtr.Zero) { ActiveWindow = child;}
+					if (RevitWindow.ActiveWindow == IntPtr.Zero)
+					{
+						rw.MakeActive();
+//						RevitWindow.ActiveWindow = child;
+					}
 
-					ChildWindows.Add(rw);
+					RevitWindow.ChildWindows.Add(rw);
 				}
 			}
 
 			return true;
 		}
 
-		internal static void SortChildWindows()
+		internal static string GetWindowTitle(IntPtr child)
 		{
-			sortChildWindows(ChildWinMinimized);
-			sortChildWindows(ChildWindows);
-			sortChildWindows(ChildWinOther);
-		}
+			StringBuilder winTitle = new StringBuilder(255);
+			GetWindowText(child, winTitle, 255);
 
-		internal static void sortChildWindows(List<RevitWindow> w)
-		{
-			if (w.Count == 0 || w.Count == 1) { return; }
-			w.Sort((a, b) => a.Sequence.CompareTo(b.Sequence));
+			return winTitle.ToString().ToLower();
 		}
 
 //		// adjust the current rectangle to be with in the bounds of the 
@@ -251,12 +248,12 @@ namespace Windows
 
 			foreach (UIView u in uiViews)
 			{
-				views.Add((View) Doc.GetElement(u.ViewId));
+				views.Add((View) Command.Doc.GetElement(u.ViewId));
 			}
 			return views;
 		}
 
-		internal static View FindView(IList<View> views, string WinTitle)
+		internal static View FindRevitView(IList<View> views, string WinTitle)
 		{
 			string test = WinTitle.ToLower();
 
@@ -269,7 +266,6 @@ namespace Windows
 			}
 			return null;
 		}
-
 
 		internal static Dictionary<ViewType, int> ViewTypeOrder = 
 			new Dictionary<ViewType, int>();

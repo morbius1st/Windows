@@ -1,4 +1,5 @@
 ﻿#region Using directives
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,10 +9,6 @@ using System.Windows.Forms;
 using Autodesk.Revit.DB;
 using Rectangle = System.Drawing.Rectangle;
 
-using static Windows.WindowUtilities;
-using static Windows.WindowListingUtilities;
-using static Windows.WindowApiUtilities.SystemMetric;
-
 #endregion
 
 // itemname:	WindowUtilities
@@ -19,16 +16,10 @@ using static Windows.WindowApiUtilities.SystemMetric;
 // created:		10/23/2017 6:15:42 AM
 
 
-namespace Windows
+namespace RevitWindows
 {
 	class WindowApiUtilities
 	{
-		internal static int GetMinWindowHeight()
-		{
-			return GetSystemMetrics(SM_CYMIN);
-		}
-
-
 		internal static Rectangle GetScreenRectFromWindow(IntPtr parent)
 		{
 			return GetMonitorInfo(parent).rcWorkArea.AsRectangle();
@@ -66,7 +57,6 @@ namespace Windows
 			if (revitProcess == null) { return IntPtr.Zero; }
 
 			IntPtr parent = revitProcess.MainWindowHandle;
-			ListMainWinInfo(parent);
 			return parent;
 		}
 
@@ -317,6 +307,12 @@ namespace Windows
 			public short value;
 		}
 
+		internal static IntPtr HWND_BOTTOM		= (IntPtr) 1;
+		internal static IntPtr HWND_NOTOPMOST	= (IntPtr) (0 - 2);
+		internal static IntPtr HWND_TOP			= (IntPtr) 0;
+		internal static IntPtr HWND_TOPMOST		= (IntPtr) (0 - 1);
+
+
 		[Flags]
 		internal enum DeferWinPos : uint
 		{
@@ -519,9 +515,9 @@ namespace Windows
 			WindowApiUtilities.TITLEBARINFO ti = new WindowApiUtilities.TITLEBARINFO();
 			ti.cbSize = (uint) Marshal.SizeOf(typeof(WindowApiUtilities.TITLEBARINFO));
 
-			logMsgln("Title bar info");
-			logMsgln("Title bar rect| " + ListRect(ti.rcTitleBar));
-			logMsgln("Title bar ht  | " + (ti.rcTitleBar.Bottom - ti.rcTitleBar.Top));
+			WindowUtilities.logMsgln("Title bar info");
+			WindowUtilities.logMsgln("Title bar rect| " + WindowListingUtilities.ListRect(ti.rcTitleBar));
+			WindowUtilities.logMsgln("Title bar ht  | " + (ti.rcTitleBar.Bottom - ti.rcTitleBar.Top));
 
 		}
 
@@ -578,14 +574,14 @@ namespace Windows
 			{
 				if (s > 0)
 				{
-					logMsg($"| {s:D4} ");
+					WindowUtilities.logMsg($"| {s:D4} ");
 				}
 				else
 				{
-					logMsg("|      ");
+					WindowUtilities.logMsg("|      ");
 				}
 			}
-			logMsgln("|");
+			WindowUtilities.logMsgln("|");
 		}
 
 		internal static void ListWinStyleNames<T>()
@@ -601,14 +597,14 @@ namespace Windows
 			{
 				patt = String.Format("{{0,{0}}}", (78 + 7 * j));
 
-				logMsg(String.Format(patt, ">  "));
+				WindowUtilities.logMsg(String.Format(patt, ">  "));
 				for (int i = j; i < num; i += offset)
 				{
 					if (i >= names.Length) { continue; }
-					logMsg($"{names[i],-35}");
+					WindowUtilities.logMsg($"{names[i],-35}");
 				}
 
-				logMsg(nl);
+				WindowUtilities.logMsg(WindowListingUtilities.nl);
 			}
 		}
 	}

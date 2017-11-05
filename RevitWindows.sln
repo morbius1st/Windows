@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevitWindows", "Windows\Rev
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F7F5F13-8045-4E0E-B941-AA0B97BBA9BF}"
 	ProjectSection(SolutionItems) = preProject
+		RevitWindows.addin = RevitWindows.addin
 		Window Listing.txt = Window Listing.txt
 	EndProjectSection
 EndProject

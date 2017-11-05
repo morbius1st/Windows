@@ -1,20 +1,21 @@
 #region Namespaces
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Rectangle = System.Drawing.Rectangle;
 
-using static Windows.WindowUtilities;
-using static Windows.WindowListingUtilities;
-using static Windows.WindowApiUtilities;
-using static Windows.RevitWindow;
+using UtilityLibrary;
+
+using static RevitWindows.WindowUtilities;
+using static RevitWindows.WindowApiUtilities;
+using static RevitWindows.WindowListingUtilities;
+using static RevitWindows.RevitWindow;
 
 #endregion
 
-namespace Windows
+namespace RevitWindows
 {
 	[Transaction(TransactionMode.Manual)]
 	public class Command : IExternalCommand
@@ -27,7 +28,6 @@ namespace Windows
 		private static Document _doc;
 
 		private static MainForm _form;
-
 
 		public Result Execute(
 			ExternalCommandData commandData,
@@ -44,12 +44,22 @@ namespace Windows
 			ChildWinMinimized = new List<RevitWindow>(5);
 			ChildWinOther = new List<RevitWindow>(5);
 
+			ResetActiveWindow();
+
 			_form = new MainForm();
 
-			int WindowLayoutStyle = 0;
+			int WindowLayoutStyle = 1;
 
 			IntPtr parent = GetMainWinHandle();
 			if (parent == IntPtr.Zero) { return Result.Failed; }
+
+
+//			ListAllChildWindows(parent);
+
+//			ListRevitUiViews();
+
+//			return Result.Cancelled;
+
 
 			GetScreenMetrics(parent);
 
@@ -59,21 +69,14 @@ namespace Windows
 				return Result.Failed;
 			}
 
-			logMsgln("windows before sort");
-
-			ListChildWindowInfo();
-
+//			ListChildren();
+//
 //			return Result.Cancelled;
-
-			SortChildWindows();
-
-			logMsgln("windows after sort");
-
-			ListChildWindowInfo();
 
 			// process and adjust the windows
 			WindowManager winMgr = 
 				new WindowManager(parent);
+
 			winMgr.AdjustWindowLayout(WindowLayoutStyle);
 
 			return Result.Succeeded;
@@ -84,6 +87,19 @@ namespace Windows
 		internal static Document Doc => _doc;
 
 		internal static MainForm MForm => _form;
+
+		void ListChildren()
+		{
+			logMsgln("windows before sort");
+
+			ListChildWindowInfo();
+
+			SortChildWindows();
+
+			logMsgln("windows after sort");
+
+			ListChildWindowInfo();
+		}
 
 	}
 }

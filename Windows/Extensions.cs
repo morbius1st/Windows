@@ -3,10 +3,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
-using System.Windows.Media.Animation;
-using Autodesk.Revit.DB.Structure;
-using static Windows.WindowApiUtilities;
 
 #endregion
 
@@ -15,7 +11,7 @@ using static Windows.WindowApiUtilities;
 // created:		10/21/2017 5:46:06 AM
 
 
-namespace Windows
+namespace RevitWindows
 {
 	//	class Extensions
 	//	{
@@ -91,7 +87,7 @@ namespace Windows
 	internal static class RectExtensions
 	{
 
-		public static Rectangle AsRectangle(this RECT r)
+		public static Rectangle AsRectangle(this WindowApiUtilities.RECT r)
 		{
 			return new Rectangle(r.Left, r.Top, r.Right - r.Left, r.Bottom - r.Top);
 		}

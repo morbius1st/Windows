@@ -4,10 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using Label = System.Windows.Forms.Label;
 
-using static Windows.WindowListingUtilities;
-using static Windows.WindowUtilities;
-
-namespace Windows
+namespace RevitWindows
 {
 	public partial class MainForm : Form
 	{
@@ -120,8 +117,8 @@ namespace Windows
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			this.Location = new Point(DisplayRect.Left, DisplayRect.Top);
-			this.Size = new Size(DisplayRect.Width, DisplayRect.Height);
+			this.Location = new Point(WindowUtilities.DisplayScreenRect.Left, WindowUtilities.DisplayScreenRect.Top);
+			this.Size = new Size(WindowUtilities.DisplayScreenRect.Width, WindowUtilities.DisplayScreenRect.Height);
 
 			label1.Text = "";
 		}
@@ -209,7 +206,7 @@ namespace Windows
 			Label l = wi.Label;
 			Rectangle r = wi.Rect;
 
-			l.Location = new Point(r.Left - DisplayRect.Left, r.Top - DisplayRect.Top);
+			l.Location = new Point(r.Left - WindowUtilities.DisplayScreenRect.Left, r.Top - WindowUtilities.DisplayScreenRect.Top);
 			l.BackColor = backColor;
 			l.Size = new Size(r.Width, r.Height);
 			l.Visible = true;
@@ -249,7 +246,7 @@ namespace Windows
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append("children windows| current|").Append(nl);
+			sb.Append("children windows| current|").Append(WindowListingUtilities.nl);
 
 			// draw the child rectangles
 			sb.Append(ShowChildren(_WiCurr, g, _colorsCurr));
@@ -260,7 +257,7 @@ namespace Windows
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append("children windows| proposed|").Append(nl);
+			sb.Append("children windows| proposed|").Append(WindowListingUtilities.nl);
 
 			// draw the child rectangles
 			sb.Append(ShowChildren(_WiProp, g, _colorsProp));
@@ -282,7 +279,7 @@ namespace Windows
 				PlaceLabel(wi, color);
 				color = cc.NextAsTransparent();
 
-				sb.Append("      child rect|").Append(ListRect(wi.Rect)).Append(nl);
+				sb.Append("      child rect|").Append(WindowListingUtilities.ListRect(wi.Rect)).Append(WindowListingUtilities.nl);
 			}
 
 			return sb;

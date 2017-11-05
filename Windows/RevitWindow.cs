@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using Rectangle = System.Drawing.Rectangle;
 
-using static Windows.WindowApiUtilities;
-using static Windows.Command;
-
-namespace Windows
+namespace RevitWindows
 {
 	internal class RevitWindow
 	{
@@ -21,7 +18,7 @@ namespace Windows
 		internal static List<RevitWindow> ChildWinMinimized;
 		internal static List<RevitWindow> ChildWinOther;
 
-		internal static IntPtr ActiveWindow = IntPtr.Zero;
+		internal static IntPtr ActiveWindow { get; private set; } = IntPtr.Zero;
 
 		private int sequence;
 		private IntPtr handle;
@@ -32,22 +29,34 @@ namespace Windows
 		internal Rectangle current;
 		internal Rectangle proposed;
 
-		internal RevitWindow(IntPtr intPtr, View v)
+		private int _nonActiveWinAdj = 100;
+
+		internal RevitWindow(IntPtr intPtr, View v, string winTitle)
 		{
+			if (v == null)
+			{
+				// select project browser because this can never happen
+				viewType = ViewType.ProjectBrowser;
+			}
+			else
+			{
+				viewType = v.ViewType;
+			}
+
 			handle = intPtr;
-			viewType = v.ViewType;
-			sequence = (int) viewType;
-			docTitle = Doc.Title;
-			windowTitle = v.Title;
+			sequence = (int) viewType + _nonActiveWinAdj;
+			docTitle = Command.Doc.Title;
+			windowTitle = winTitle;
 			state = WindowState.NORMAL;
 			current = Rectangle.Empty;
 			proposed = Rectangle.Empty;
 
-			if (IsIconic(intPtr))
+
+			if (WindowApiUtilities.IsIconic(intPtr))
 			{
 				state = WindowState.MINIMIZED;
 			}
-			else if (IsZoomed(intPtr))
+			else if (WindowApiUtilities.IsZoomed(intPtr))
 			{
 				state = WindowState.MAXIMIZED;
 			}
@@ -64,6 +73,7 @@ namespace Windows
 		internal bool IsMaximized => state == WindowState.MAXIMIZED;
 		internal bool IsMinimized => state == WindowState.MINIMIZED;
 		internal bool IsNormal => state == WindowState.NORMAL;
+		internal bool IsActiveWindow => sequence > _nonActiveWinAdj;
 
 		internal RevitWindow Clone()
 		{
@@ -78,7 +88,22 @@ namespace Windows
 			rwn.proposed = this.proposed;
 
 			return rwn;
-
 		}
+
+		internal static void ResetActiveWindow()
+		{
+			ActiveWindow = IntPtr.Zero;
+		}
+
+		internal bool MakeActive()
+		{
+			if (ActiveWindow != IntPtr.Zero) { return false; }
+
+			ActiveWindow = this.handle;
+			this.sequence -= _nonActiveWinAdj;
+
+			return true;
+		}
+
 	}
 }
