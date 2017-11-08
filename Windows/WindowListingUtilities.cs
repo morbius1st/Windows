@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Text;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using UtilityLibrary;
 using Rectangle = System.Drawing.Rectangle;
 
 using static RevitWindows.WindowUtilities;
 using static RevitWindows.WindowApiUtilities;
+using static RevitWindows.RevitWindow;
 
 #endregion
 
@@ -140,76 +142,149 @@ namespace RevitWindows
 			}
 		}
 
-		internal static void ListChildWindowInfo()
+		internal static void ListChildWindowInfo(int which, string message)
 		{
-			if (RevitWindow.ChildWindows == null) { return; }
+			if (ChildWindows == null) { return; }
 
 			logMsgln(nl);
-			logMsgln("listing of found revit windows| active|");
+			logMsgln(message);
 			logMsg(nl);
 
-			int which = 3;
+			ListChildWin(ChildWindows, "child windows", which);
+//			ListChildWin(RevitWindow.ChildWinMinimized, "minimized windows", which);
+//			ListChildWin(RevitWindow.ChildWinOther, "other windows", which);
 
-			ListChildWin(RevitWindow.ChildWindows, "child windows", which);
-			ListChildWin(RevitWindow.ChildWinMinimized, "minimized windows", which);
-			ListChildWin(RevitWindow.ChildWinOther, "other windows", which);
+			int idx = FindActive();
 
-			logMsgln("active window| " + RevitWindow.ActiveWindow);
+			logMsg("active window| ");
+
+			logMsgln(idx >= 0 ? ChildWindows[idx].Handle.ToString() : "none");
 		}
 
 		internal static void ListChildWin(List<RevitWindow> rws, string title, int which)
 		{
+			MessageUtilities.clearConsole();
+
+			int change = 0;
+
 			logMsgln(title);
+
+			ListChildCounts();
+			logMsg(nl);
+			logMsgln("normal windows");
 
 			foreach (RevitWindow rw in rws)
 			{
-				if (which == 1)
+				if (change == 0 && rw.IsMinimized)
 				{
-					ListChildWinInfo1(rw);
+					logMsgln("minimized windows");
+					change = 1;
+
 				}
-				else if (which == 2)
+				else if (change <= 1 && rw.IsOtherDoc)
 				{
-					ListChildWinInfo2(rw);
+					logMsgln("other windows");
+					change = 2;
 				}
-				else
+
+
+
+				switch (which)
 				{
-					ListChildWinInfo3(rw);
+					case 1:
+						ListChildHandle(rw);
+						ListChildIsMin(rw);
+						ListChildCurrRect(rw);
+						ListChildPropRect(rw);
+						break;
+					case 2:
+						ListChildHandle(rw);
+						ListChildViewType(rw);
+						ListChildIsMin(rw);
+						break;
+					case 3:
+						ListChildViewType(rw);
+						ListChildPropRect(rw);
+						break;
+					case 4:
+						ListChildTitle(rw);
+						ListChildHandle(rw);
+						ListChildSeq(rw);
+						ListChildWinStatus(rw);
+						ListChildViewType(rw);
+						ListChildIsFromCurrDoc(rw);
+						ListChildIsMin(rw);
+						break;
+					case 5:
+						ListChildTitle(rw);
+						ListChildHandle(rw);
+						ListChildPropRect(rw);
+						break;
+					case 6:
+						ListChildTitle(rw);
+						ListChildPropRect(rw);
+						break;
+					default:
+						ListChildHandle(rw);
+						break;
 				}
+				logMsg(nl);
 			}
 		}
 
-		internal static void ListChildWinInfo1(RevitWindow rw)
+		internal static void ListChildCounts()
 		{
-			logMsgln("       child handle| " + rw.Handle);
-			logMsgln("     child sequence| " + rw.Sequence);
-			logMsgln("     child ViewType| " + Enum.GetName(typeof(ViewType), rw.ViewType) 
-				+ "  viewtype value| " + (int) rw.ViewType);
-			logMsgln(" child rect current| " + ListRect(rw.current));
-			logMsgln("child rect proposed| " + ListRect(rw.proposed));
-			logMsgln("child  is minimized| " + rw.IsMinimized);
-			logMsgln("child  is maximized| " + rw.IsMaximized);
-			logMsg(nl);
+			logMsgln("   normal win count| " + RevitWindow.NormalWinCount);
+			logMsgln("minimized win count| " + RevitWindow.MinimizedWinCount);
+			logMsgln("    other win count| " + RevitWindow.OtherDocWinCount);
 		}
 
-		internal static void ListChildWinInfo2(RevitWindow rw)
+		internal static void ListChildHandle(RevitWindow rw)
 		{
-			logMsgln("        child title| " + rw.WindowTitle);
 			logMsgln("       child handle| " + rw.Handle);
-			logMsgln("     child sequence| " + rw.Sequence);
-			logMsgln("     child ViewType| " + Enum.GetName(typeof(ViewType), rw.ViewType)
-				+ "  viewtype value| " + (int) rw.ViewType);
-			logMsgln("child  is minimized| " + IsIconic(rw.Handle));
-			logMsgln("child  is maximized| " + IsZoomed(rw.Handle));
-			logMsg(nl);
 		}
 
-		internal static void ListChildWinInfo3(RevitWindow rw)
+		internal static void ListChildCurrRect(RevitWindow rw)
+		{
+			logMsgln("       rect current| " + ListRect(rw.Current));
+		}
+
+		internal static void ListChildIsMin(RevitWindow rw)
+		{
+			logMsgln("       is minimized| " + rw.IsMinimized);
+		}
+
+		internal static void ListChildPropRect(RevitWindow rw)
+		{
+			logMsgln("      rect proposed| " + ListRect(rw.Proposed));
+		}
+
+		internal static void ListChildViewType(RevitWindow rw)
+		{
+			logMsgln("     child ViewType| >" + rw.ViewType 
+				+ "<  viewtype value| " + (int) rw.ViewType);
+		}
+
+		internal static void ListChildTitle(RevitWindow rw)
 		{
 			logMsgln("        child title| " + rw.WindowTitle);
-			logMsgln("     child sequence| " + rw.Sequence);
-			logMsgln("child rect proposed| " + ListRect(rw.proposed));
-			logMsg(nl);
 		}
+
+		internal static void ListChildSeq(RevitWindow rw)
+		{
+			logMsgln("     child sequence| " + rw.Sequence);
+		}
+
+		internal static void ListChildIsFromCurrDoc(RevitWindow rw)
+		{
+			logMsgln("     is current doc| " + !rw.IsOtherDoc);
+		}
+
+		internal static void ListChildWinStatus(RevitWindow rw)
+		{
+			logMsgln("      window status| " + Enum.GetName(typeof(WindowStatus), rw.WinStatus));
+		}
+
 
 
 		internal static string ListRect(RECT r)

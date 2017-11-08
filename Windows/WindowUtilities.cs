@@ -85,18 +85,18 @@ namespace RevitWindows
 
 			foreach (RevitWindow rw in RevitWindow.ChildWindows)
 			{
-				Command.MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle);
+				Command.MForm.SetChildCurr(idx++, rw.Current, rw.WindowTitle);
 			}
 
-			foreach (RevitWindow rw in RevitWindow.ChildWinMinimized)
-			{
-				Command.MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle, true);
-			}
-
-			foreach (RevitWindow rw in RevitWindow.ChildWinOther)
-			{
-				Command.MForm.SetChildCurr(idx++, rw.current, rw.WindowTitle);
-			}
+//			foreach (RevitWindow rw in RevitWindow.ChildWinMinimized)
+//			{
+//				Command.MForm.SetChildCurr(idx++, rw.Current, rw.WindowTitle, true);
+//			}
+//
+//			foreach (RevitWindow rw in RevitWindow.ChildWinOther)
+//			{
+//				Command.MForm.SetChildCurr(idx++, rw.Current, rw.WindowTitle);
+//			}
 
 
 		}
@@ -109,9 +109,9 @@ namespace RevitWindows
 
 		internal static void SortChildWindows()
 		{
-			sortChildWindows(RevitWindow.ChildWinMinimized);
+//			sortChildWindows(RevitWindow.ChildWinMinimized);
 			sortChildWindows(RevitWindow.ChildWindows);
-			sortChildWindows(RevitWindow.ChildWinOther);
+//			sortChildWindows(RevitWindow.ChildWinOther);
 		}
 
 		internal static void sortChildWindows(List<RevitWindow> w)
@@ -173,27 +173,27 @@ namespace RevitWindows
 				RevitWindow rw = new RevitWindow(child, v, winTitle);
 
 				// rw.current = ValidateWindow(NewRectangle(wi.rcWindow));
-				rw.current = NewRectangle(wi.rcWindow);
+				rw.Current = NewRectangle(wi.rcWindow);
 
-				if (v == null)
-				{
-					RevitWindow.ChildWinOther.Add(rw);
-				}
-				else if (rw.IsMinimized)
-				{
-					RevitWindow.ChildWinMinimized.Add(rw);
-				}
-				else
-				{
-					// save the active window for later
-					if (RevitWindow.ActiveWindow == IntPtr.Zero)
-					{
-						rw.MakeActive();
-//						RevitWindow.ActiveWindow = child;
-					}
+//				if (v == null)
+//				{
+////					RevitWindow.ChildWinOther.Add(rw);
+//				}
+//				else if (rw.IsMinimized)
+//				{
+////					RevitWindow.ChildWinMinimized.Add(rw);
+//				}
+//				else
+//				{
+//					// save the active window for later
+//					if (RevitWindow.ActiveWindow == IntPtr.Zero)
+//					{
+//						rw.MakeActive();
+////						RevitWindow.ActiveWindow = child;
+//					}
 
-					RevitWindow.ChildWindows.Add(rw);
-				}
+				RevitWindow.ChildWindows.Add(rw);
+//				}
 			}
 
 			return true;
@@ -204,7 +204,7 @@ namespace RevitWindows
 			StringBuilder winTitle = new StringBuilder(255);
 			GetWindowText(child, winTitle, 255);
 
-			return winTitle.ToString().ToLower();
+			return winTitle.ToString();
 		}
 
 //		// adjust the current rectangle to be with in the bounds of the 

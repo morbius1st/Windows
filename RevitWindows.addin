@@ -8,7 +8,7 @@
     <AddInId>3F7846DE-F843-418A-ABEA-A9F9A62E12E2</AddInId>
     <VendorId>pro.cyberstudio</VendorId>
     <VendorDescription>CyberStudio</VendorDescription>
-    <VisibilityMode>AlwaysVisible</VisibilityMode>
+    <VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
     <Discipline>Any</Discipline>
   </AddIn>
 <!--  <AddIn Type="Application">-->

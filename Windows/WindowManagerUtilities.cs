@@ -23,26 +23,27 @@ namespace RevitWindows
 		internal static int MarginRight { get; } = 20;
 		internal static int MarginBottom { get; } = 20;
 
-		internal static int Offset { get; } = TitleBarHeight;
+		internal static int OffsetVert { get; } = TitleBarHeight;
+		internal static int OffsetHoriz { get; } = TitleBarHeight;
 
 
 		// make sure that there is at least one ChildWindow and 
 		// that this is the active window
-		internal static void InsureOneChildWindow()
-		{
-			if (ChildWindows.Count > 0) { return; }
-
-			RevitWindow rw = ChildWinMinimized[0];
-
-			ChildWindows.Add(rw);
-
-			ChildWinMinimized.RemoveAt(0);
-
-			rw.MakeActive();
-
-			ShowWindow(rw.Handle, ShowWinCmds.SW_RESTORE);
-
-		}
+//		internal static void InsureOneChildWindow()
+//		{
+//			if (ChildWindows.Count > 0) { return; }
+//
+//			RevitWindow rw = ChildWinMinimized[0];
+//
+//			ChildWindows.Add(rw);
+//
+//			ChildWinMinimized.RemoveAt(0);
+//
+//			rw.MakeActive();
+//
+//			ShowWindow(rw.Handle, ShowWinCmds.SW_RESTORE);
+//
+//		}
 
 		internal static Rectangle CalcBadCascadeRect(int width, int height, ref int idx, ref int col)
 		{
@@ -70,7 +71,7 @@ namespace RevitWindows
 
 		static int CalcTopLeft(int idx, int col, int margin, double adjAmt)
 		{
-			return (int) ((idx + (adjAmt * col)) * Offset) + margin;
+			return (int) ((idx + (adjAmt * col)) * OffsetVert) + margin;
 		}
 
 

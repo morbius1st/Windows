@@ -29,6 +29,8 @@ namespace RevitWindows
 
 		private static MainForm _form;
 
+		
+
 		public Result Execute(
 			ExternalCommandData commandData,
 			ref string message,
@@ -40,15 +42,15 @@ namespace RevitWindows
 			_doc = _uidoc.Document;
 
 			// must be here to insure a blank list
-			ChildWindows = new List<RevitWindow>(5);
-			ChildWinMinimized = new List<RevitWindow>(5);
-			ChildWinOther = new List<RevitWindow>(5);
+//			ChildWindows = new List<RevitWindow>(5);
+//			ChildWinMinimized = new List<RevitWindow>(5);
+//			ChildWinOther = new List<RevitWindow>(5);
 
-			ResetActiveWindow();
+			ResetChileWindows();
 
 			_form = new MainForm();
 
-			int WindowLayoutStyle = 1;
+			int WindowLayoutStyle = 0;
 
 			IntPtr parent = GetMainWinHandle();
 			if (parent == IntPtr.Zero) { return Result.Failed; }
@@ -75,7 +77,7 @@ namespace RevitWindows
 
 			// process and adjust the windows
 			WindowManager winMgr = 
-				new WindowManager(parent);
+				new WindowManager();
 
 			winMgr.AdjustWindowLayout(WindowLayoutStyle);
 
@@ -90,15 +92,11 @@ namespace RevitWindows
 
 		void ListChildren()
 		{
-			logMsgln("windows before sort");
-
-			ListChildWindowInfo();
+//			ListChildWindowInfo(4, "windows before sort");
 
 			SortChildWindows();
 
-			logMsgln("windows after sort");
-
-			ListChildWindowInfo();
+			ListChildWindowInfo(4, "windows after sort");
 		}
 
 	}

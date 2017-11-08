@@ -3,107 +3,199 @@ using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using Rectangle = System.Drawing.Rectangle;
 
+using static RevitWindows.Command;
+using static RevitWindows.WindowApiUtilities;
+
 namespace RevitWindows
 {
 	internal class RevitWindow
 	{
-		enum WindowState : short
+		internal enum WindowStatus : short
 		{
-			MINIMIZED = -1,
-			NORMAL = 0,
-			MAXIMIZED = 1
+			CURR_DOC_ACTIVE = -1000,
+			CURR_DOC_NORMAL = 0,
+			CURR_DOC_MIN = 1000,
+			OTHER_DOC = 2000
 		}
 
+
 		internal static List<RevitWindow> ChildWindows;
-		internal static List<RevitWindow> ChildWinMinimized;
-		internal static List<RevitWindow> ChildWinOther;
+//		internal static List<RevitWindow> ChildWinMinimized;
+//		internal static List<RevitWindow> ChildWinOther;
 
-		internal static IntPtr ActiveWindow { get; private set; } = IntPtr.Zero;
+//		internal static IntPtr ActiveWindow { get; private set; } = IntPtr.Zero;
 
-		private int sequence;
-		private IntPtr handle;
-		private string docTitle;
-		private string windowTitle;
-		private ViewType viewType;
-		private WindowState state;
-		internal Rectangle current;
-		internal Rectangle proposed;
+		internal static int NormalWinCount { get; private set; }
+		internal static int MinimizedWinCount { get; private set; }
+		internal static int OtherDocWinCount { get; private set; }
 
-		private int _nonActiveWinAdj = 100;
+		private static bool _gotActive = false;
+
+
+		private int			_sequence;
+		private IntPtr		_handle;
+		private string		_windowTitle;
+		private ViewType	_viewType;
+		private WindowStatus _winStatus;
+		internal Rectangle	Current;
+		internal Rectangle	Proposed;
 
 		internal RevitWindow(IntPtr intPtr, View v, string winTitle)
 		{
 			if (v == null)
 			{
-				// select project browser because this can never happen
-				viewType = ViewType.ProjectBrowser;
+				_winStatus = WindowStatus.OTHER_DOC;
+				_viewType = ViewType.Internal;
+
+				OtherDocWinCount++;
 			}
 			else
 			{
-				viewType = v.ViewType;
+				_viewType = v.ViewType;
+
+				if (IsIconic(intPtr))
+				{
+					_winStatus = WindowStatus.CURR_DOC_MIN;
+
+					MinimizedWinCount++;
+				}
+				else
+				{
+					NormalWinCount++;
+
+					if (_gotActive)
+					{
+						_winStatus = WindowStatus.CURR_DOC_NORMAL;
+					}
+					else
+					{
+						_winStatus = WindowStatus.CURR_DOC_ACTIVE;
+						_gotActive = true;
+					}
+
+				}
 			}
 
-			handle = intPtr;
-			sequence = (int) viewType + _nonActiveWinAdj;
-			docTitle = Command.Doc.Title;
-			windowTitle = winTitle;
-			state = WindowState.NORMAL;
-			current = Rectangle.Empty;
-			proposed = Rectangle.Empty;
-
-
-			if (WindowApiUtilities.IsIconic(intPtr))
-			{
-				state = WindowState.MINIMIZED;
-			}
-			else if (WindowApiUtilities.IsZoomed(intPtr))
-			{
-				state = WindowState.MAXIMIZED;
-			}
+			_handle = intPtr;
+			_sequence = (int) _viewType + (int) _winStatus;
+			_windowTitle = winTitle.ToLower();
+			Current = Rectangle.Empty;
+			Proposed = Rectangle.Empty;
+			
 		}
 
 		private RevitWindow() { }
 
-		internal int Sequence => sequence;
-		internal string WindowTitle => windowTitle;
-		internal string DocTitle => docTitle;
-		internal ViewType ViewType => viewType;
-		internal IntPtr Handle => handle;
+		internal int Sequence =>			_sequence;
+		internal IntPtr Handle =>			_handle;
+		internal string	WindowTitle =>		_windowTitle;
+		internal WindowStatus WinStatus =>	_winStatus;
+		internal ViewType ViewType =>		_viewType;
 
-		internal bool IsMaximized => state == WindowState.MAXIMIZED;
-		internal bool IsMinimized => state == WindowState.MINIMIZED;
-		internal bool IsNormal => state == WindowState.NORMAL;
-		internal bool IsActiveWindow => sequence > _nonActiveWinAdj;
+		internal bool IsMinimized =>	_winStatus == WindowStatus.CURR_DOC_MIN;
+		internal bool IsNormal =>		_winStatus == WindowStatus.CURR_DOC_NORMAL;
+		internal bool IsActive =>		_winStatus == WindowStatus.CURR_DOC_ACTIVE;
+		internal bool IsOtherDoc =>		_winStatus == WindowStatus.OTHER_DOC;
 
-		internal RevitWindow Clone()
+		//		internal RevitWindow Clone()
+		//		{
+		//			RevitWindow rwn = new RevitWindow();
+		//			rwn._sequence = this._sequence;
+		//			rwn._handle = this._handle;
+		//			rwn._windowTitle = this._windowTitle;
+		//			rwn._viewType = this._viewType;
+		//			rwn._state = this._state;
+		//			rwn.Current = this.Current;
+		//			rwn.Proposed = this.Proposed;
+		//
+		//			return rwn;
+		//		}
+
+		internal static void ResetChileWindows()
 		{
-			RevitWindow rwn = new RevitWindow();
-			rwn.sequence = this.sequence;
-			rwn.handle = this.handle;
-			rwn.docTitle = this.docTitle;
-			rwn.windowTitle = this.windowTitle;
-			rwn.viewType = this.viewType;
-			rwn.state = this.state;
-			rwn.current = this.current;
-			rwn.proposed = this.proposed;
+			_gotActive = false;
 
-			return rwn;
-		}
+			NormalWinCount = 0;
+			MinimizedWinCount = 0;
+			OtherDocWinCount = 0;
 
-		internal static void ResetActiveWindow()
-		{
-			ActiveWindow = IntPtr.Zero;
+			ChildWindows = new List<RevitWindow>(5);
 		}
 
 		internal bool MakeActive()
 		{
-			if (ActiveWindow != IntPtr.Zero) { return false; }
+			if (!IsNormal) return false;
 
-			ActiveWindow = this.handle;
-			this.sequence -= _nonActiveWinAdj;
+			int idx = FindActive();
+
+			if (idx >= 0)
+			{
+				ChildWindows[idx]._winStatus = WindowStatus.CURR_DOC_NORMAL;
+				ChildWindows[idx]._sequence = (int) _viewType + (int) _winStatus;
+			}
+
+			_winStatus = WindowStatus.CURR_DOC_ACTIVE;
+			_sequence = (int) _viewType + (int) _winStatus;
+			_gotActive = true;
 
 			return true;
 		}
+
+		internal static int FindActive()
+		{
+			if (!_gotActive) return -1;
+
+			int idx = 0;
+
+			foreach (RevitWindow rw in ChildWindows)
+			{
+				if (rw.IsActive)
+				{
+					return idx;
+				}
+
+				idx++;
+			}
+
+			return -1;
+		}
+
+//		internal bool FromCurrentDocument()
+//		{
+//			return _windowTitle.Contains(Command.Doc.Title.ToLower());
+//		}
+
+		//			_viewType = v?.ViewType ?? ViewType.CeilingPlan; // 2
+		//			_viewType = v?.ViewType ?? ViewType.Internal; // 214
+		//			_viewType = v?.ViewType ?? ViewType.ThreeD; // 4
+		//			_viewType = v?.ViewType ?? ViewType.Undefined; // 0
+		//			_viewType = v?.ViewType ?? ViewType.Walkthrough; // 124
+		//			_viewType = v?.ViewType ?? ViewType.AreaPlan; // 116
+		//			_viewType = v?.ViewType ?? ViewType.ColumnSchedule; // 122
+		//			_viewType = v?.ViewType ?? ViewType.CostReport; // 119
+		//			_viewType = v?.ViewType ?? ViewType.Detail; // 118
+		//			_viewType = v?.ViewType ?? ViewType.DraftingView; // 10
+		//			_viewType = v?.ViewType ?? ViewType.DrawingSheet; // 6
+		//			_viewType = v?.ViewType ?? ViewType.Elevation; // 3
+		//			_viewType = v?.ViewType ?? ViewType.EngineeringPlan; // 115
+		//			_viewType = v?.ViewType ?? ViewType.FloorPlan; // 1
+		//			_viewType = v?.ViewType ?? ViewType.AreaPlan; // 116
+		//			_viewType = v?.ViewType ?? ViewType.Legend; // 11
+		//			_viewType = v?.ViewType ?? ViewType.ColumnSchedule; // 122
+		//			_viewType = v?.ViewType ?? ViewType.CostReport; // 119
+		//			_viewType = v?.ViewType ?? ViewType.LoadsReport; // 120
+		//			_viewType = v?.ViewType ?? ViewType.PanelSchedule; // 123
+		//			_viewType = v?.ViewType ?? ViewType.PresureLossReport; // 121
+		//			_viewType = v?.ViewType ?? ViewType.ProjectBrowser; // 7
+		//			_viewType = v?.ViewType ?? ViewType.Rendering; // 125
+		//			_viewType = v?.ViewType ?? ViewType.Report; // 8
+		//			_viewType = v?.ViewType ?? ViewType.Schedule; // 5
+		//			_viewType = v?.ViewType ?? ViewType.Section; // 117
+		//			_viewType = v?.ViewType ?? ViewType.SystemBrowser; // 12
+		//			_viewType = v?.ViewType ?? ViewType.ThreeD; // 4
+		//			_viewType = v?.ViewType ?? ViewType.Undefined; // 0
+		//
+
 
 	}
 }
