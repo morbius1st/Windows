@@ -36,23 +36,23 @@ namespace RevitWindows
 			return mi;
 		}
 
-		public class WinHandle : IWin32Window
-		{
-			public WinHandle(IntPtr h)
-			{
-				if (h == null)
-				{
-					throw new NullReferenceException();
-				}
-				Handle = h;
-			}
-
-			public IntPtr Handle { get; }
-		}
+//		public class WinHandle : IWin32Window
+//		{
+//			public WinHandle(IntPtr h)
+//			{
+//				if (h.Equals(null))
+//				{
+//					throw new NullReferenceException();
+//				}
+//				Handle = h;
+//			}
+//
+//			public IntPtr Handle { get; }
+//		}
 
 		internal static IntPtr GetMainWinHandle()
 		{
-			Process revitProcess = GetRevit(Command.Doc);
+			Process revitProcess = GetRevit(ProjectSelectForm.Doc);
 
 			if (revitProcess == null) { return IntPtr.Zero; }
 
@@ -137,6 +137,10 @@ namespace RevitWindows
 		[DllImport("user32.dll")]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool ShowWindow(IntPtr hWnd, ShowWinCmds nCmdShow);
+
+		[DllImport("user32.dll", SetLastError = true)]
+		internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, 
+			int cx, int cy, SetWindowPosFlags uFlags);
 
 		[DllImport("user32.dll")]
 		internal static extern int GetDpiForWindow(IntPtr parent);
@@ -306,12 +310,7 @@ namespace RevitWindows
 			public short fract;
 			public short value;
 		}
-
-		internal static IntPtr HWND_BOTTOM		= (IntPtr) 1;
-		internal static IntPtr HWND_NOTOPMOST	= (IntPtr) (0 - 2);
-		internal static IntPtr HWND_TOP			= (IntPtr) 0;
-		internal static IntPtr HWND_TOPMOST		= (IntPtr) (0 - 1);
-
+		
 
 		[Flags]
 		internal enum DeferWinPos : uint
@@ -508,6 +507,37 @@ namespace RevitWindows
 			SM_CONVERTABLESLATEMODE = 0x2003,
 			SM_SYSTEMDOCKED = 0x2004,
 		}
+
+		[Flags]
+		internal enum SetWindowPosFlags : int
+		{
+			SWP_NOSIZE			= 0x0001,
+			SWP_NOMOVE			= 0x0002,
+			SWP_NOZORDER		= 0x0004,
+			SWP_NOREDRAW		= 0x0008,
+			SWP_NOACTIVATE		= 0x0010,
+			SWP_DRAWFRAME		= 0x0020,
+			SWP_FRAMECHANGED	= 0x0020,
+			SWP_SHOWWINDOW		= 0x0040,
+			SWP_HIDEWINDOW		= 0x0080,
+			SWP_NOCOPYBITS		= 0x0100,
+			SWP_NOOWNERZORDER	= 0x0200,
+			SWP_NOREPOSITION	= 0x0200,
+			SWP_NOSENDCHANGING	= 0x0400,
+			SWP_DEFERERASE		= 0x2000,
+			SWP_ASYNCWINDOWPOS	= 0x4000,
+		}
+
+		internal static class HWND
+		{
+			public static IntPtr
+			
+			NoTopMost = new IntPtr(-2),
+			TopMost = new IntPtr(-1),
+			Top = new IntPtr(0),
+			Bottom = new IntPtr(1);
+		}
+
 
 
 		void ListTitleBarInfo(IntPtr win)

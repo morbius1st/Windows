@@ -6,3 +6,4 @@ B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\Revi
 B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\RevitWindows.Properties.Resources.resources
 B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\RevitWindows.dll
 B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\RevitWindows.pdb
+B:\Programming\VisualStudioProjects\RevitProjects\Windows\Windows\obj\Debug\RevitWindows.ProjectSelectForm.resources

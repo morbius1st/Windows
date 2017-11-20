@@ -5,6 +5,7 @@ using Rectangle = System.Drawing.Rectangle;
 
 using static RevitWindows.Command;
 using static RevitWindows.WindowApiUtilities;
+using static RevitWindows.WindowUtilities;
 
 namespace RevitWindows
 {
@@ -12,76 +13,77 @@ namespace RevitWindows
 	{
 		internal enum WindowStatus : short
 		{
-			CURR_DOC_ACTIVE = -1000,
-			CURR_DOC_NORMAL = 0,
-			CURR_DOC_MIN = 1000,
-			OTHER_DOC = 2000
+			DOC_MIN = -1,
+			DOC_ACTIVE = 0,
+			DOC_SELECT = 50,
+			DOC_NONSEL = 100
 		}
 
+		
 
 		internal static List<RevitWindow> ChildWindows;
-//		internal static List<RevitWindow> ChildWinMinimized;
-//		internal static List<RevitWindow> ChildWinOther;
 
-//		internal static IntPtr ActiveWindow { get; private set; } = IntPtr.Zero;
-
-		internal static int NormalWinCount { get; private set; }
+		internal static int SelectedWinCount { get; private set; }
+		internal static int NonSelWinCount { get; private set; }
 		internal static int MinimizedWinCount { get; private set; }
-		internal static int OtherDocWinCount { get; private set; }
 
 		private static bool _gotActive = false;
 
-
 		private int			_sequence;
 		private IntPtr		_handle;
+		private int			_docIndex;
 		private string		_windowTitle;
-		private ViewType	_viewType;
+		private int			_viewType;
 		private WindowStatus _winStatus;
 		internal Rectangle	Current;
 		internal Rectangle	Proposed;
 
-		internal RevitWindow(IntPtr intPtr, View v, string winTitle)
+		internal RevitWindow(IntPtr child, int selDocIdx, Rectangle current)
 		{
-			if (v == null)
-			{
-				_winStatus = WindowStatus.OTHER_DOC;
-				_viewType = ViewType.Internal;
+			string windowTitle = GetWindowTitle(child);
 
-				OtherDocWinCount++;
+			_docIndex = _formProjSel.IndexOfDocument(windowTitle);
+
+			if (_docIndex < 0) throw new IndexOutOfRangeException();
+
+			_viewType = ViewTypeIndexOf(windowTitle);
+
+			if (IsIconic(child))
+			{
+				_winStatus = WindowStatus.DOC_MIN;
+				MinimizedWinCount++;
+				_sequence = (int) _winStatus;
 			}
 			else
 			{
-				_viewType = v.ViewType;
-
-				if (IsIconic(intPtr))
+				if (selDocIdx == _docIndex)
 				{
-					_winStatus = WindowStatus.CURR_DOC_MIN;
-
-					MinimizedWinCount++;
-				}
-				else
-				{
-					NormalWinCount++;
+					SelectedWinCount++;
 
 					if (_gotActive)
 					{
-						_winStatus = WindowStatus.CURR_DOC_NORMAL;
+						_winStatus = WindowStatus.DOC_SELECT;
+						_sequence = (int) _winStatus + _viewType;
 					}
 					else
 					{
-						_winStatus = WindowStatus.CURR_DOC_ACTIVE;
+						_winStatus = WindowStatus.DOC_ACTIVE;
 						_gotActive = true;
+						_sequence = (int) _winStatus + _viewType;
 					}
-
+				}
+				else
+				{
+					NonSelWinCount++;
+					_winStatus = WindowStatus.DOC_NONSEL;
+					_sequence = (_docIndex + 1) * (int) _winStatus + _viewType;
 				}
 			}
 
-			_handle = intPtr;
-			_sequence = (int) _viewType + (int) _winStatus;
-			_windowTitle = winTitle.ToLower();
-			Current = Rectangle.Empty;
+			_handle = child;
+			_windowTitle = windowTitle.ToLower();
+			Current = current;
 			Proposed = Rectangle.Empty;
-			
 		}
 
 		private RevitWindow() { }
@@ -90,12 +92,14 @@ namespace RevitWindows
 		internal IntPtr Handle =>			_handle;
 		internal string	WindowTitle =>		_windowTitle;
 		internal WindowStatus WinStatus =>	_winStatus;
-		internal ViewType ViewType =>		_viewType;
+		internal int ViewType =>			_viewType;
+		internal int DocIndex =>			_docIndex;
+		internal string DocTitle =>			_formProjSel.GetDocName(_docIndex);
 
-		internal bool IsMinimized =>	_winStatus == WindowStatus.CURR_DOC_MIN;
-		internal bool IsNormal =>		_winStatus == WindowStatus.CURR_DOC_NORMAL;
-		internal bool IsActive =>		_winStatus == WindowStatus.CURR_DOC_ACTIVE;
-		internal bool IsOtherDoc =>		_winStatus == WindowStatus.OTHER_DOC;
+		internal bool IsMinimized =>	_winStatus == WindowStatus.DOC_MIN;
+		internal bool IsSelected =>		_winStatus == WindowStatus.DOC_SELECT;
+		internal bool IsNonSelected =>	_winStatus == WindowStatus.DOC_NONSEL;
+		internal bool IsActive =>		_winStatus == WindowStatus.DOC_ACTIVE;
 
 		//		internal RevitWindow Clone()
 		//		{
@@ -111,35 +115,37 @@ namespace RevitWindows
 		//			return rwn;
 		//		}
 
-		internal static void ResetChileWindows()
+		internal static void ResetRevitWindows()
 		{
 			_gotActive = false;
 
-			NormalWinCount = 0;
+			SelectedWinCount = 0;
+			NonSelWinCount = 0;
 			MinimizedWinCount = 0;
-			OtherDocWinCount = 0;
 
 			ChildWindows = new List<RevitWindow>(5);
+
+			InitViewTypeOrderList2();
 		}
 
-		internal bool MakeActive()
-		{
-			if (!IsNormal) return false;
-
-			int idx = FindActive();
-
-			if (idx >= 0)
-			{
-				ChildWindows[idx]._winStatus = WindowStatus.CURR_DOC_NORMAL;
-				ChildWindows[idx]._sequence = (int) _viewType + (int) _winStatus;
-			}
-
-			_winStatus = WindowStatus.CURR_DOC_ACTIVE;
-			_sequence = (int) _viewType + (int) _winStatus;
-			_gotActive = true;
-
-			return true;
-		}
+//		internal bool MakeActive()
+//		{
+//			if (!IsNormal) return false;
+//
+//			int idx = FindActive();
+//
+//			if (idx >= 0)
+//			{
+//				ChildWindows[idx]._winStatus = WindowStatus.DOC_NORMAL;
+//				ChildWindows[idx]._sequence = (int) _viewType + (int) _winStatus;
+//			}
+//
+//			_winStatus = WindowStatus.DOC_ACTIVE;
+//			_sequence = (int) _viewType + (int) _winStatus;
+//			_gotActive = true;
+//
+//			return true;
+//		}
 
 		internal static int FindActive()
 		{
@@ -159,6 +165,8 @@ namespace RevitWindows
 
 			return -1;
 		}
+
+
 
 //		internal bool FromCurrentDocument()
 //		{

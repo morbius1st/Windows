@@ -23,10 +23,6 @@ namespace RevitWindows
 		internal static int MarginRight { get; } = 20;
 		internal static int MarginBottom { get; } = 20;
 
-		internal static int OffsetVert { get; } = TitleBarHeight;
-		internal static int OffsetHoriz { get; } = TitleBarHeight;
-
-
 		// make sure that there is at least one ChildWindow and 
 		// that this is the active window
 //		internal static void InsureOneChildWindow()
@@ -45,34 +41,34 @@ namespace RevitWindows
 //
 //		}
 
-		internal static Rectangle CalcBadCascadeRect(int width, int height, ref int idx, ref int col)
-		{
-			const double leftAdj = 4;
-			const double topAdj = 0.5;
-
-			int left = CalcTopLeft(idx, col, MarginLeft, leftAdj);
-			int top = CalcTopLeft(idx, col, MarginTop, topAdj);
-			//
-			//			Rectangle ParentWin = ParentWindow;
-			//			Rectangle DisplayWin = DisplayScreenRect;
-
-
-			if (left + width + MarginRight > ParentWindow.Width || 
-				top + height + MarginBottom > ParentWindow.Height)
-			{
-				idx = 0;
-				col++;
-				left = CalcTopLeft(idx, col, MarginLeft, leftAdj);
-				top = CalcTopLeft(idx, col, MarginTop, topAdj);
-			}
-
-			return new Rectangle(left, top, width, height);
-		}
-
-		static int CalcTopLeft(int idx, int col, int margin, double adjAmt)
-		{
-			return (int) ((idx + (adjAmt * col)) * OffsetVert) + margin;
-		}
+//		internal static Rectangle CalcBadCascadeRect(int width, int height, ref int idx, ref int col)
+//		{
+//			const double leftAdj = 4;
+//			const double topAdj = 0.5;
+//
+//			int left = CalcTopLeft(idx, col, MarginLeft, leftAdj);
+//			int top = CalcTopLeft(idx, col, MarginTop, topAdj);
+//			//
+//			//			Rectangle ParentWin = ParentWindow;
+//			//			Rectangle DisplayWin = DisplayScreenRect;
+//
+//
+//			if (left + width + MarginRight > ParentWindow.Width || 
+//				top + height + MarginBottom > ParentWindow.Height)
+//			{
+//				idx = 0;
+//				col++;
+//				left = CalcTopLeft(idx, col, MarginLeft, leftAdj);
+//				top = CalcTopLeft(idx, col, MarginTop, topAdj);
+//			}
+//
+//			return new Rectangle(left, top, width, height);
+//		}
+//
+//		static int CalcTopLeft(int idx, int col, int margin, double adjAmt)
+//		{
+//			return (int) ((idx + (adjAmt * col)) * WinAdjVert) + margin;
+//		}
 
 
 

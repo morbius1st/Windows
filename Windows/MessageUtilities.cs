@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -15,10 +16,17 @@ namespace UtilityLibrary
 
 	    public static string nl = Environment.NewLine;
 
-		public static int output { get; set; } = 0;
+		// the default location to send messages
+		// is the debug window
+		private const int DEF_OUTPUT = 2;
+
+		// where to send the messasges
+		// 0 == rich text box
+		// 1 == console
+		// 2 == debug window
+		public static int output { get; set; } = DEF_OUTPUT;
 
 		public static RichTextBox rtb { get; set; }
-
 		
 		//
 		//		private static string fmtInt(int int1)
@@ -105,14 +113,28 @@ namespace UtilityLibrary
 
 		static public void sendMsg(string msg, Color color = new Color(), Font font = null)
 		{
-			if (output == 0 && rtb != null)
+			int where = output;
+
+			if (output == 0 && rtb == null)
 			{
-				rtb.AppendText(msg, color, font);
-			}
-			else
+				where = DEF_OUTPUT;
+			} 
+
+			switch (where)
 			{
-				Console.Write(msg);
+				case 0:
+					rtb.AppendText(msg, color, font);
+					break;
+				case 1:
+					Console.Write(msg);
+					break;
+				case 2:
+				default:
+					Debug.Write(msg);
+					break;
 			}
+
+
 		}
 
 		static public void clearConsole()

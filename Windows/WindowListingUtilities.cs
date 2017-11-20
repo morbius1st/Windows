@@ -11,6 +11,9 @@ using Rectangle = System.Drawing.Rectangle;
 using static RevitWindows.WindowUtilities;
 using static RevitWindows.WindowApiUtilities;
 using static RevitWindows.RevitWindow;
+using static RevitWindows.Command;
+using static RevitWindows.ProjectSelectForm;
+
 
 #endregion
 
@@ -25,6 +28,12 @@ namespace RevitWindows
 	{
 		internal const string nl = "\r\n";
 		internal const string pattRect = "x1|{0,5:D} y1|{1,5:D} x2|{2,5:D} y2|{3,5:D}";
+
+		static internal void ListDocuments()
+		{
+			logMsg(_formProjSel.ToString());
+		}
+
 
 		static internal void ListSystemInformation(IntPtr parent, int titleBarHeight)
 		{
@@ -112,9 +121,9 @@ namespace RevitWindows
 
 		internal static void ListMainWinInfo(IntPtr parent)
 		{
-			logMsgln("            main window| title| " + Command.Doc.Title + "  (" + Command.Doc.PathName + ")");
+			logMsgln("            main window| title| " + Doc.Title + "  (" + Doc.PathName + ")");
 			logMsgln("                 intptr| " + parent.ToString());
-			logMsgln("                extents| " + ListRect(NewRectangle(Command.UiApp.MainWindowExtents)));
+			logMsgln("                extents| " + ListRect(NewRectangle(UiApp.MainWindowExtents)));
 			logMsgln(nl);
 
 		}
@@ -123,14 +132,14 @@ namespace RevitWindows
 		{
 			// process revit views
 			logMsgln("revit window rectangles| ");
-			IList<UIView> views = GetRevitChildUiViews(Command.UiDoc);
+			IList<UIView> views = GetRevitChildUiViews(UiDoc);
 
 			Autodesk.Revit.DB.Rectangle r = null;
 
 			foreach (UIView v in views)
 			{
 //				Element e = Doc.GetElement(v.ViewId);
-				View e = (View) Command.Doc.GetElement(v.ViewId);
+				View e = (View) Doc.GetElement(v.ViewId);
 
 				logMsgln("              view name| " + e.Name);
 				logMsg(  "           view extents| " + ListRect(v.GetWindowRectangle()));
@@ -142,150 +151,193 @@ namespace RevitWindows
 			}
 		}
 
-		internal static void ListChildWindowInfo(int which, string message)
+//		internal static void ListChildWindowInfo(int which, string message)
+//		{
+//			if (ChildWindows == null) { return; }
+//
+//			logMsgln(nl);
+//			logMsgln(message);
+//			logMsg(nl);
+//
+//			ListChildWin(ChildWindows, "child windows", which);
+////			ListChildWin(RevitWindow.ChildWinMinimized, "minimized windows", which);
+////			ListChildWin(RevitWindow.ChildWinOther, "other windows", which);
+//
+//			int idx = FindActive();
+//
+//			logMsg("active window| ");
+//
+//			logMsgln(idx >= 0 ? ChildWindows[idx].Handle.ToString() : "none");
+//		}
+
+		internal static void ListChildWin(List<RevitWindow> rws, string title, 
+			params int[] whichLst)
 		{
-			if (ChildWindows == null) { return; }
+			int selectedWinCount = 0;
+			int normalWinCount = 0;
+			int minWinCount = 0;
 
-			logMsgln(nl);
-			logMsgln(message);
-			logMsg(nl);
-
-			ListChildWin(ChildWindows, "child windows", which);
-//			ListChildWin(RevitWindow.ChildWinMinimized, "minimized windows", which);
-//			ListChildWin(RevitWindow.ChildWinOther, "other windows", which);
-
-			int idx = FindActive();
-
-			logMsg("active window| ");
-
-			logMsgln(idx >= 0 ? ChildWindows[idx].Handle.ToString() : "none");
-		}
-
-		internal static void ListChildWin(List<RevitWindow> rws, string title, int which)
-		{
-			MessageUtilities.clearConsole();
+//			MessageUtilities.clearConsole();
 
 			int change = 0;
+			int count = 0;
 
 			logMsgln(title);
-
-			ListChildCounts();
+			
 			logMsg(nl);
-			logMsgln("normal windows");
+			logMsgln("minimized windows");
 
 			foreach (RevitWindow rw in rws)
 			{
-				if (change == 0 && rw.IsMinimized)
+				if (change == 0 && rw.IsActive)
 				{
-					logMsgln("minimized windows");
-					change = 1;
+					if (count == 0)
+					{
+						logMsgln("    none");
+					}
+					count = 0;
 
+					logMsgln("active window");
+					change = 1;
 				}
-				else if (change <= 1 && rw.IsOtherDoc)
+				else if (change == 1 && rw.IsSelected)
 				{
-					logMsgln("other windows");
+					if (count == 0)
+					{
+						logMsgln("    none");
+					}
+					count = 0;
+
+					logMsgln("selected windows");
 					change = 2;
 				}
-
-
-
-				switch (which)
+				else if (change == 2 && rw.IsNonSelected)
 				{
-					case 1:
-						ListChildHandle(rw);
-						ListChildIsMin(rw);
-						ListChildCurrRect(rw);
-						ListChildPropRect(rw);
-						break;
-					case 2:
-						ListChildHandle(rw);
-						ListChildViewType(rw);
-						ListChildIsMin(rw);
-						break;
-					case 3:
-						ListChildViewType(rw);
-						ListChildPropRect(rw);
-						break;
-					case 4:
-						ListChildTitle(rw);
-						ListChildHandle(rw);
-						ListChildSeq(rw);
-						ListChildWinStatus(rw);
-						ListChildViewType(rw);
-						ListChildIsFromCurrDoc(rw);
-						ListChildIsMin(rw);
-						break;
-					case 5:
-						ListChildTitle(rw);
-						ListChildHandle(rw);
-						ListChildPropRect(rw);
-						break;
-					case 6:
-						ListChildTitle(rw);
-						ListChildPropRect(rw);
-						break;
-					default:
-						ListChildHandle(rw);
-						break;
+					if (count == 0)
+					{
+						logMsgln("    none");
+					}
+					count = 0;
+
+					logMsgln("non-selected windows");
+					change = 3;
+				}
+
+				if (rw.IsActive || rw.IsSelected)
+				{
+					selectedWinCount++;
+				}
+				else if (rw.IsNonSelected)
+				{
+					normalWinCount++;
+				}
+				else if (rw.IsMinimized)
+				{
+					minWinCount++;
+				}
+
+				count++;
+				foreach (int which in whichLst)
+				{
+					switch (which)
+					{
+						case 1:
+							ListChildTitle(rw);
+							break;
+						case 2:
+							ListChildHandle(rw);
+							break;
+						case 3:
+							ListChildSeq(rw);
+							break;
+						case 4:
+							ListChildWinStatus(rw);
+							break;
+						case 5:
+							ListChildViewType(rw);
+							break;
+						case 6:
+							ListChildIsMin(rw);
+							break;
+						case 7:
+							ListChildIsActive(rw);
+							break;
+						case 8:
+							ListChildCurrRect(rw);
+							break;
+						case 9:
+							ListChildPropRect(rw);
+							break;
+					}
 				}
 				logMsg(nl);
 			}
+			ListChildCounts();
+			logMsg(nl);
+			logMsgln("      calc'd values| ");
+			logMsgln(" selected win count| " + selectedWinCount);
+			logMsgln("non-sel'd win count| " + normalWinCount);
+			logMsgln("minimized win count| " + minWinCount);
 		}
 
 		internal static void ListChildCounts()
 		{
-			logMsgln("   normal win count| " + RevitWindow.NormalWinCount);
-			logMsgln("minimized win count| " + RevitWindow.MinimizedWinCount);
-			logMsgln("    other win count| " + RevitWindow.OtherDocWinCount);
+			logMsgln(" selected win count| " + SelectedWinCount);
+			logMsgln("non-sel'd win count| " + NonSelWinCount);
+			logMsgln("minimized win count| " + MinimizedWinCount);
 		}
 
+		// 1
+		internal static void ListChildTitle(RevitWindow rw)
+		{
+			logMsgln("        child title| " + rw.WindowTitle);
+		}
+		// 2
 		internal static void ListChildHandle(RevitWindow rw)
 		{
 			logMsgln("       child handle| " + rw.Handle);
 		}
-
-		internal static void ListChildCurrRect(RevitWindow rw)
+		// 3
+		internal static void ListChildSeq(RevitWindow rw)
 		{
-			logMsgln("       rect current| " + ListRect(rw.Current));
+			logMsgln("     child sequence| " + rw.Sequence);
 		}
-
-		internal static void ListChildIsMin(RevitWindow rw)
+		// 4
+		internal static void ListChildWinStatus(RevitWindow rw)
 		{
-			logMsgln("       is minimized| " + rw.IsMinimized);
+			logMsgln("      window status| " + Enum.GetName(typeof(WindowStatus), rw.WinStatus));
 		}
-
-		internal static void ListChildPropRect(RevitWindow rw)
-		{
-			logMsgln("      rect proposed| " + ListRect(rw.Proposed));
-		}
-
+		// 5
 		internal static void ListChildViewType(RevitWindow rw)
 		{
 			logMsgln("     child ViewType| >" + rw.ViewType 
 				+ "<  viewtype value| " + (int) rw.ViewType);
 		}
-
-		internal static void ListChildTitle(RevitWindow rw)
+		// 6
+		internal static void ListChildIsMin(RevitWindow rw)
 		{
-			logMsgln("        child title| " + rw.WindowTitle);
+			logMsgln("       is minimized| " + rw.IsMinimized);
 		}
-
-		internal static void ListChildSeq(RevitWindow rw)
+		// 7
+		internal static void ListChildIsActive(RevitWindow rw)
 		{
-			logMsgln("     child sequence| " + rw.Sequence);
+			logMsgln("          is active| " + rw.IsActive);
 		}
-
-		internal static void ListChildIsFromCurrDoc(RevitWindow rw)
+		// 8
+		internal static void ListChildCurrRect(RevitWindow rw)
 		{
-			logMsgln("     is current doc| " + !rw.IsOtherDoc);
+			logMsgln("       rect current| " + ListRect(rw.Current));
 		}
-
-		internal static void ListChildWinStatus(RevitWindow rw)
+		// 9
+		internal static void ListChildPropRect(RevitWindow rw)
 		{
-			logMsgln("      window status| " + Enum.GetName(typeof(WindowStatus), rw.WinStatus));
+			logMsgln("      rect proposed| " + ListRect(rw.Proposed));
 		}
-
-
+//
+//		internal static void ListChildDocIndex(RevitWindow rw)
+//		{
+//			logMsgln("   doc index & name| " + rw.DocIndex + " :: " + rw.DocTitle);
+//		}
 
 		internal static string ListRect(RECT r)
 		{

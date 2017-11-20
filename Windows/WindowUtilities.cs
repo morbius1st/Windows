@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Windows.Media.Imaging;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Rectangle = System.Drawing.Rectangle;
 
 using static RevitWindows.WindowApiUtilities;
 using static RevitWindows.WindowListingUtilities;
+using static RevitWindows.ProjectSelectForm;
 
 #endregion
 
@@ -22,6 +24,8 @@ namespace RevitWindows
 {
 	class WindowUtilities
 	{
+		
+
 		// an AutoDesk rectangle from a system rectangle
 		internal static Autodesk.Revit.DB.Rectangle ConvertTo(Rectangle r)
 		{
@@ -139,7 +143,7 @@ namespace RevitWindows
 		{
 			// determine the main client rectangle - the repositioned
 			// view window go here
-			ParentWindow = NewRectangle(Command.UiApp.DrawingAreaExtents).Adjust(-2);
+			ParentWindow = NewRectangle(UiApp.DrawingAreaExtents).Adjust(-2);
 			TitleBarHeight = GetTitleBarHeight(parent);
 			DisplayScreenRect = GetScreenRectFromWindow(parent);
 
@@ -147,10 +151,12 @@ namespace RevitWindows
 			MinWindowWidth = GetSystemMetrics(SystemMetric.SM_CXMIN);
 		}
 
-		internal static bool GetRevitChildWindows(IntPtr parent)
+		internal static bool GetRevitChildWindows(IntPtr parent, int selDocIdx)
 		{
+			RevitWindow.ResetRevitWindows();
+
 			List<IntPtr> children = GetChildWindows(parent);
-			IList<View> views = GetRevitChildViews(Command.UiDoc);
+			IList<View> views = GetRevitChildViews(UiDoc);
 
 			bool activeSet = false;
 
@@ -164,36 +170,16 @@ namespace RevitWindows
 				if ((wi.dwExStyle & (uint) WinStyleEx.WS_EX_MDICHILD) == 0) { continue; }
 
 				// got a good window - store it for later
-
-				string winTitle = GetWindowTitle(child);
-
-				View v = FindRevitView(views, winTitle);
-
 				// create the revit window data
-				RevitWindow rw = new RevitWindow(child, v, winTitle);
-
-				// rw.current = ValidateWindow(NewRectangle(wi.rcWindow));
-				rw.Current = NewRectangle(wi.rcWindow);
-
-//				if (v == null)
-//				{
-////					RevitWindow.ChildWinOther.Add(rw);
-//				}
-//				else if (rw.IsMinimized)
-//				{
-////					RevitWindow.ChildWinMinimized.Add(rw);
-//				}
-//				else
-//				{
-//					// save the active window for later
-//					if (RevitWindow.ActiveWindow == IntPtr.Zero)
-//					{
-//						rw.MakeActive();
-////						RevitWindow.ActiveWindow = child;
-//					}
+				RevitWindow rw = new RevitWindow(child, selDocIdx, NewRectangle(wi.rcWindow));
 
 				RevitWindow.ChildWindows.Add(rw);
-//				}
+
+				// no maximized windows allowed
+				if (IsZoomed(child))
+				{
+					ShowWindow(child, ShowWinCmds.SW_RESTORE);
+				}
 			}
 
 			return true;
@@ -248,9 +234,15 @@ namespace RevitWindows
 
 			foreach (UIView u in uiViews)
 			{
-				views.Add((View) Command.Doc.GetElement(u.ViewId));
+				views.Add((View) Doc.GetElement(u.ViewId));
 			}
 			return views;
+		}
+
+		internal static string GetDocName(string docName)
+		{
+			int len = docName.Length - 4;
+			return docName.Substring(0, len);
 		}
 
 		internal static View FindRevitView(IList<View> views, string WinTitle)
@@ -266,44 +258,92 @@ namespace RevitWindows
 			}
 			return null;
 		}
+//
+//		internal static Dictionary<ViewType, int> ViewTypeOrder = 
+//			new Dictionary<ViewType, int>();
 
-		internal static Dictionary<ViewType, int> ViewTypeOrder = 
-			new Dictionary<ViewType, int>();
+		internal static Dictionary<string, int> ViewTypeOrder2;
 
-		internal int IndexOf(ViewType vt)
+//		internal int IndexOf(ViewType vt)
+//		{
+//			int order;
+//			return ViewTypeOrder.TryGetValue(vt, out order) ? order : -1;
+//		}
+
+		internal static int ViewTypeIndexOf(string viewTitle)
 		{
-			int order;
-			return ViewTypeOrder.TryGetValue(vt, out order) ? order : -1;
+			foreach (KeyValuePair<string, int> viewType in ViewTypeOrder2)
+			{
+				if (viewTitle.ToLower().StartsWith(viewType.Key, StringComparison.Ordinal))
+				{
+					return viewType.Value;
+				}
+			}
+
+			return 100;	// place at the end of the list
 		}
 
-		internal static void InitViewTypeOrderList()
-		{
-			int idx = 0;
+//
+//		internal static void InitViewTypeOrderList()
+//		{
+//			int idx = 0;
+//
+//			ViewTypeOrder.Add(ViewType.FloorPlan, idx++);			//Floor plan type of view. 
+//			ViewTypeOrder.Add(ViewType.EngineeringPlan, idx++);		//a Structural plan or Engineering plan type of view.
+//			ViewTypeOrder.Add(ViewType.CeilingPlan, idx++);			//Reflected ceiling plan type of view.
+//			ViewTypeOrder.Add(ViewType.Elevation, idx++);			//Elevation type of view.
+//			ViewTypeOrder.Add(ViewType.Section, idx++);				//a Cross section type of view. 
+//			ViewTypeOrder.Add(ViewType.DraftingView, idx++);		//Drafting type of view.
+//			ViewTypeOrder.Add(ViewType.Detail, idx++);				//Detail type of view.
+//			ViewTypeOrder.Add(ViewType.ThreeD, idx++);				//3D type of view.
+//			ViewTypeOrder.Add(ViewType.Walkthrough, idx++);			//Walk-Through type of 3D view.
+//			ViewTypeOrder.Add(ViewType.AreaPlan, idx++);			//an Area plan type of view. 
+//			ViewTypeOrder.Add(ViewType.Legend, idx++);				//a Legend type of view.
+//			ViewTypeOrder.Add(ViewType.Schedule, idx++);			//a Schedule type of view.
+//			ViewTypeOrder.Add(ViewType.ColumnSchedule, idx++);		//Column Schedule type of view. 
+//			ViewTypeOrder.Add(ViewType.Rendering, idx++);			//Rendering type of view.
+//			ViewTypeOrder.Add(ViewType.Report, idx++);				//Report type of view.
+//			ViewTypeOrder.Add(ViewType.CostReport, idx++);			//Cost Report view. 
+//			ViewTypeOrder.Add(ViewType.LoadsReport, idx++);			//Loads Report view. 
+//			ViewTypeOrder.Add(ViewType.PresureLossReport, idx++);	//Pressure Loss Report view.
+//			ViewTypeOrder.Add(ViewType.DrawingSheet, idx++);		//Drawing sheet type of view. 
+//			ViewTypeOrder.Add(ViewType.ProjectBrowser, idx++);		//The project browser view.
+//			ViewTypeOrder.Add(ViewType.SystemBrowser, idx++);		//The MEP system browser view. 
+//			ViewTypeOrder.Add(ViewType.PanelSchedule, idx++);		//Panel Schedule Report view.
+//			ViewTypeOrder.Add(ViewType.Undefined, idx++);			//an Undefined/ unspecified type of view.
+//			ViewTypeOrder.Add(ViewType.Internal, idx++);			//Revit's internal type of view
+//		}
 
-			ViewTypeOrder.Add(ViewType.FloorPlan, idx++);			//Floor plan type of view. 
-			ViewTypeOrder.Add(ViewType.EngineeringPlan, idx++);		//a Structural plan or Engineering plan type of view.
-			ViewTypeOrder.Add(ViewType.CeilingPlan, idx++);			//Reflected ceiling plan type of view.
-			ViewTypeOrder.Add(ViewType.Elevation, idx++);			//Elevation type of view.
-			ViewTypeOrder.Add(ViewType.Section, idx++);				//a Cross section type of view. 
-			ViewTypeOrder.Add(ViewType.DraftingView, idx++);		//Drafting type of view.
-			ViewTypeOrder.Add(ViewType.Detail, idx++);				//Detail type of view.
-			ViewTypeOrder.Add(ViewType.ThreeD, idx++);				//3D type of view.
-			ViewTypeOrder.Add(ViewType.Walkthrough, idx++);			//Walk-Through type of 3D view.
-			ViewTypeOrder.Add(ViewType.AreaPlan, idx++);			//an Area plan type of view. 
-			ViewTypeOrder.Add(ViewType.Legend, idx++);				//a Legend type of view.
-			ViewTypeOrder.Add(ViewType.Schedule, idx++);			//a Schedule type of view.
-			ViewTypeOrder.Add(ViewType.ColumnSchedule, idx++);		//Column Schedule type of view. 
-			ViewTypeOrder.Add(ViewType.Rendering, idx++);			//Rendering type of view.
-			ViewTypeOrder.Add(ViewType.Report, idx++);				//Report type of view.
-			ViewTypeOrder.Add(ViewType.CostReport, idx++);			//Cost Report view. 
-			ViewTypeOrder.Add(ViewType.LoadsReport, idx++);			//Loads Report view. 
-			ViewTypeOrder.Add(ViewType.PresureLossReport, idx++);	//Pressure Loss Report view.
-			ViewTypeOrder.Add(ViewType.DrawingSheet, idx++);		//Drawing sheet type of view. 
-			ViewTypeOrder.Add(ViewType.ProjectBrowser, idx++);		//The project browser view.
-			ViewTypeOrder.Add(ViewType.SystemBrowser, idx++);		//The MEP system browser view. 
-			ViewTypeOrder.Add(ViewType.PanelSchedule, idx++);		//Panel Schedule Report view.
-			ViewTypeOrder.Add(ViewType.Undefined, idx++);			//an Undefined/ unspecified type of view.
-			ViewTypeOrder.Add(ViewType.Internal, idx++);			//Revit's internal type of view
+		internal static void InitViewTypeOrderList2()
+		{
+			ViewTypeOrder2 = new Dictionary<string, int>(25);
+			int idx = 0;
+			ViewTypeOrder2.Add("unknown", 100);
+			ViewTypeOrder2.Add("sheet", idx++);						//* sheet view
+			ViewTypeOrder2.Add("floor plan", idx++);				//* Floor plan type of view. 
+			ViewTypeOrder2.Add("reflected ceiling plan", idx++);	//* reflected ceiling plan type of view.
+			ViewTypeOrder2.Add("area plan", idx++);					//* an area plan type of view. 
+			ViewTypeOrder2.Add("structural plan", idx++);			//* a structural plan or engineering plan type of view
+			ViewTypeOrder2.Add("elevation", idx++);					//* elevation type of view.
+			ViewTypeOrder2.Add("section", idx++);					//* a cross section type of view. 
+			ViewTypeOrder2.Add("drafting view", idx++);				//* drafting type of view.
+			ViewTypeOrder2.Add("detail view", idx++);				//* detail type of view.
+			ViewTypeOrder2.Add("3d view", idx++);					//* 3d type of view.
+			ViewTypeOrder2.Add("walkthrough", idx++);				//walk-through type of 3d view.
+			ViewTypeOrder2.Add("legend", idx++);					//a legend type of view.
+			ViewTypeOrder2.Add("schedule", idx++);					//* schedule type of view.
+			ViewTypeOrder2.Add("graphical column schedule", idx++);	//* column schedule type of view. 
+			ViewTypeOrder2.Add("rendering", idx++);					//rendering type of view.
+			ViewTypeOrder2.Add("report", idx++);					//report type of view.
+			ViewTypeOrder2.Add("cost report", idx++);				//cost report view. 
+			ViewTypeOrder2.Add("loads report", idx++);				//loads report view. 
+			ViewTypeOrder2.Add("presure loss report", idx++);		//pressure loss report view.
+			ViewTypeOrder2.Add("panel schedule", idx++);			//* panel schedule report view.
+			ViewTypeOrder2.Add("project browser", idx++);			//the project browser view.
+			ViewTypeOrder2.Add("system browser", idx++);			//the mep system browser view.
+			ViewTypeOrder2.Add("undefined", idx++);					//an undefined/ unspecified type of view.
+			ViewTypeOrder2.Add("internal", idx++);					//revit's internal type of view
+
 		}
 
 
