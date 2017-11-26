@@ -11,6 +11,8 @@ namespace RevitWindows
 {
 	internal class RevitWindow
 	{
+		private RevitWindow() { }
+
 		internal enum WindowStatus : short
 		{
 			DOC_MIN = -1,
@@ -19,32 +21,31 @@ namespace RevitWindows
 			DOC_NONSEL = 100
 		}
 
-		
-
 		internal static List<RevitWindow> ChildWindows;
 
+		// the number of "selected" windows
 		internal static int SelectedWinCount { get; private set; }
+		// the number of "non-selected" windows
 		internal static int NonSelWinCount { get; private set; }
+		// the number of minimized windows
 		internal static int MinimizedWinCount { get; private set; }
 
 		private static bool _gotActive = false;
 
 		private int			_sequence;
 		private IntPtr		_handle;
-		private int			_docIndex;
+//		private int			_docIndex;
 		private string		_windowTitle;
 		private int			_viewType;
 		private WindowStatus _winStatus;
 		internal Rectangle	Current;
 		internal Rectangle	Proposed;
 
-		internal RevitWindow(IntPtr child, int selDocIdx, Rectangle current)
+		internal RevitWindow(IntPtr child, Rectangle current, string currDoc)
 		{
 			string windowTitle = GetWindowTitle(child);
 
-			_docIndex = _formProjSel.IndexOfDocument(windowTitle);
-
-			if (_docIndex < 0) throw new IndexOutOfRangeException();
+			bool isCurrDoc = windowTitle.ToLower().Contains(currDoc);
 
 			_viewType = ViewTypeIndexOf(windowTitle);
 
@@ -56,29 +57,28 @@ namespace RevitWindows
 			}
 			else
 			{
-				if (selDocIdx == _docIndex)
+				if (isCurrDoc)
 				{
 					SelectedWinCount++;
 
 					if (_gotActive)
 					{
 						_winStatus = WindowStatus.DOC_SELECT;
-						_sequence = (int) _winStatus + _viewType;
 					}
 					else
 					{
 						_winStatus = WindowStatus.DOC_ACTIVE;
 						_gotActive = true;
-						_sequence = (int) _winStatus + _viewType;
 					}
 				}
 				else
 				{
 					NonSelWinCount++;
 					_winStatus = WindowStatus.DOC_NONSEL;
-					_sequence = (_docIndex + 1) * (int) _winStatus + _viewType;
 				}
 			}
+
+			_sequence = (int) _winStatus + _viewType;
 
 			_handle = child;
 			_windowTitle = windowTitle.ToLower();
@@ -86,34 +86,20 @@ namespace RevitWindows
 			Proposed = Rectangle.Empty;
 		}
 
-		private RevitWindow() { }
+		
 
 		internal int Sequence =>			_sequence;
 		internal IntPtr Handle =>			_handle;
 		internal string	WindowTitle =>		_windowTitle;
 		internal WindowStatus WinStatus =>	_winStatus;
 		internal int ViewType =>			_viewType;
-		internal int DocIndex =>			_docIndex;
-		internal string DocTitle =>			_formProjSel.GetDocName(_docIndex);
+//		internal int DocIndex =>			_docIndex;
+//		internal string DocTitle =>			_formProjSel.GetDocName(_docIndex);
 
 		internal bool IsMinimized =>	_winStatus == WindowStatus.DOC_MIN;
 		internal bool IsSelected =>		_winStatus == WindowStatus.DOC_SELECT;
 		internal bool IsNonSelected =>	_winStatus == WindowStatus.DOC_NONSEL;
 		internal bool IsActive =>		_winStatus == WindowStatus.DOC_ACTIVE;
-
-		//		internal RevitWindow Clone()
-		//		{
-		//			RevitWindow rwn = new RevitWindow();
-		//			rwn._sequence = this._sequence;
-		//			rwn._handle = this._handle;
-		//			rwn._windowTitle = this._windowTitle;
-		//			rwn._viewType = this._viewType;
-		//			rwn._state = this._state;
-		//			rwn.Current = this.Current;
-		//			rwn.Proposed = this.Proposed;
-		//
-		//			return rwn;
-		//		}
 
 		internal static void ResetRevitWindows()
 		{
@@ -125,47 +111,8 @@ namespace RevitWindows
 
 			ChildWindows = new List<RevitWindow>(5);
 
-			InitViewTypeOrderList2();
+			InitViewTypeOrderList();
 		}
-
-//		internal bool MakeActive()
-//		{
-//			if (!IsNormal) return false;
-//
-//			int idx = FindActive();
-//
-//			if (idx >= 0)
-//			{
-//				ChildWindows[idx]._winStatus = WindowStatus.DOC_NORMAL;
-//				ChildWindows[idx]._sequence = (int) _viewType + (int) _winStatus;
-//			}
-//
-//			_winStatus = WindowStatus.DOC_ACTIVE;
-//			_sequence = (int) _viewType + (int) _winStatus;
-//			_gotActive = true;
-//
-//			return true;
-//		}
-
-		internal static int FindActive()
-		{
-			if (!_gotActive) return -1;
-
-			int idx = 0;
-
-			foreach (RevitWindow rw in ChildWindows)
-			{
-				if (rw.IsActive)
-				{
-					return idx;
-				}
-
-				idx++;
-			}
-
-			return -1;
-		}
-
 
 
 //		internal bool FromCurrentDocument()

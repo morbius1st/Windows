@@ -36,33 +36,11 @@ namespace RevitWindows
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.cboSelectProject = new System.Windows.Forms.ComboBox();
-			this.lblSelProject = new System.Windows.Forms.Label();
 			this.btnOK = new System.Windows.Forms.Button();
 			this.btnExit = new System.Windows.Forms.Button();
+			this.cboWinStyle = new System.Windows.Forms.ComboBox();
+			this.lblWinStyle = new System.Windows.Forms.Label();
 			this.SuspendLayout();
-			// 
-			// cboSelectProject
-			// 
-			this.cboSelectProject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.cboSelectProject.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboSelectProject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.cboSelectProject.FormattingEnabled = true;
-			this.cboSelectProject.Location = new System.Drawing.Point(12, 40);
-			this.cboSelectProject.Name = "cboSelectProject";
-			this.cboSelectProject.Size = new System.Drawing.Size(284, 21);
-			this.cboSelectProject.TabIndex = 0;
-			this.cboSelectProject.DropDownClosed += new System.EventHandler(this.cboSelectProject_DropDownClosed);
-			// 
-			// lblSelProject
-			// 
-			this.lblSelProject.AutoSize = true;
-			this.lblSelProject.Location = new System.Drawing.Point(9, 22);
-			this.lblSelProject.Name = "lblSelProject";
-			this.lblSelProject.Size = new System.Drawing.Size(82, 13);
-			this.lblSelProject.TabIndex = 1;
-			this.lblSelProject.Text = "Select a Project";
 			// 
 			// btnOK
 			// 
@@ -70,7 +48,7 @@ namespace RevitWindows
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btnOK.FlatAppearance.BorderColor = System.Drawing.Color.White;
 			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnOK.Location = new System.Drawing.Point(206, 81);
+			this.btnOK.Location = new System.Drawing.Point(230, 57);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(90, 30);
 			this.btnOK.TabIndex = 2;
@@ -84,7 +62,7 @@ namespace RevitWindows
 			this.btnExit.DialogResult = System.Windows.Forms.DialogResult.No;
 			this.btnExit.FlatAppearance.BorderColor = System.Drawing.Color.White;
 			this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnExit.Location = new System.Drawing.Point(110, 81);
+			this.btnExit.Location = new System.Drawing.Point(326, 57);
 			this.btnExit.Name = "btnExit";
 			this.btnExit.Size = new System.Drawing.Size(90, 30);
 			this.btnExit.TabIndex = 3;
@@ -92,36 +70,49 @@ namespace RevitWindows
 			this.btnExit.UseVisualStyleBackColor = true;
 			this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
 			// 
+			// cboWinStyle
+			// 
+			this.cboWinStyle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.cboWinStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboWinStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.cboWinStyle.FormattingEnabled = true;
+			this.cboWinStyle.Location = new System.Drawing.Point(97, 63);
+			this.cboWinStyle.Name = "cboWinStyle";
+			this.cboWinStyle.Size = new System.Drawing.Size(127, 21);
+			this.cboWinStyle.TabIndex = 4;
+			// 
+			// lblWinStyle
+			// 
+			this.lblWinStyle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblWinStyle.AutoSize = true;
+			this.lblWinStyle.Location = new System.Drawing.Point(9, 66);
+			this.lblWinStyle.Name = "lblWinStyle";
+			this.lblWinStyle.Size = new System.Drawing.Size(72, 13);
+			this.lblWinStyle.TabIndex = 5;
+			this.lblWinStyle.Text = "Window Style";
+			// 
 			// ProjectSelectForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(308, 123);
+			this.ClientSize = new System.Drawing.Size(428, 99);
+			this.Controls.Add(this.lblWinStyle);
+			this.Controls.Add(this.cboWinStyle);
 			this.Controls.Add(this.btnExit);
 			this.Controls.Add(this.btnOK);
-			this.Controls.Add(this.lblSelProject);
-			this.Controls.Add(this.cboSelectProject);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "ProjectSelectForm";
 			this.Text = "Select A Project";
-//			this.Activated += new System.EventHandler(this.ProjectSelectForm_Activated);
-//			this.Deactivate += new System.EventHandler(this.ProjectSelectForm_Deactivate);
-//			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProjectSelectForm_FormClosing);
-//			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProjectSelectForm_FormClosed);
-//			this.Load += new System.EventHandler(this.ProjectSelectForm_Load);
-//			this.Shown += new System.EventHandler(this.ProjectSelectForm_Shown);
-//			this.VisibleChanged += new System.EventHandler(this.ProjectSelectForm_VisibleChanged);
-//			this.Leave += new System.EventHandler(this.ProjectSelectForm_Leave);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 
 		#endregion
-
-		private ComboBox cboSelectProject;
-		private Label lblSelProject;
 		private Button btnOK;
 		private Button btnExit;
+		private ComboBox cboWinStyle;
+		private Label lblWinStyle;
 	}
 }

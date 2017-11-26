@@ -1,21 +1,13 @@
 #region Namespaces
 
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
+
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
-using Application = Autodesk.Revit.ApplicationServices.Application;
+using Autodesk.Revit.UI.Events;
 
-using UtilityLibrary;
-
-using static RevitWindows.WindowUtilities;
 using static RevitWindows.WindowApiUtilities;
-using static RevitWindows.WindowListingUtilities;
-using static RevitWindows.RevitWindow;
 using static RevitWindows.ProjectSelectForm;
 
 using static UtilityLibrary.MessageUtilities;
@@ -27,13 +19,14 @@ namespace RevitWindows
 	[Transaction(TransactionMode.Manual)]
 	public class Command : IExternalCommand
 	{
-		private const string MAIN_WINDOW_KEY = "Main :: Window";
+		private const bool AUTO_UPDATE_ON_OPEN_VIEW = true;
+		private const bool AUTO_UPDATE_ON_ACTIVATE_DOCUMENT = true;
+
 
 		private static MainForm _form;
 		internal static ProjectSelectForm _formProjSel;
 
-		internal static string SelectedDocument;
-
+		private static bool EventsRegistered = false;
 
 		public Result Execute(
 			ExternalCommandData commandData,
@@ -43,105 +36,70 @@ namespace RevitWindows
 			_uiapp = commandData.Application;
 			_uidoc = _uiapp.ActiveUIDocument;
 			_app = _uiapp.Application;
-			_doc = _uidoc.Document;
+//			_doc = _uidoc.Document;
 
-			MessageUtilities.clearConsole();
+			clearConsole();
 
 			_form = new MainForm();
 
-			logMsgFmtln("constructing form - start");
 			_formProjSel = new ProjectSelectForm();
-			logMsgFmtln("constructing form - end");
 
-			_formProjSel.Parent = GetMainWinHandle();
+			_formProjSel.Parent = GetMainWinHandle(_uidoc.Document);
 			if (_formProjSel.Parent == IntPtr.Zero) { return Result.Failed; }
 
 			_formProjSel.Show();
 
-			//			logMsgFmtln("showing form - start");
-			//			_formProjSel.SelectDocument();
-			//			logMsgFmtln("showing form - end");
-			//
-			//			int selDocIdx = _formProjSel.GetSelDocIdx;
-			//
-			//			int WindowLayoutStyle = 0;
-			//
-
-			//
-			//			GetScreenMetrics(parent);
-			//
-			//			// get the list of child windows
-			//			if (!GetRevitChildWindows(parent, selDocIdx) || 
-			//				SelectedWinCount == 0)
-			//			{
-			//				return Result.Failed;
-			//			}
-			//
-			////			ListInfo();
-			////			return Result.Succeeded;
-			//
-			//			// process and adjust the windows
-			//			WindowManager winMgr = 
-			//				new WindowManager();
-			//
-			//			winMgr.AdjustWindowLayout(WindowLayoutStyle, selDocIdx);
-
-			RegisterDocEvents();
+			if (!RegisterDocEvents()) return Result.Failed;
 
 			return Result.Succeeded;
 		}
 
-//		internal static UIDocument UiDoc => ProjectSelectForm._uidoc;
-//		internal static UIApplication UiApp => ProjectSelectForm._uiapp;
-//		internal static Application App => ProjectSelectForm._app;
-//		internal static Document Doc => ProjectSelectForm._doc;
-
 		internal static MainForm MForm => _form;
-
-//		void ListInfo()
-//		{
-//			logMsgln("selection made");
-//			logMsgln("selected document| " + _formProjSel.GetSelDocName);
-//			logMsgln("   selected index| " + _formProjSel.GetSelDocIdx);
-//			logMsgln("");
-//
-//			logMsgln("document list");
-//			ListDocuments();
-//			logMsgln("");
-//
-//			SortChildWindows();
-//			ListChildWin(ChildWindows, "child windows", 7);
-//		}
 
 		bool RegisterDocEvents()
 		{
+			if (EventsRegistered) return true;
+
 			try
 			{
-				_app.DocumentOpened += new EventHandler<DocumentOpenedEventArgs>(DocOpenEvent);
-				_app.DocumentCreated += new EventHandler<DocumentCreatedEventArgs>(DocCreateEvent);
+//				_app.DocumentOpened += new EventHandler<DocumentOpenedEventArgs>(DocOpenEvent);
+//				_app.DocumentCreated += new EventHandler<DocumentCreatedEventArgs>(DocCreateEvent);
 
+				_uiapp.ViewActivated += ViewActivated;
+				_uiapp.ApplicationClosing += AppClosing;
 			}
 			catch (Exception)
 			{
 				return false;
 			}
+
+			EventsRegistered = true;
+
 			return true;
 		}
 
-		void DocOpenEvent(object sender, DocumentOpenedEventArgs args) 
+		private void ViewActivated(object sender, ViewActivatedEventArgs args)
 		{
-			_formProjSel.GetDocumentList(args.Document.Title);
+			View vPrev = args.PreviousActiveView;
+			View vCurr = args.CurrentActiveView;
+
+			if (AUTO_UPDATE_ON_ACTIVATE_DOCUMENT &&
+				!vPrev.Document.Title.ToLower().Equals(vCurr.Document.Title.ToLower()))
+			{
+				_formProjSel.UpdateWindowLayout();
+			}
+//			else if (AUTO_UPDATE_ON_OPEN_VIEW)
+//			{
+//				_formProjSel.UpdateWindowLayoutDelay();
+//			}
 		}
 
-		void DocCreateEvent(object sender, DocumentCreatedEventArgs args)
+		private void AppClosing(object sender, ApplicationClosingEventArgs args)
 		{
-			_formProjSel.GetDocumentList(args.Document.Title);
-		}
+			_uiapp.ViewActivated -= ViewActivated;
+			_uiapp.ApplicationClosing -= AppClosing;
 
-//		void UnRegiseterDocumentOpenEvent()
-//		{
-//			_app.DocumentOpened -= DocOpenEvt;
-//		}
+		}
 
 	}
 }

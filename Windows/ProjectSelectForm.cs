@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Form = System.Windows.Forms.Form;
 
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Application = Autodesk.Revit.ApplicationServices.Application;
 
@@ -43,25 +44,32 @@ namespace RevitWindows
 
 		private static IntPtr _parent;
 
-		private static List<string> _docNames;// = new List<string>(3);
-
 		private const string WHERE = "@projSelForm| ";
 
-		internal static UIApplication UiApp => _uiapp;
-		internal static UIDocument UiDoc => _uidoc;
-		internal static Application App => _app;
-		internal static Document Doc => _doc;
+		private int _winStyle;
+
+		private List<string> _winStyles = new List<string>()
+		{
+			"Proper Cascade", 
+			"Window's Cascade",
+			"At Left", 
+			"At Bottom", 
+			"At Right", 
+			"At Top",
+			"At Left - Overlapped"
+		};
 
 		public ProjectSelectForm()
 		{
-//			logMsgFmtln(WHERE, "form creating form");
 			InitializeComponent();
-			GetDocumentList(_doc.Title);
+
+			foreach (string s in _winStyles)
+			{
+				cboWinStyle.Items.Add(s);
+			}
+
+			cboWinStyle.SelectedIndex = 0;
 		}
-
-		internal string GetSelDocName => _docNames[GetSelDocIdx];
-
-		internal int GetSelDocIdx => IndexOfDocument((string) cboSelectProject.SelectedItem);
 
 		internal IntPtr Parent
 		{
@@ -74,120 +82,6 @@ namespace RevitWindows
 			this.Focus();
 		}
 
-		internal int IndexOfDocument(string docTitle)
-		{
-			string title = docTitle.ToLower();
-
-			for (int i = 0; i < _docNames.Count; i++)
-			{
-				if (title.Contains(_docNames[i]))
-				{
-					return i;
-				}
-			}
-
-			return -1;
-		}
-
-		internal void GetDocumentList(string documentTitle)
-		{
-			// initialize the list of documents currently open
-			DocumentSet docs = _app.Documents;
-
-			string[] dt = new string[docs.Size];
-
-			string currDocTitle = documentTitle.ToLower();
-
-			int idx = 1;
-
-			cboSelectProject.Items.Clear();
-
-			foreach (Document d in docs)
-			{
-				string docTitle = d.Title.ToLower();
-
-				cboSelectProject.Items.Add(docTitle);
-
-				if (docTitle.Equals(currDocTitle))
-				{
-					dt[0] = docTitle;
-
-					cboSelectProject.SelectedIndex =
-						cboSelectProject.Items.Count - 1;
-
-				}
-				else
-				{
-					dt[idx++] = docTitle;
-				}
-			}
-
-//			_docNames.Clear();
-			_docNames = new List<string>(dt);
-
-			this.Refresh();
-		}
-
-		internal string GetDocName(int index)
-		{
-			return _docNames[index];
-		}
-
-		public override string ToString()
-		{
-			StringBuilder sb = new StringBuilder();
-
-			for (int i = 0; i < _docNames.Count; i++)
-			{
-				sb.Append(nl);
-				sb.Append(" doc name| " + _docNames[i]).Append(nl);
-				sb.Append("  doc idx| " + i).Append(nl);
-			}
-
-			return sb.ToString();
-		}
-//
-//		private void ProjectSelectForm_Activated(object sender, EventArgs e)
-//		{
-//			logMsgFmtln(WHERE, "form Activated");
-//		}
-//
-//		private void ProjectSelectForm_Deactivate(object sender, EventArgs e)
-//		{
-//			logMsgFmtln(WHERE, "form Deactivate");
-//		}
-//
-//		private void ProjectSelectForm_FormClosed(object sender, FormClosedEventArgs e)
-//		{
-//			logMsgFmtln(WHERE, "form FormClosed");
-//		}
-//
-//		private void ProjectSelectForm_FormClosing(object sender, FormClosingEventArgs e)
-//		{
-//			logMsgFmtln(WHERE, "form FormClosing");
-//		}
-//
-//		private void ProjectSelectForm_Leave(object sender, EventArgs e)
-//		{
-//			logMsgFmtln(WHERE, "form Leave");
-//		}
-//
-//		private void ProjectSelectForm_Load(object sender, EventArgs e)
-//		{
-//			logMsgFmtln(WHERE, "form Load");
-//		}
-//
-//		private void ProjectSelectForm_Shown(object sender, EventArgs e)
-//		{
-//			logMsgFmtln(WHERE, "form Shown");
-//		}
-//
-//		private void ProjectSelectForm_VisibleChanged(object sender, EventArgs e)
-//		{
-//			logMsgFmtln(WHERE, "form VisibleChanged");
-//		}
-
-
 		private void btnExit_Click(object sender, EventArgs e)
 		{
 			this.Close();
@@ -196,9 +90,17 @@ namespace RevitWindows
 
 		private void btnOK_Click(object sender, EventArgs e)
 		{
-			logMsgFmtln(WHERE, "*** button pressed ***");
+			UpdateWindowLayout();
 
-			bool result = InitializeRevitWindows(GetSelDocIdx);
+		}
+
+		internal void UpdateWindowLayout()
+		{
+			_uidoc = _uiapp.ActiveUIDocument;
+			_app = _uiapp.Application;
+			_doc = _uidoc.Document;
+
+			bool result = InitializeRevitWindows();
 
 			if (!result)
 			{
@@ -206,36 +108,25 @@ namespace RevitWindows
 				return;
 			}
 
-			int WindowLayoutStyle = 0;
+			int windowLayoutStyle =
+				_winStyles.IndexOf((string) cboWinStyle.SelectedItem);
 
 			WindowManager winMgr =
 				new WindowManager();
 
-			winMgr.AdjustWindowLayout(WindowLayoutStyle, GetSelDocIdx);
-		}
-
-
-		internal int SelectDocument()
-		{
-			if (_docNames.Count == 1) return 0;
-
-			DialogResult r = this.ShowDialog();
-			//			this.Show();
-
-			if (r == DialogResult.OK)
+			if (!winMgr.AdjustWindowLayout(windowLayoutStyle))
 			{
-				return cboSelectProject.SelectedIndex;
+//				this.Close();
+				return;
 			}
-
-			return -1;
 		}
 
-		private bool InitializeRevitWindows(int selDocIdx)
+		private bool InitializeRevitWindows()
 		{
 			GetScreenMetrics(_parent);
 
 			// get the list of child windows
-			if (!GetRevitChildWindows(_parent, selDocIdx) ||
+			if (!GetRevitChildWindows(_parent) ||
 				SelectedWinCount == 0)
 			{
 				return false;

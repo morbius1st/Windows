@@ -50,9 +50,9 @@ namespace RevitWindows
 //			public IntPtr Handle { get; }
 //		}
 
-		internal static IntPtr GetMainWinHandle()
+		internal static IntPtr GetMainWinHandle(Document doc)
 		{
-			Process revitProcess = GetRevit(ProjectSelectForm.Doc);
+			Process revitProcess = GetRevit(doc);
 
 			if (revitProcess == null) { return IntPtr.Zero; }
 

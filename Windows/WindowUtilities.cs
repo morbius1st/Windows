@@ -24,6 +24,7 @@ namespace RevitWindows
 {
 	class WindowUtilities
 	{
+		internal const string APP_NAME = "Revit Windows";
 		
 
 		// an AutoDesk rectangle from a system rectangle
@@ -143,7 +144,7 @@ namespace RevitWindows
 		{
 			// determine the main client rectangle - the repositioned
 			// view window go here
-			ParentWindow = NewRectangle(UiApp.DrawingAreaExtents).Adjust(-2);
+			ParentWindow = NewRectangle(_uiapp.DrawingAreaExtents).Adjust(-2);
 			TitleBarHeight = GetTitleBarHeight(parent);
 			DisplayScreenRect = GetScreenRectFromWindow(parent);
 
@@ -151,16 +152,18 @@ namespace RevitWindows
 			MinWindowWidth = GetSystemMetrics(SystemMetric.SM_CXMIN);
 		}
 
-		internal static bool GetRevitChildWindows(IntPtr parent, int selDocIdx)
+		internal static bool GetRevitChildWindows(IntPtr parent)
 		{
 			RevitWindow.ResetRevitWindows();
 
 			List<IntPtr> children = GetChildWindows(parent);
-			IList<View> views = GetRevitChildViews(UiDoc);
+			IList<View> views = GetRevitChildViews(_uidoc);
 
 			bool activeSet = false;
 
 			if (children == null || children.Count == 0) { return false; }
+
+			string currDoc = _doc.Title.ToLower();
 
 			foreach (IntPtr child in children)
 			{
@@ -171,7 +174,7 @@ namespace RevitWindows
 
 				// got a good window - store it for later
 				// create the revit window data
-				RevitWindow rw = new RevitWindow(child, selDocIdx, NewRectangle(wi.rcWindow));
+				RevitWindow rw = new RevitWindow(child, NewRectangle(wi.rcWindow), currDoc);
 
 				RevitWindow.ChildWindows.Add(rw);
 
@@ -234,7 +237,7 @@ namespace RevitWindows
 
 			foreach (UIView u in uiViews)
 			{
-				views.Add((View) Doc.GetElement(u.ViewId));
+				views.Add((View) _doc.GetElement(u.ViewId));
 			}
 			return views;
 		}
@@ -314,7 +317,7 @@ namespace RevitWindows
 //			ViewTypeOrder.Add(ViewType.Internal, idx++);			//Revit's internal type of view
 //		}
 
-		internal static void InitViewTypeOrderList2()
+		internal static void InitViewTypeOrderList()
 		{
 			ViewTypeOrder2 = new Dictionary<string, int>(25);
 			int idx = 0;

@@ -121,9 +121,9 @@ namespace RevitWindows
 
 		internal static void ListMainWinInfo(IntPtr parent)
 		{
-			logMsgln("            main window| title| " + Doc.Title + "  (" + Doc.PathName + ")");
+			logMsgln("            main window| title| " + _doc.Title + "  (" + _doc.PathName + ")");
 			logMsgln("                 intptr| " + parent.ToString());
-			logMsgln("                extents| " + ListRect(NewRectangle(UiApp.MainWindowExtents)));
+			logMsgln("                extents| " + ListRect(NewRectangle(_uiapp.MainWindowExtents)));
 			logMsgln(nl);
 
 		}
@@ -132,14 +132,14 @@ namespace RevitWindows
 		{
 			// process revit views
 			logMsgln("revit window rectangles| ");
-			IList<UIView> views = GetRevitChildUiViews(UiDoc);
+			IList<UIView> views = GetRevitChildUiViews(_uidoc);
 
 			Autodesk.Revit.DB.Rectangle r = null;
 
 			foreach (UIView v in views)
 			{
 //				Element e = Doc.GetElement(v.ViewId);
-				View e = (View) Doc.GetElement(v.ViewId);
+				View e = (View) _doc.GetElement(v.ViewId);
 
 				logMsgln("              view name| " + e.Name);
 				logMsg(  "           view extents| " + ListRect(v.GetWindowRectangle()));
@@ -150,25 +150,6 @@ namespace RevitWindows
 				v.Dispose();
 			}
 		}
-
-//		internal static void ListChildWindowInfo(int which, string message)
-//		{
-//			if (ChildWindows == null) { return; }
-//
-//			logMsgln(nl);
-//			logMsgln(message);
-//			logMsg(nl);
-//
-//			ListChildWin(ChildWindows, "child windows", which);
-////			ListChildWin(RevitWindow.ChildWinMinimized, "minimized windows", which);
-////			ListChildWin(RevitWindow.ChildWinOther, "other windows", which);
-//
-//			int idx = FindActive();
-//
-//			logMsg("active window| ");
-//
-//			logMsgln(idx >= 0 ? ChildWindows[idx].Handle.ToString() : "none");
-//		}
 
 		internal static void ListChildWin(List<RevitWindow> rws, string title, 
 			params int[] whichLst)
@@ -268,6 +249,9 @@ namespace RevitWindows
 						case 9:
 							ListChildPropRect(rw);
 							break;
+						case 10:
+							ListChildIsSelected(rw);
+							break;
 					}
 				}
 				logMsg(nl);
@@ -333,11 +317,16 @@ namespace RevitWindows
 		{
 			logMsgln("      rect proposed| " + ListRect(rw.Proposed));
 		}
-//
-//		internal static void ListChildDocIndex(RevitWindow rw)
-//		{
-//			logMsgln("   doc index & name| " + rw.DocIndex + " :: " + rw.DocTitle);
-//		}
+		// 10
+		internal static void ListChildIsSelected(RevitWindow rw)
+		{
+			logMsgln("        is selected| " + rw.IsSelected);
+		}
+		//
+		//		internal static void ListChildDocIndex(RevitWindow rw)
+		//		{
+		//			logMsgln("   doc index & name| " + rw.DocIndex + " :: " + rw.DocTitle);
+		//		}
 
 		internal static string ListRect(RECT r)
 		{
