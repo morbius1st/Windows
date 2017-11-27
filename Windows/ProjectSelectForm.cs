@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using Form = System.Windows.Forms.Form;
 
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Application = Autodesk.Revit.ApplicationServices.Application;
 
-using static RevitWindows.Command;
 using static RevitWindows.WindowUtilities;
-using static RevitWindows.WindowApiUtilities;
+using static RevitWindows.WindowListingUtilities;
 using static RevitWindows.RevitWindow;
 
-using static UtilityLibrary.MessageUtilities;
+//using static UtilityLibrary.MessageUtilities;
 
 /* form creation process
  * constructor / create & initilize the form
@@ -37,18 +33,16 @@ namespace RevitWindows
 {
 	public partial class ProjectSelectForm : Form
 	{
-		internal static UIApplication _uiapp;
-		internal static UIDocument _uidoc;
-		internal static Application _app;
-		internal static Document _doc;
+		internal static UIApplication Uiapp;
+		internal static UIDocument Uidoc;
+		internal static Application App;
+		internal static Document Doc;
 
 		private static IntPtr _parent;
 
 		private const string WHERE = "@projSelForm| ";
 
-		private int _winStyle;
-
-		private List<string> _winStyles = new List<string>()
+		private readonly List<string> _winStyles = new List<string>()
 		{
 			"Proper Cascade", 
 			"Window's Cascade",
@@ -96,11 +90,18 @@ namespace RevitWindows
 
 		internal void UpdateWindowLayout()
 		{
-			_uidoc = _uiapp.ActiveUIDocument;
-			_app = _uiapp.Application;
-			_doc = _uidoc.Document;
+			Uidoc = Uiapp.ActiveUIDocument;
+			App = Uiapp.Application;
+			Doc = Uidoc.Document;
 
 			bool result = InitializeRevitWindows();
+
+			SortChildWindows();
+
+			ListChildWin(ChildWindows, nl + "child windows after initalize",
+				1, 3, 4, 5, 6, 7, 10, 11, 12);
+
+			result = false;
 
 			if (!result)
 			{
@@ -127,7 +128,7 @@ namespace RevitWindows
 
 			// get the list of child windows
 			if (!GetRevitChildWindows(_parent) ||
-				SelectedWinCount == 0)
+				CurrDocWinCount == 0)
 			{
 				return false;
 			}

@@ -121,9 +121,9 @@ namespace RevitWindows
 
 		internal static void ListMainWinInfo(IntPtr parent)
 		{
-			logMsgln("            main window| title| " + _doc.Title + "  (" + _doc.PathName + ")");
+			logMsgln("            main window| title| " + Doc.Title + "  (" + Doc.PathName + ")");
 			logMsgln("                 intptr| " + parent.ToString());
-			logMsgln("                extents| " + ListRect(NewRectangle(_uiapp.MainWindowExtents)));
+			logMsgln("                extents| " + ListRect(NewRectangle(Uiapp.MainWindowExtents)));
 			logMsgln(nl);
 
 		}
@@ -132,14 +132,14 @@ namespace RevitWindows
 		{
 			// process revit views
 			logMsgln("revit window rectangles| ");
-			IList<UIView> views = GetRevitChildUiViews(_uidoc);
+			IList<UIView> views = GetRevitChildUiViews(Uidoc);
 
 			Autodesk.Revit.DB.Rectangle r = null;
 
 			foreach (UIView v in views)
 			{
 //				Element e = Doc.GetElement(v.ViewId);
-				View e = (View) _doc.GetElement(v.ViewId);
+				View e = (View) Doc.GetElement(v.ViewId);
 
 				logMsgln("              view name| " + e.Name);
 				logMsg(  "           view extents| " + ListRect(v.GetWindowRectangle()));
@@ -154,8 +154,8 @@ namespace RevitWindows
 		internal static void ListChildWin(List<RevitWindow> rws, string title, 
 			params int[] whichLst)
 		{
-			int selectedWinCount = 0;
-			int normalWinCount = 0;
+			int curDocWinCount = 0;
+			int nonCurrWinCount = 0;
 			int minWinCount = 0;
 
 //			MessageUtilities.clearConsole();
@@ -164,6 +164,7 @@ namespace RevitWindows
 			int count = 0;
 
 			logMsgln(title);
+			logMsgln(nl + "got active| " + rws[0].HasActive);
 			
 			logMsg(nl);
 			logMsgln("minimized windows");
@@ -181,7 +182,7 @@ namespace RevitWindows
 					logMsgln("active window");
 					change = 1;
 				}
-				else if (change == 1 && rw.IsSelected)
+				else if (change == 1 && rw.IsCurrDoc)
 				{
 					if (count == 0)
 					{
@@ -192,7 +193,7 @@ namespace RevitWindows
 					logMsgln("selected windows");
 					change = 2;
 				}
-				else if (change == 2 && rw.IsNonSelected)
+				else if (change == 2 && rw.IsNonCurrDoc)
 				{
 					if (count == 0)
 					{
@@ -204,13 +205,13 @@ namespace RevitWindows
 					change = 3;
 				}
 
-				if (rw.IsActive || rw.IsSelected)
+				if (rw.IsActive || rw.IsCurrDoc)
 				{
-					selectedWinCount++;
+					curDocWinCount++;
 				}
-				else if (rw.IsNonSelected)
+				else if (rw.IsNonCurrDoc)
 				{
-					normalWinCount++;
+					nonCurrWinCount++;
 				}
 				else if (rw.IsMinimized)
 				{
@@ -250,7 +251,13 @@ namespace RevitWindows
 							ListChildPropRect(rw);
 							break;
 						case 10:
-							ListChildIsSelected(rw);
+							ListChildIsCurr(rw);
+							break;
+						case 11:
+							ListChildIsCurrSel(rw);
+							break;
+						case 12:
+							ListChildIsCurrNonSel(rw);
 							break;
 					}
 				}
@@ -258,17 +265,19 @@ namespace RevitWindows
 			}
 			ListChildCounts();
 			logMsg(nl);
-			logMsgln("      calc'd values| ");
-			logMsgln(" selected win count| " + selectedWinCount);
-			logMsgln("non-sel'd win count| " + normalWinCount);
-			logMsgln("minimized win count| " + minWinCount);
+			logMsgln("            calc'd values| ");
+			logMsgln("       curr doc win count| " + curDocWinCount);
+			logMsgln("   non curr doc win count| " + nonCurrWinCount);
+			logMsgln("      minimized win count| " + minWinCount);
 		}
 
 		internal static void ListChildCounts()
 		{
-			logMsgln(" selected win count| " + SelectedWinCount);
-			logMsgln("non-sel'd win count| " + NonSelWinCount);
-			logMsgln("minimized win count| " + MinimizedWinCount);
+			logMsgln("        curr doc win count| " + CurrDocWinCount);
+			logMsgln("    curr doc sel win count| " + CurrDocSelWinCount);
+			logMsgln(" curr doc non selwin count| " + CurrDocNonSelWinCount);
+			logMsgln("    non curr doc win count| " + NonCurrDocWinCount);
+			logMsgln("       minimized win count| " + MinimizedWinCount);
 		}
 
 		// 1
@@ -294,8 +303,8 @@ namespace RevitWindows
 		// 5
 		internal static void ListChildViewType(RevitWindow rw)
 		{
-			logMsgln("     child ViewType| >" + rw.ViewType 
-				+ "<  viewtype value| " + (int) rw.ViewType);
+			logMsgln("     child ViewType| " + rw.ViewType 
+				+ "  viewtype name| " + (ViewType) rw.ViewType);
 		}
 		// 6
 		internal static void ListChildIsMin(RevitWindow rw)
@@ -318,9 +327,19 @@ namespace RevitWindows
 			logMsgln("      rect proposed| " + ListRect(rw.Proposed));
 		}
 		// 10
-		internal static void ListChildIsSelected(RevitWindow rw)
+		internal static void ListChildIsCurr(RevitWindow rw)
 		{
-			logMsgln("        is selected| " + rw.IsSelected);
+			logMsgln("        is curr doc| " + rw.IsCurrDoc);
+		}
+		// 11
+		internal static void ListChildIsCurrSel(RevitWindow rw)
+		{
+			logMsgln("        is curr sel| " + rw.IsCurrDocSeleced);
+		}
+		// 12
+		internal static void ListChildIsCurrNonSel(RevitWindow rw)
+		{
+			logMsgln("    is curr non sel| " + rw.IsCurrDocNonSeleced);
 		}
 		//
 		//		internal static void ListChildDocIndex(RevitWindow rw)

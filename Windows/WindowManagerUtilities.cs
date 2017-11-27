@@ -67,7 +67,7 @@ namespace RevitWindows
 
 		private int _nonActiveWidth;
 		private int _nonActiveHeight;
-
+		private int _nonActiveLastHeight;
 
 		private int _minimizedTop;
 		private int _minimizedLeft;
@@ -101,7 +101,7 @@ namespace RevitWindows
 				{
 					active = rw;
 				}
-				else if (rw.IsSelected || rw.IsNonSelected)
+				else if (rw.IsCurrDoc || rw.IsNonCurrDoc)
 				{
 					SetWindowPos(rw.Handle, HWND.Bottom, rw.Proposed.X, rw.Proposed.Y,
 						rw.Proposed.Width, rw.Proposed.Height, SetWindowPosFlags.SWP_SHOWWINDOW | SetWindowPosFlags.SWP_NOACTIVATE);
@@ -119,8 +119,8 @@ namespace RevitWindows
 
 		internal bool OrganizeByProperCascade()
 		{
-			if (SelectedWinCount == 0 || 
-				SelectedWinCount < MIN_WIN_IN_CASCADE) return false;
+			if (CurrDocWinCount == 0 || 
+				CurrDocWinCount < MIN_WIN_IN_CASCADE) return false;
 
 			// for this cascade, double the normal horizontal adjustment
 			_winAdjHoriz = (int) (_winAdjHoriz * 1.5);
@@ -137,7 +137,7 @@ namespace RevitWindows
 			bool gotFirstNotSel = false;
 
 			_selectedTop = MarginTop;
-			_selectedLeft = MarginLeft + SelectedWinCount * _winAdjHoriz;
+			_selectedLeft = MarginLeft + CurrDocWinCount * _winAdjHoriz;
 			_selectedRight = ParentWindow.Width - MarginRight;
 			_selectedBottom = ParentWindow.Height - MarginBottom;
 
@@ -156,7 +156,7 @@ namespace RevitWindows
 					}
 					rw.Proposed = RectForMinimized();
 				}
-				else if (rw.IsSelected || rw.IsActive)
+				else if (rw.IsCurrDoc || rw.IsActive)
 				{
 					rw.Proposed = RectForProperCascade();
 					
@@ -177,7 +177,7 @@ namespace RevitWindows
 
 		bool ValidateProperCascade()
 		{
-			if (SelectedWinCount == 0) { return false; }
+			if (CurrDocWinCount == 0) { return false; }
 
 			int minWinHeight = Math.Max((int) (ParentWindow.Height * MIN_HEIGHT_PCT), MIN_HEIGHT_PIX);
 			int minWinWidth = Math.Max((int) (ParentWindow.Width * MIN_WIDTH_PCT), MIN_WIDTH_PIX);
@@ -189,8 +189,8 @@ namespace RevitWindows
 				- MarginBottom - minWinHeight) / _winAdjVert;
 
 			// can all of the windows be cascaded?
-			if (maxWindowsHoriz < SelectedWinCount
-				|| maxWindowsVert < SelectedWinCount) { return false; }
+			if (maxWindowsHoriz < CurrDocWinCount
+				|| maxWindowsVert < CurrDocWinCount) { return false; }
 
 			return true;
 		}
@@ -267,7 +267,7 @@ namespace RevitWindows
 			bool gotFirstNotSel = false;
 
 			_selectedTop = MarginTop;
-			_selectedLeft = MarginLeft + SelectedWinCount * _winAdjHoriz;
+			_selectedLeft = MarginLeft + CurrDocWinCount * _winAdjHoriz;
 			_selectedRight = ParentWindow.Width - MarginRight;
 			_selectedBottom = ParentWindow.Height - MarginBottom;
 
@@ -290,7 +290,7 @@ namespace RevitWindows
 
 					rw.Proposed = RectForMinimized();
 				}
-				else if (rw.IsSelected || rw.IsActive)
+				else if (rw.IsCurrDoc || rw.IsActive)
 				{
 					rw.Proposed = RectForBadCascade(_selectedWidth, _selectedHeight, ref idx, ref col);
 
@@ -358,7 +358,7 @@ namespace RevitWindows
 		internal bool OrganizeByActOnLeft()
 		{
 			// need at least 2 selected windows
-			if (SelectedWinCount < 2) return false;
+			if (CurrDocWinCount < 2) return false;
 
 			int numOfCols = ValidateActOnLeftOrRight();
 
@@ -393,7 +393,7 @@ namespace RevitWindows
 					_selectedLeft += _selectedWidth;
 
 				}
-				else if (rw.IsSelected)
+				else if (rw.IsCurrDoc)
 				{
 					if (_selectedTop + _nonActiveHeight > _availableHeight + MarginTop)
 					{
@@ -423,7 +423,7 @@ namespace RevitWindows
 		internal bool OrganizeByActOnRight()
 		{
 			// need at least 2 selected windows
-			if (SelectedWinCount < 2) return false;
+			if (CurrDocWinCount < 2) return false;
 
 			int numOfCols = ValidateActOnLeftOrRight();
 
@@ -458,7 +458,7 @@ namespace RevitWindows
 					_selectedLeft = MarginLeft;
 
 				}
-				else if (rw.IsSelected)
+				else if (rw.IsCurrDoc)
 				{
 					if (_selectedTop + _nonActiveHeight > _availableHeight + MarginTop)
 					{
@@ -502,7 +502,7 @@ namespace RevitWindows
 			// this is a minimum - it can grow
 			_nonActiveHeight = (int) (MinWindowHeight * (1.0 + NON_ACT_HEIGHT_INCREASE_PCT));
 
-			int totalNonActHeight = _nonActiveHeight * (SelectedWinCount - 1);
+			int totalNonActHeight = _nonActiveHeight * (CurrDocWinCount - 1);
 			int numOfCols = (int) Math.Ceiling((double) totalNonActHeight / _availableHeight);
 
 			int totalNonActWidth = numOfCols * _nonActiveWidth;
@@ -512,7 +512,7 @@ namespace RevitWindows
 				return -1;
 			}
 
-			int numOfRows = (int) Math.Ceiling((double) (SelectedWinCount - 1) / numOfCols);
+			int numOfRows = (int) Math.Ceiling((double) (CurrDocWinCount - 1) / numOfCols);
 
 			// adjust the non act window height so that each column is filled up
 			_nonActiveHeight = _availableHeight / numOfRows;
@@ -525,7 +525,7 @@ namespace RevitWindows
 		internal bool OrganizeByActOnTop()
 		{
 			// need at least 2 selected windows
-			if (SelectedWinCount < 2) return false;
+			if (CurrDocWinCount < 2) return false;
 
 			int numOfRows = ValidateActOnTopOrBottom();
 
@@ -560,7 +560,7 @@ namespace RevitWindows
 					_selectedTop += _selectedHeight;
 
 				}
-				else if (rw.IsSelected)
+				else if (rw.IsCurrDoc)
 				{
 					if (_selectedLeft + _nonActiveWidth > MarginLeft + _availableWidth)
 					{
@@ -591,7 +591,7 @@ namespace RevitWindows
 		internal bool OrganizeByActOnBottom()
 		{
 			// need at least 2 selected windows
-			if (SelectedWinCount < 2) return false;
+			if (CurrDocWinCount < 2) return false;
 
 			int numOfRows = ValidateActOnTopOrBottom();
 
@@ -626,7 +626,7 @@ namespace RevitWindows
 					_selectedTop = MarginTop;
 
 				}
-				else if (rw.IsSelected)
+				else if (rw.IsCurrDoc)
 				{
 					if (_selectedLeft + _nonActiveWidth > MarginLeft + _availableWidth)
 					{
@@ -671,7 +671,7 @@ namespace RevitWindows
 			// this is fixed
 			_nonActiveHeight = (int) (MinWindowHeight * (1.0 + NON_ACT_HEIGHT_INCREASE_PCT));
 
-			int totalNonActWidth = _nonActiveWidth * (SelectedWinCount - 1);
+			int totalNonActWidth = _nonActiveWidth * (CurrDocWinCount - 1);
 			int numOfRows = (int) Math.Ceiling((double) totalNonActWidth / _availableWidth);
 
 			int totalNonActHeight = numOfRows * _nonActiveHeight;
@@ -681,7 +681,7 @@ namespace RevitWindows
 				return -1;
 			}
 
-			int numOfCols = (int) Math.Ceiling((double) (SelectedWinCount - 1) / numOfRows);
+			int numOfCols = (int) Math.Ceiling((double) (CurrDocWinCount - 1) / numOfRows);
 
 			// adjust the non-act window width so that each column is filled up
 			_nonActiveWidth = _availableWidth / numOfCols;
@@ -694,7 +694,7 @@ namespace RevitWindows
 		internal bool OrganizeByActOnLeftOverlapped()
 		{
 			// need at least 2 selected windows
-			if (SelectedWinCount < 2) return false;
+			if (CurrDocWinCount < 2) return false;
 
 			int numOfRows = ValidateActOnLeftOrRightOverlapped();
 
@@ -723,7 +723,7 @@ namespace RevitWindows
 			// this is basically fixed but can grow a little to fill in the space
 			int lastWinHeight = (int) (MinWindowHeight * (1.0 + NON_ACT_HEIGHT_INCREASE_OVERLAP_PCT));
 
-			int totalNonActHeight = _nonActiveHeight * (SelectedWinCount - 2) + lastWinHeight;
+			int totalNonActHeight = _nonActiveHeight * (CurrDocWinCount - 2) + lastWinHeight;
 			int numOfCols = (int) Math.Ceiling((double) totalNonActHeight / _availableHeight);
 
 			int totalNonActWidth = numOfCols * _nonActiveWidth;
@@ -733,7 +733,7 @@ namespace RevitWindows
 				return -1;
 			}
 
-			int numOfRows = (int) Math.Ceiling((double) (SelectedWinCount - 1) / numOfCols);
+			int numOfRows = (int) Math.Ceiling((double) (CurrDocWinCount - 1) / numOfCols);
 
 			// adjust the non act window height so that each column is filled up
 			_nonActiveHeight = _availableHeight / numOfRows;

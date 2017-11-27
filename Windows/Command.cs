@@ -33,9 +33,9 @@ namespace RevitWindows
 			ref string message,
 			ElementSet elements)
 		{
-			_uiapp = commandData.Application;
-			_uidoc = _uiapp.ActiveUIDocument;
-			_app = _uiapp.Application;
+			Uiapp = commandData.Application;
+			Uidoc = Uiapp.ActiveUIDocument;
+			App = Uiapp.Application;
 //			_doc = _uidoc.Document;
 
 			clearConsole();
@@ -44,7 +44,7 @@ namespace RevitWindows
 
 			_formProjSel = new ProjectSelectForm();
 
-			_formProjSel.Parent = GetMainWinHandle(_uidoc.Document);
+			_formProjSel.Parent = GetMainWinHandle(Uidoc.Document);
 			if (_formProjSel.Parent == IntPtr.Zero) { return Result.Failed; }
 
 			_formProjSel.Show();
@@ -65,8 +65,8 @@ namespace RevitWindows
 //				_app.DocumentOpened += new EventHandler<DocumentOpenedEventArgs>(DocOpenEvent);
 //				_app.DocumentCreated += new EventHandler<DocumentCreatedEventArgs>(DocCreateEvent);
 
-				_uiapp.ViewActivated += ViewActivated;
-				_uiapp.ApplicationClosing += AppClosing;
+				Uiapp.ViewActivated += ViewActivated;
+				Uiapp.ApplicationClosing += AppClosing;
 			}
 			catch (Exception)
 			{
@@ -96,8 +96,8 @@ namespace RevitWindows
 
 		private void AppClosing(object sender, ApplicationClosingEventArgs args)
 		{
-			_uiapp.ViewActivated -= ViewActivated;
-			_uiapp.ApplicationClosing -= AppClosing;
+			Uiapp.ViewActivated -= ViewActivated;
+			Uiapp.ApplicationClosing -= AppClosing;
 
 		}
 

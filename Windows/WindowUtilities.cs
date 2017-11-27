@@ -25,6 +25,8 @@ namespace RevitWindows
 	class WindowUtilities
 	{
 		internal const string APP_NAME = "Revit Windows";
+
+		internal const int VIEW_TYPE_VOID = 199;
 		
 
 		// an AutoDesk rectangle from a system rectangle
@@ -115,11 +117,11 @@ namespace RevitWindows
 		internal static void SortChildWindows()
 		{
 //			sortChildWindows(RevitWindow.ChildWinMinimized);
-			sortChildWindows(RevitWindow.ChildWindows);
+			SortChildWindows(RevitWindow.ChildWindows);
 //			sortChildWindows(RevitWindow.ChildWinOther);
 		}
 
-		internal static void sortChildWindows(List<RevitWindow> w)
+		internal static void SortChildWindows(List<RevitWindow> w)
 		{
 			if (w.Count == 0 || w.Count == 1) { return; }
 			w.Sort((a, b) => a.Sequence.CompareTo(b.Sequence));
@@ -137,14 +139,13 @@ namespace RevitWindows
 			//			GetTitleBarInfo(parent, ref ti);
 			//			return ti.rcTitleBar.Bottom - ti.rcTitleBar.Top;
 			return ((int) ((captionHeight + frameHeight) * dpi)) + addedBorderHeight;
-
 		}
 
 		internal static void GetScreenMetrics(IntPtr parent)
 		{
 			// determine the main client rectangle - the repositioned
 			// view window go here
-			ParentWindow = NewRectangle(_uiapp.DrawingAreaExtents).Adjust(-2);
+			ParentWindow = NewRectangle(Uiapp.DrawingAreaExtents).Adjust(-2);
 			TitleBarHeight = GetTitleBarHeight(parent);
 			DisplayScreenRect = GetScreenRectFromWindow(parent);
 
@@ -157,13 +158,13 @@ namespace RevitWindows
 			RevitWindow.ResetRevitWindows();
 
 			List<IntPtr> children = GetChildWindows(parent);
-			IList<View> views = GetRevitChildViews(_uidoc);
+			IList<View> views = GetRevitChildViews(Uidoc);
 
 			bool activeSet = false;
 
 			if (children == null || children.Count == 0) { return false; }
 
-			string currDoc = _doc.Title.ToLower();
+			string currDoc = Doc.Title.ToLower();
 
 			foreach (IntPtr child in children)
 			{
@@ -196,34 +197,6 @@ namespace RevitWindows
 			return winTitle.ToString();
 		}
 
-//		// adjust the current rectangle to be with in the bounds of the 
-//		// parent window
-//		internal static Rectangle ValidateWindow(Rectangle r)
-//		{
-//
-//			if (r.Left < ParentClientWindow.Left)
-//			{
-//				r.X = ParentClientWindow.Left;
-//			}
-//
-//			if (r.Top < ParentClientWindow.Top)
-//			{
-//				r.Y = ParentClientWindow.Top;
-//
-//			}
-//
-//			if (r.Right > ParentClientWindow.Right)
-//			{
-//				r = r.SetRight(ParentClientWindow.Right);
-//			}
-//
-//			if (r.Bottom > ParentClientWindow.Bottom)
-//			{
-//				r = r.SetBottom(ParentClientWindow.Bottom);
-//			}
-//			return r;
-//		}
-
 		internal static IList<UIView> GetRevitChildUiViews(UIDocument uidoc)
 		{
 			return uidoc.GetOpenUIViews();
@@ -237,20 +210,14 @@ namespace RevitWindows
 
 			foreach (UIView u in uiViews)
 			{
-				views.Add((View) _doc.GetElement(u.ViewId));
+				views.Add((View) Doc.GetElement(u.ViewId));
 			}
 			return views;
 		}
 
-		internal static string GetDocName(string docName)
+		internal static View FindRevitView(IList<View> views, string winTitle)
 		{
-			int len = docName.Length - 4;
-			return docName.Substring(0, len);
-		}
-
-		internal static View FindRevitView(IList<View> views, string WinTitle)
-		{
-			string test = WinTitle.ToLower();
+			string test = winTitle.ToLower();
 
 			foreach (View v in views)
 			{
@@ -261,93 +228,77 @@ namespace RevitWindows
 			}
 			return null;
 		}
-//
-//		internal static Dictionary<ViewType, int> ViewTypeOrder = 
-//			new Dictionary<ViewType, int>();
 
-		internal static Dictionary<string, int> ViewTypeOrder2;
-
-//		internal int IndexOf(ViewType vt)
-//		{
-//			int order;
-//			return ViewTypeOrder.TryGetValue(vt, out order) ? order : -1;
-//		}
-
-		internal static int ViewTypeIndexOf(string viewTitle)
+		internal static int GetRevitViewType(IList<View> views, string winTitle)
 		{
-			foreach (KeyValuePair<string, int> viewType in ViewTypeOrder2)
-			{
-				if (viewTitle.ToLower().StartsWith(viewType.Key, StringComparison.Ordinal))
-				{
-					return viewType.Value;
-				}
-			}
+			View v = FindRevitView(views, winTitle);
 
-			return 100;	// place at the end of the list
+			if (v == null) return VIEW_TYPE_VOID;
+
+			int viewType = (int) v.ViewType > VIEW_TYPE_VOID ? VIEW_TYPE_VOID : (int) v.ViewType;
+
+			return viewType;
 		}
-
+//
+//		internal static Dictionary<int, string> ViewTypeOrder;
+//
+//		internal static int ViewTypeIndexOf(string viewTitle, out string ViewTypeName)
+//		{
+//			foreach (KeyValuePair<int, string> viewType in ViewTypeOrder)
+//			{
+//				if (viewTitle.ToLower().StartsWith(viewType.Value, StringComparison.Ordinal))
+//				{
+//					ViewTypeName = viewType.Value;
+//					return viewType.Key;
+//				}
+//			}
+//
+//			ViewTypeName = "unknown";
+//			return 99;	// place at the end of the list
+//		}
+//
+//		internal static string ViewTypeNameByIdx(int idx)
+//		{
+//			string viewTitle;
+//
+//			bool result = ViewTypeOrder.TryGetValue(idx, out viewTitle);
+//
+//			if (!result) return null;
+//
+//			return viewTitle;
+//		}
 //
 //		internal static void InitViewTypeOrderList()
 //		{
+//			ViewTypeOrder = new Dictionary<int, string>(25);
 //			int idx = 0;
+//			ViewTypeOrder.Add(99,	 "unknown");
+//			ViewTypeOrder.Add(idx++, "sheet");						//* sheet view
+//			ViewTypeOrder.Add(idx++, "floor plan");					//* Floor plan type of view. 
+//			ViewTypeOrder.Add(idx++, "reflected ceiling plan");		//* reflected ceiling plan type of view.
+//			ViewTypeOrder.Add(idx++, "area plan");					//* an area plan type of view. 
+//			ViewTypeOrder.Add(idx++, "structural plan");			//* a structural plan or engineering plan type of view
+//			ViewTypeOrder.Add(idx++, "elevation");					//* elevation type of view.
+//			ViewTypeOrder.Add(idx++, "section");					//* a cross section type of view. 
+//			ViewTypeOrder.Add(idx++, "drafting view");				//* drafting type of view.
+//			ViewTypeOrder.Add(idx++, "detail view");				//* detail type of view.
+//			ViewTypeOrder.Add(idx++, "3d view");					//* 3d type of view.
+//			ViewTypeOrder.Add(idx++, "walkthrough");				//walk-through type of 3d view.
+//			ViewTypeOrder.Add(idx++, "legend");						//a legend type of view.
+//			ViewTypeOrder.Add(idx++, "schedule");					//* schedule type of view.
+//			ViewTypeOrder.Add(idx++, "graphical column schedule");	//* column schedule type of view. 
+//			ViewTypeOrder.Add(idx++, "rendering");					//rendering type of view.
+//			ViewTypeOrder.Add(idx++, "report");						//report type of view.
+//			ViewTypeOrder.Add(idx++, "cost report");				//cost report view. 
+//			ViewTypeOrder.Add(idx++, "loads report");				//loads report view. 
+//			ViewTypeOrder.Add(idx++, "presure loss report");		//pressure loss report view.
+//			ViewTypeOrder.Add(idx++, "panel schedule");				//* panel schedule report view.
+//			ViewTypeOrder.Add(idx++, "project browser");			//the project browser view.
+//			ViewTypeOrder.Add(idx++, "system browser");				//the mep system browser view.
+//			ViewTypeOrder.Add(idx++, "undefined");					//an undefined/ unspecified type of view.
+//			ViewTypeOrder.Add(idx++, "internal");					//revit's internal type of view
 //
-//			ViewTypeOrder.Add(ViewType.FloorPlan, idx++);			//Floor plan type of view. 
-//			ViewTypeOrder.Add(ViewType.EngineeringPlan, idx++);		//a Structural plan or Engineering plan type of view.
-//			ViewTypeOrder.Add(ViewType.CeilingPlan, idx++);			//Reflected ceiling plan type of view.
-//			ViewTypeOrder.Add(ViewType.Elevation, idx++);			//Elevation type of view.
-//			ViewTypeOrder.Add(ViewType.Section, idx++);				//a Cross section type of view. 
-//			ViewTypeOrder.Add(ViewType.DraftingView, idx++);		//Drafting type of view.
-//			ViewTypeOrder.Add(ViewType.Detail, idx++);				//Detail type of view.
-//			ViewTypeOrder.Add(ViewType.ThreeD, idx++);				//3D type of view.
-//			ViewTypeOrder.Add(ViewType.Walkthrough, idx++);			//Walk-Through type of 3D view.
-//			ViewTypeOrder.Add(ViewType.AreaPlan, idx++);			//an Area plan type of view. 
-//			ViewTypeOrder.Add(ViewType.Legend, idx++);				//a Legend type of view.
-//			ViewTypeOrder.Add(ViewType.Schedule, idx++);			//a Schedule type of view.
-//			ViewTypeOrder.Add(ViewType.ColumnSchedule, idx++);		//Column Schedule type of view. 
-//			ViewTypeOrder.Add(ViewType.Rendering, idx++);			//Rendering type of view.
-//			ViewTypeOrder.Add(ViewType.Report, idx++);				//Report type of view.
-//			ViewTypeOrder.Add(ViewType.CostReport, idx++);			//Cost Report view. 
-//			ViewTypeOrder.Add(ViewType.LoadsReport, idx++);			//Loads Report view. 
-//			ViewTypeOrder.Add(ViewType.PresureLossReport, idx++);	//Pressure Loss Report view.
-//			ViewTypeOrder.Add(ViewType.DrawingSheet, idx++);		//Drawing sheet type of view. 
-//			ViewTypeOrder.Add(ViewType.ProjectBrowser, idx++);		//The project browser view.
-//			ViewTypeOrder.Add(ViewType.SystemBrowser, idx++);		//The MEP system browser view. 
-//			ViewTypeOrder.Add(ViewType.PanelSchedule, idx++);		//Panel Schedule Report view.
-//			ViewTypeOrder.Add(ViewType.Undefined, idx++);			//an Undefined/ unspecified type of view.
-//			ViewTypeOrder.Add(ViewType.Internal, idx++);			//Revit's internal type of view
 //		}
-
-		internal static void InitViewTypeOrderList()
-		{
-			ViewTypeOrder2 = new Dictionary<string, int>(25);
-			int idx = 0;
-			ViewTypeOrder2.Add("unknown", 100);
-			ViewTypeOrder2.Add("sheet", idx++);						//* sheet view
-			ViewTypeOrder2.Add("floor plan", idx++);				//* Floor plan type of view. 
-			ViewTypeOrder2.Add("reflected ceiling plan", idx++);	//* reflected ceiling plan type of view.
-			ViewTypeOrder2.Add("area plan", idx++);					//* an area plan type of view. 
-			ViewTypeOrder2.Add("structural plan", idx++);			//* a structural plan or engineering plan type of view
-			ViewTypeOrder2.Add("elevation", idx++);					//* elevation type of view.
-			ViewTypeOrder2.Add("section", idx++);					//* a cross section type of view. 
-			ViewTypeOrder2.Add("drafting view", idx++);				//* drafting type of view.
-			ViewTypeOrder2.Add("detail view", idx++);				//* detail type of view.
-			ViewTypeOrder2.Add("3d view", idx++);					//* 3d type of view.
-			ViewTypeOrder2.Add("walkthrough", idx++);				//walk-through type of 3d view.
-			ViewTypeOrder2.Add("legend", idx++);					//a legend type of view.
-			ViewTypeOrder2.Add("schedule", idx++);					//* schedule type of view.
-			ViewTypeOrder2.Add("graphical column schedule", idx++);	//* column schedule type of view. 
-			ViewTypeOrder2.Add("rendering", idx++);					//rendering type of view.
-			ViewTypeOrder2.Add("report", idx++);					//report type of view.
-			ViewTypeOrder2.Add("cost report", idx++);				//cost report view. 
-			ViewTypeOrder2.Add("loads report", idx++);				//loads report view. 
-			ViewTypeOrder2.Add("presure loss report", idx++);		//pressure loss report view.
-			ViewTypeOrder2.Add("panel schedule", idx++);			//* panel schedule report view.
-			ViewTypeOrder2.Add("project browser", idx++);			//the project browser view.
-			ViewTypeOrder2.Add("system browser", idx++);			//the mep system browser view.
-			ViewTypeOrder2.Add("undefined", idx++);					//an undefined/ unspecified type of view.
-			ViewTypeOrder2.Add("internal", idx++);					//revit's internal type of view
-
-		}
 
 
 	}
