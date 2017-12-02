@@ -94,14 +94,17 @@ namespace RevitWindows
 			App = Uiapp.Application;
 			Doc = Uidoc.Document;
 
+			lblStatus.Text = "";
+			lblMessasge.Text = "";
+
 			bool result = InitializeRevitWindows();
-
-			SortChildWindows();
-
-			ListChildWin(ChildWindows, nl + "child windows after initalize",
-				1, 3, 4, 5, 6, 7, 10, 11, 12);
-
-			result = false;
+//
+//			SortChildWindows();
+//
+//			ListChildWin(ChildWindows, nl + "child windows after initalize",
+//				1, 3, 4, 5, 6, 7, 10, 11, 12);
+//
+//			result = false;
 
 			if (!result)
 			{
@@ -117,7 +120,8 @@ namespace RevitWindows
 
 			if (!winMgr.AdjustWindowLayout(windowLayoutStyle))
 			{
-//				this.Close();
+				lblStatus.Text = winMgr.MessageStatus;
+				lblMessasge.Text = winMgr.MessageError;
 				return;
 			}
 		}
@@ -136,5 +140,9 @@ namespace RevitWindows
 			return true;
 		}
 
+		private void lblMessasge_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

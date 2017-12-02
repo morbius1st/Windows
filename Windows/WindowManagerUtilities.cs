@@ -2,11 +2,12 @@
 
 using System;
 using System.Drawing;
-using System.Windows.Forms.VisualStyles;
-using Autodesk.Revit.UI;
+
 using static RevitWindows.WindowUtilities;
 using static RevitWindows.RevitWindow;
 using static RevitWindows.WindowApiUtilities;
+
+using static UtilityLibrary.MessageUtilities;
 
 
 #endregion
@@ -22,8 +23,8 @@ namespace RevitWindows
 	{
 		// to be changed to settings layer
 		private static int MarginLeft { get; } = 20;
-		private static int MarginTop { get; } = 0;
-		private static int MarginRight { get; } = 0;
+		private static int MarginTop { get; } = 20;
+		private static int MarginRight { get; } = 20;
 		private static int MarginBottom { get; } = 20;
 
 		private const int MIN_WIN_IN_CASCADE = 3;
@@ -48,10 +49,10 @@ namespace RevitWindows
 
 		// 1.O means a 100% (double) increase above the minimim size
 		// must be greater than zero
-		private const double NON_ACT_WIDTH_INCREASE_OVERLAP_PCT = 1.0;
+		private const double NON_ACT_WIDTH_INCREASE_OVERLAP_PCT = 0.0;
 		// 0.O means no increase above the minimim size
 		// must be greater than zero
-		private const double NON_ACT_HEIGHT_INCREASE_OVERLAP_PCT = 0.0;
+		private const double NON_ACT_HEIGHT_INCREASE_OVERLAP_PCT = 1.0;
 
 
 		// instance variables
@@ -68,6 +69,8 @@ namespace RevitWindows
 		private int _nonActiveWidth;
 		private int _nonActiveHeight;
 		private int _nonActiveLastHeight;
+		private int _nonActiveSpacingVert;
+		private int _nonActiveSpacingHoriz;
 
 		private int _minimizedTop;
 		private int _minimizedLeft;
@@ -76,12 +79,12 @@ namespace RevitWindows
 		private int _minimizedHeight = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
 		private int _minimizedWidth = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
 
-		private int _notSelHeight = MinWindowHeight;
-		private int _notSelWidth = MinWindowWidth;
+		private int _nonCurrHeight = MinWindowHeight;
+		private int _notCurrWidth = MinWindowWidth;
 
-		private int _indexNormal;
-		private int _indexMinimized;
-		private int _row;
+//		private int _indexNormal;
+//		private int _indexMinimized;
+//		private int _row;
 
 		private int _winAdjHoriz = TitleBarHeight;
 		private int _winAdjVert = TitleBarHeight;
@@ -119,17 +122,21 @@ namespace RevitWindows
 
 		internal bool OrganizeByProperCascade()
 		{
-			if (CurrDocWinCount == 0 || 
-				CurrDocWinCount < MIN_WIN_IN_CASCADE) return false;
+			if (CurrDocWinCount == 0 ||
+				CurrDocWinCount < MIN_WIN_IN_CASCADE)
+			{
+				WindowManager.messageError = 
+					"At least three windows are needed in order to organize";
+
+				return false;
+			}
 
 			// for this cascade, double the normal horizontal adjustment
 			_winAdjHoriz = (int) (_winAdjHoriz * 1.5);
 
 			if (!ValidateProperCascade())
 			{
-				TaskDialog.Show(APP_NAME + " - Adjust Window Layout",
-							"Cannot adjust the window layout as there is not enough screen space to proceed");
-				logMsgln("organize failed");
+				WindowManager.messageError = "Cannot adjust the window layout as there is not enough screen space to proceed";
 				return false;
 			}
 
@@ -165,7 +172,7 @@ namespace RevitWindows
 				{
 					if (!gotFirstNotSel)
 					{
-						_minimizedTop -= _notSelHeight;
+						_minimizedTop -= _nonCurrHeight;
 						_minimizedLeft = 0;
 						gotFirstNotSel = true;
 					}
@@ -223,15 +230,15 @@ namespace RevitWindows
 
 		Rectangle RectForNotSelected()
 		{
-			if (_minimizedLeft + _notSelWidth > ParentWindow.Width)
+			if (_minimizedLeft + _notCurrWidth > ParentWindow.Width)
 			{
-				_minimizedTop -= _notSelHeight;
+				_minimizedTop -= _nonCurrHeight;
 				_minimizedLeft = 0;
 			}
 
-			Rectangle r = new Rectangle(_minimizedLeft, _minimizedTop, _notSelWidth, _notSelHeight);
+			Rectangle r = new Rectangle(_minimizedLeft, _minimizedTop, _notCurrWidth, _nonCurrHeight);
 
-			_minimizedLeft += _notSelWidth;
+			_minimizedLeft += _notCurrWidth;
 
 			return r;
 		}
@@ -239,27 +246,18 @@ namespace RevitWindows
 		// organize by windows stupid cascade method
 		internal bool OrganizeByBadCascade()
 		{
-			//			if (SelectedWinCount == 0 ||
-			//				SelectedWinCount < MIN_WIN_IN_CASCADE) return false;
-			//
-			//			// determine the window width and height
-			//			_selectedWidth = (int) (ParentWindow.Width * BAD_CASCADE_WIDTH_PCT);
-			//			_selectedHeight = (int) (ParentWindow.Height * BAD_CASCADE_HEIGHT_PCT);
-			//
-			//			// make sure that the window width and height is at least 2x the minimum window height and width
-			//			_selectedWidth = _selectedWidth > MinWindowWidth * 2 ? _selectedWidth : MinWindowWidth * 2;
-			//			_selectedHeight = _selectedHeight > MinWindowHeight * 2 ? _selectedHeight : MinWindowHeight * 2;
-			//
-			//			// make sure there is enough height and width to actually cascade the windows
-			//			// allow for 3 times the offset amount
-			//			if (MarginTop + _selectedHeight + MarginBottom + _winAdjVert * MIN_WIN_IN_CASCADE >= ParentWindow.Height
-			//				|| MarginLeft + _selectedWidth + MarginRight + _winAdjHoriz * MIN_WIN_IN_CASCADE >= ParentWindow.Width)
+			if (CurrDocWinCount == 0 ||
+				CurrDocWinCount < MIN_WIN_IN_CASCADE)
+			{
+				WindowManager.messageError =
+					"At least three windows are needed in order to organize";
+
+				return false;
+			}
 
 			if (!ValidateBadCascade())
 			{
-				TaskDialog.Show(APP_NAME + "Adjust Window Layout",
-							"Cannot adjust the window layout as there is not enough screen space to proceed");
-				logMsgln("organize failed");
+				WindowManager.messageError = "Cannot adjust the window layout as there is not enough screen space to proceed";
 				return false;
 			}
 
@@ -300,7 +298,7 @@ namespace RevitWindows
 				{
 					if (!gotFirstNotSel)
 					{
-						_minimizedTop -= _notSelHeight;
+						_minimizedTop -= _nonCurrHeight;
 						_minimizedLeft = 0;
 						gotFirstNotSel = true;
 					}
@@ -357,12 +355,25 @@ namespace RevitWindows
 
 		internal bool OrganizeByActOnLeft()
 		{
-			// need at least 2 selected windows
-			if (CurrDocWinCount < 2) return false;
+			// need at least 3 selected windows
+			if (CurrDocWinCount == 0 ||
+				CurrDocWinCount < MIN_WIN_IN_CASCADE)
+			{
+				WindowManager.messageError =
+					"At least three windows are needed in order to organize";
+
+				return false;
+			}
 
 			int numOfCols = ValidateActOnLeftOrRight();
 
-			if (numOfCols < 0) return false;
+			if (numOfCols < 0)
+			{
+				WindowManager.messageError =
+						"Cannot adjust the window layout as there is not enough screen space to proceed";
+
+				return false;
+			}
 
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
@@ -410,7 +421,7 @@ namespace RevitWindows
 				{
 					if (!gotFirstNotSel)
 					{
-						_minimizedTop -= _notSelHeight;
+						_minimizedTop -= _nonCurrHeight;
 						_minimizedLeft = 0;
 						gotFirstNotSel = true;
 					}
@@ -422,12 +433,25 @@ namespace RevitWindows
 
 		internal bool OrganizeByActOnRight()
 		{
-			// need at least 2 selected windows
-			if (CurrDocWinCount < 2) return false;
+			// need at least 3 selected windows
+			if (CurrDocWinCount == 0 ||
+				CurrDocWinCount < MIN_WIN_IN_CASCADE)
+			{
+				WindowManager.messageError =
+					"At least three windows are needed in order to organize";
+
+				return false;
+			}
 
 			int numOfCols = ValidateActOnLeftOrRight();
 
-			if (numOfCols < 0) return false;
+			if (numOfCols < 0)
+			{
+				WindowManager.messageError =
+						"Cannot adjust the window layout as there is not enough screen space to proceed";
+
+				return false;
+			}
 
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
@@ -475,7 +499,7 @@ namespace RevitWindows
 				{
 					if (!gotFirstNotSel)
 					{
-						_minimizedTop -= _notSelHeight;
+						_minimizedTop -= _nonCurrHeight;
 						_minimizedLeft = 0;
 						gotFirstNotSel = true;
 					}
@@ -524,12 +548,25 @@ namespace RevitWindows
 
 		internal bool OrganizeByActOnTop()
 		{
-			// need at least 2 selected windows
-			if (CurrDocWinCount < 2) return false;
+			// need at least 3 selected windows
+			if (CurrDocWinCount == 0 ||
+				CurrDocWinCount < MIN_WIN_IN_CASCADE)
+			{
+				WindowManager.messageError =
+					"At least three windows are needed in order to organize";
+
+				return false;
+			}
 
 			int numOfRows = ValidateActOnTopOrBottom();
 
-			if (numOfRows < 0) return false;
+			if (numOfRows < 0)
+			{
+				WindowManager.messageError =
+						"Cannot adjust the window layout as there is not enough screen space to proceed";
+
+				return false;
+			}
 
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
@@ -577,7 +614,7 @@ namespace RevitWindows
 				{
 					if (!gotFirstNotSel)
 					{
-						_minimizedTop -= _notSelHeight;
+						_minimizedTop -= _nonCurrHeight;
 						_minimizedLeft = 0;
 						gotFirstNotSel = true;
 					}
@@ -590,12 +627,25 @@ namespace RevitWindows
 
 		internal bool OrganizeByActOnBottom()
 		{
-			// need at least 2 selected windows
-			if (CurrDocWinCount < 2) return false;
+			// need at least 3 selected windows
+			if (CurrDocWinCount == 0 ||
+				CurrDocWinCount < MIN_WIN_IN_CASCADE)
+			{
+				WindowManager.messageError =
+					"At least three windows are needed in order to organize";
+
+				return false;
+			}
 
 			int numOfRows = ValidateActOnTopOrBottom();
 
-			if (numOfRows < 0) return false;
+			if (numOfRows < 0)
+			{
+				WindowManager.messageError =
+						"Cannot adjust the window layout as there is not enough screen space to proceed";
+
+				return false;
+			}
 
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
@@ -643,7 +693,7 @@ namespace RevitWindows
 				{
 					if (!gotFirstNotSel)
 					{
-						_minimizedTop -= _notSelHeight;
+						_minimizedTop -= _nonCurrHeight;
 						_minimizedLeft = 0;
 						gotFirstNotSel = true;
 					}
@@ -693,10 +743,86 @@ namespace RevitWindows
 
 		internal bool OrganizeByActOnLeftOverlapped()
 		{
-			// need at least 2 selected windows
-			if (CurrDocWinCount < 2) return false;
+			// need at least 3 selected windows
+			if (CurrDocWinCount == 0 ||
+				CurrDocWinCount < MIN_WIN_IN_CASCADE)
+			{
+				WindowManager.messageError =
+					"At least three windows are needed in order to organize";
+
+				return false;
+			}
 
 			int numOfRows = ValidateActOnLeftOrRightOverlapped();
+
+			if (numOfRows < 0)
+			{
+				WindowManager.messageError =
+						"Cannot adjust the window layout as there is not enough screen space to proceed";
+
+				return false;
+			}
+
+			bool gotFirstMinimized = false;
+			bool gotFirstNotSel = false;
+
+			int tempNonActHeight = _nonActiveLastHeight;
+
+			_selectedTop = MarginTop;
+			_selectedLeft = MarginLeft;
+
+			_minimizedTop = ParentWindow.Height;
+			_minimizedLeft = 0;
+
+			foreach (RevitWindow rw in ChildWindows)
+			{
+				if (rw.IsMinimized)
+				{
+					if (!gotFirstMinimized)
+					{
+						_minimizedTop -= _minimizedHeight;
+						_minimizedLeft = 0;
+						gotFirstMinimized = true;
+					}
+					rw.Proposed = RectForMinimized();
+				}
+				else if (rw.IsActive)
+				{
+					rw.Proposed =
+						new Rectangle(_selectedLeft, _selectedTop, _selectedWidth, _selectedHeight);
+
+					_selectedLeft += _selectedWidth;
+					_selectedTop = _availableHeight + MarginTop - tempNonActHeight;
+
+				}
+				else if (rw.IsCurrDoc)
+				{
+					if (_selectedTop < MarginTop)
+					{
+						_selectedLeft += _nonActiveWidth;
+						_selectedTop = MarginTop + _availableHeight - _nonActiveLastHeight;
+						tempNonActHeight = _nonActiveLastHeight;
+					}
+
+					rw.Proposed =
+						new Rectangle(_selectedLeft, _selectedTop, _nonActiveWidth, tempNonActHeight);
+
+					_selectedTop -= _nonActiveSpacingVert;
+					tempNonActHeight = _nonActiveHeight;
+				}
+				else
+				{
+					if (!gotFirstNotSel)
+					{
+						_minimizedTop -= _nonCurrHeight;
+						_minimizedLeft = 0;
+						gotFirstNotSel = true;
+					}
+					rw.Proposed = RectForNotSelected();
+				}
+			}
+			return true;
+
 
 
 			return true;
@@ -719,12 +845,22 @@ namespace RevitWindows
 			_nonActiveWidth = (int) (MinWindowWidth * (1.0 + NON_ACT_WIDTH_INCREASE_OVERLAP_PCT));
 			// this is a minimum - it can grow - how ever this is the overlapping distance
 			// there the last window will be "full height"
-			_nonActiveHeight = MinWindowHeight;
+			_nonActiveSpacingVert = MinWindowHeight;
+			_nonActiveHeight = (int) (MinWindowHeight * (1.0 + NON_ACT_HEIGHT_INCREASE_OVERLAP_PCT));
 			// this is basically fixed but can grow a little to fill in the space
-			int lastWinHeight = (int) (MinWindowHeight * (1.0 + NON_ACT_HEIGHT_INCREASE_OVERLAP_PCT));
+			_nonActiveLastHeight = _nonActiveHeight;
 
-			int totalNonActHeight = _nonActiveHeight * (CurrDocWinCount - 2) + lastWinHeight;
-			int numOfCols = (int) Math.Ceiling((double) totalNonActHeight / _availableHeight);
+			int x = CurrDocNonSelWinCount;
+			int y = CurrDocSelWinCount;
+			int z = CurrDocWinCount;
+
+			int lastHeightRemainder = _nonActiveLastHeight - _nonActiveSpacingVert;
+
+			int adjAvailableHeight = _availableHeight - lastHeightRemainder;
+
+			int totalNonActHeight = _nonActiveSpacingVert * (CurrDocWinCount - 1);
+
+			int numOfCols = (int) Math.Ceiling((double) totalNonActHeight / adjAvailableHeight);
 
 			int totalNonActWidth = numOfCols * _nonActiveWidth;
 
@@ -735,10 +871,55 @@ namespace RevitWindows
 
 			int numOfRows = (int) Math.Ceiling((double) (CurrDocWinCount - 1) / numOfCols);
 
-			// adjust the non act window height so that each column is filled up
-			_nonActiveHeight = _availableHeight / numOfRows;
+			clearConsole();
 
+			logMsg(nl);
+			logMsgFmtln("** adjustments| ", "before");
+			logMsgFmtln("CurrDocWinCount| ", CurrDocWinCount);
+			logMsgFmtln("_availableHeight| ", _availableHeight);
+			logMsgFmtln("_selectedHeight| ", _selectedHeight);
+			logMsgFmtln("_nonActiveSpacingVert| ", _nonActiveSpacingVert);
+			logMsgFmtln("_nonActiveHeight| ", _nonActiveHeight);
+			logMsgFmtln("_nonActiveLastHeight| ", _nonActiveLastHeight);
+			logMsgFmtln("lastHeightRemainder| ", lastHeightRemainder);
+			logMsgFmtln("adjAvailableHeight| ", adjAvailableHeight);
+			logMsgFmtln("totalNonActHeight| ", totalNonActHeight);
+			logMsgFmtln("totalNonActWidth| ", totalNonActWidth);
+			logMsgFmtln("numOfCols| ", numOfCols);
+			logMsgFmtln("numOfRows| ", numOfRows);
+//			logMsgFmtln("| ", );
+
+
+			// adjust the vert spacing so that each column is filled up
+			_nonActiveSpacingVert = (_availableHeight - _nonActiveLastHeight) / (numOfRows - 1);
+
+			if (_nonActiveSpacingVert > _nonActiveHeight)
+			{
+				_nonActiveHeight = _availableHeight / numOfRows;
+				_nonActiveLastHeight = _availableHeight - _nonActiveHeight * (numOfRows - 1);
+				_nonActiveSpacingVert = _nonActiveHeight;
+			}
+			else
+			{
+				_nonActiveLastHeight = _availableHeight - (_nonActiveSpacingVert * (numOfRows - 1));
+			}
 			_selectedWidth = _availableWidth - (numOfCols * _nonActiveWidth);
+
+			logMsg(nl);
+			logMsgFmtln("** adjustments| ", "after");
+			logMsgFmtln("CurrDocWinCount| ", CurrDocWinCount);
+			logMsgFmtln("_availableHeight| ", _availableHeight);
+			logMsgFmtln("_selectedHeight| ", _selectedHeight);
+			logMsgFmtln("_nonActiveSpacingVert| ", _nonActiveSpacingVert);
+			logMsgFmtln("_nonActiveHeight| ", _nonActiveHeight);
+			logMsgFmtln("_nonActiveLastHeight| ", _nonActiveLastHeight);
+			logMsgFmtln("lastHeightRemainder| ", lastHeightRemainder);
+			logMsgFmtln("adjAvailableHeight| ", adjAvailableHeight);
+			logMsgFmtln("totalNonActHeight| ", totalNonActHeight);
+			logMsgFmtln("totalNonActWidth| ", totalNonActWidth);
+			logMsgFmtln("numOfCols| ", numOfCols);
+			logMsgFmtln("numOfRows| ", numOfRows);
+			//			logMsgFmtln("| ", );
 
 			return numOfCols;
 		}

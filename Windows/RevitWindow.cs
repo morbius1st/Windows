@@ -13,7 +13,7 @@ namespace RevitWindows
 {
 	internal class RevitWindow
 	{
-		private RevitWindow() { }
+//		private RevitWindow() { }
 
 		internal enum WindowStatus : short
 		{
@@ -132,6 +132,8 @@ namespace RevitWindows
 			_gotActive = false;
 
 			CurrDocWinCount = 0;
+			CurrDocSelWinCount = 0;
+			CurrDocNonSelWinCount = 0;
 			NonCurrDocWinCount = 0;
 			MinimizedWinCount = 0;
 
@@ -146,8 +148,6 @@ namespace RevitWindows
 				(int) Elevation,
 				(int) Section
 			};
-
-//			InitViewTypeOrderList();
 		}
 
 	}

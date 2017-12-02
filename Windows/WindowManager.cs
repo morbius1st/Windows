@@ -24,42 +24,50 @@ namespace RevitWindows
 	class WindowManager
 	{
 		internal const bool DISPLAY_INFO = false;
+//
+//		internal const int MIN_WIN_IN_CASCADE = 3;
+//		internal const int MIN_WIDTH_PIX = 600; // pixels
+//		internal const int MIN_HEIGHT_PIX = 400; // pixels
+//		internal const double MIN_WIDTH_PCT = 0.40; // percent
+//
+//		private int _topSelected;
+//		private int _leftSelected;
+//		private int _bottomSelected;
+//		private int _rightSelected;
+//		
+//		private int _topMinimized;
+//		private int _leftMinimized;
+//		private int _rightMinMax;
+//		
+//		private int _heightMinimized = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
+//		private int _widthMinimized = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
+//		
+//		private int _heightNotSel = GetSystemMetrics(SystemMetric.SM_CYMINTRACK);
+//		private int _widthNotSel = GetSystemMetrics(SystemMetric.SM_CXMINTRACK);
+//		
+//		private int _indexNormal;
+//		private int _indexMinimized;
+//		private int _row;
+//		
+//		private int _winAdjVert = TitleBarHeight;
+//		private int _winAdjHoriz = TitleBarHeight;
 
-		internal const int MIN_WIN_IN_CASCADE = 3;
-		internal const int MIN_WIDTH_PIX = 600; // pixels
-		internal const int MIN_HEIGHT_PIX = 400; // pixels
-		internal const double MIN_WIDTH_PCT = 0.40; // percent
-
-		private int _topSelected;
-		private int _leftSelected;
-		private int _bottomSelected;
-		private int _rightSelected;
-		
-		private int _topMinimized;
-		private int _leftMinimized;
-		private int _rightMinMax;
-		
-		private int _heightMinimized = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
-		private int _widthMinimized = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
-		
-		private int _heightNotSel = GetSystemMetrics(SystemMetric.SM_CYMINTRACK);
-		private int _widthNotSel = GetSystemMetrics(SystemMetric.SM_CXMINTRACK);
-		
-		private int _indexNormal;
-		private int _indexMinimized;
-		private int _row;
-		
-		private int _winAdjVert = TitleBarHeight;
-		private int _winAdjHoriz = TitleBarHeight;
-
-		private WindowManagerUtilities winMgrUtil;
-
+		private readonly WindowManagerUtilities _winMgrUtil;
 
 		private IntPtr _active = IntPtr.Zero;
 
+		internal static string messageStatus = "";
+		internal static string messageError = "";
+
+		private const string MSG_01 = "Could not Organize windows";
+
+		internal string MessageStatus => messageStatus;
+		internal string MessageError => messageError;
+
+
 		public WindowManager()
 		{
-			winMgrUtil = new WindowManagerUtilities();
+			_winMgrUtil = new WindowManagerUtilities();
 
 		}
 
@@ -76,113 +84,114 @@ namespace RevitWindows
 					// for this, sort the windows first
 					SortChildWindows();
 
-					result = winMgrUtil.OrganizeByProperCascade();
+					result = _winMgrUtil.OrganizeByProperCascade();
 
 					if (!result)
 					{
+						messageStatus = MSG_01;
 						return false;
 					}
 
 					ListInfo("PROPER CASCADE");
 
-					winMgrUtil.RepositionWindows();
+					_winMgrUtil.RepositionWindows();
 
 					break;
 				case 1:
 					SortChildWindows();
 
-					result = winMgrUtil.OrganizeByBadCascade();
+					result = _winMgrUtil.OrganizeByBadCascade();
 
 					if (!result)
 					{
-						logMsgln("organize failed");
+						messageStatus = MSG_01;
 						return false;
 					}
 
 					ListInfo("WINDOW CASCADE");
 
-					winMgrUtil.RepositionWindows();
+					_winMgrUtil.RepositionWindows();
 
 					break;
 				case 2: // left side
 					SortChildWindows();
 
-					result = winMgrUtil.OrganizeByActOnLeft();
+					result = _winMgrUtil.OrganizeByActOnLeft();
 
 					if (!result)
 					{
-						logMsgln("organize failed");
+						messageStatus = MSG_01;
 						return false;
 					}
 
 					ListInfo("AT LEFT");
 
-					winMgrUtil.RepositionWindows();
+					_winMgrUtil.RepositionWindows();
 					break;
 				// bottom side
 				case 3:
 					SortChildWindows();
 
-					result = winMgrUtil.OrganizeByActOnBottom();
+					result = _winMgrUtil.OrganizeByActOnBottom();
 
 					if (!result)
 					{
-						logMsgln("organize failed");
+						messageStatus = MSG_01;
 						return false;
 					}
 
 					ListInfo("AT BOTTOM");
 
-					winMgrUtil.RepositionWindows();
+					_winMgrUtil.RepositionWindows();
 
 					break;
 				// right side
 				case 4:
 					SortChildWindows();
 
-					result = winMgrUtil.OrganizeByActOnRight();
+					result = _winMgrUtil.OrganizeByActOnRight();
 
 					if (!result)
 					{
-						logMsgln("organize failed");
+						messageStatus = MSG_01;
 						return false;
 					}
 
 					ListInfo("AT RIGHT");
 
-					winMgrUtil.RepositionWindows();
+					_winMgrUtil.RepositionWindows();
 					break;
 				// top side
 				case 5:
 					SortChildWindows();
 
-					result = winMgrUtil.OrganizeByActOnTop();
+					result = _winMgrUtil.OrganizeByActOnTop();
 
 					if (!result)
 					{
-						logMsgln("organize failed");
+						messageStatus = MSG_01;
 						return false;
 					}
 
 					ListInfo("AT TOP");
 
-					winMgrUtil.RepositionWindows();
+					_winMgrUtil.RepositionWindows();
 					break;
 				// left - stacked
 				case 6:
 					SortChildWindows();
 
-					result = winMgrUtil.OrganizeByActOnLeftOverlapped();
+					result = _winMgrUtil.OrganizeByActOnLeftOverlapped();
 
 					if (!result)
 					{
-						logMsgln("organize failed");
+						messageStatus = MSG_01;
 						return false;
 					}
 
 					ListInfo("AT LEFT - OVERLAPPED");
 
-					winMgrUtil.RepositionWindows();
+					_winMgrUtil.RepositionWindows();
 					break;
 			}
 			return true;
