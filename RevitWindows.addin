@@ -11,12 +11,13 @@
     <VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
     <Discipline>Any</Discipline>
   </AddIn>
-<!--  <AddIn Type="Application">-->
-<!--    <Name>Application Windows</Name>-->
-<!--    <Assembly>Windows.dll</Assembly>-->
-<!--    <FullClassName>Windows.App</FullClassName>-->
-<!--    <ClientId>205119e0-9ac2-4809-a5ca-66a91b0feb45</ClientId>-->
-<!--    <VendorId>com.typepad.thebuildingcoder</VendorId>-->
-<!--    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>-->
-<!--  </AddIn>-->
+  <AddIn Type="Application">
+    <Name>RevitWindows</Name>
+    <Description>Organize Revit's Editing Windows</Description>
+    <Assembly>RevitWindows.dll</Assembly>
+    <FullClassName>RevitWindows.Ribbon</FullClassName>
+    <AddInId>5DC1D894-A963-4A6E-B093-05C0122D5E55</AddInId>
+    <VendorId>pro.cyberstudio</VendorId>
+    <VendorDescription>CyberStudio</VendorDescription>
+  </AddIn>
 </RevitAddIns>

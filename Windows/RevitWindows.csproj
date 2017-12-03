@@ -87,6 +87,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RevitWindow.cs" />
+    <Compile Include="Ribbon.cs" />
+    <Compile Include="RibbonUtil.cs" />
     <Compile Include="WindowListingUtilities.cs" />
     <Compile Include="WindowManager.cs" />
     <Compile Include="WindowApiUtilities.cs" />
@@ -104,6 +106,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\information16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\information32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
