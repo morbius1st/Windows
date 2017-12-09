@@ -8,7 +8,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 
 using static RevitWindows.WindowApiUtilities;
-using static RevitWindows.ProjectSelectForm;
+using static RevitWindows.WindowManager;
 
 using static UtilityLibrary.MessageUtilities;
 
@@ -44,10 +44,15 @@ namespace RevitWindows
 
 			_formProjSel = new ProjectSelectForm();
 
-			_formProjSel.Parent = GetMainWinHandle(Uidoc.Document);
-			if (_formProjSel.Parent == IntPtr.Zero) { return Result.Failed; }
+			IntPtr parent = GetMainWinHandle(Uidoc.Document);
 
-			_formProjSel.Show();
+			if (parent == IntPtr.Zero) { return Result.Failed; }
+
+//			OrganizeRevitWindows.Parent = parent;
+//
+//			_formProjSel.Parent = parent;
+
+//			_formProjSel.Show();
 
 			if (!RegisterDocEvents()) return Result.Failed;
 

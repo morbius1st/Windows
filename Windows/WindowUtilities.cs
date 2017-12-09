@@ -11,7 +11,7 @@ using Rectangle = System.Drawing.Rectangle;
 
 using static RevitWindows.WindowApiUtilities;
 using static RevitWindows.WindowListingUtilities;
-using static RevitWindows.ProjectSelectForm;
+using static RevitWindows.WindowManager;
 
 #endregion
 
@@ -65,48 +65,48 @@ namespace RevitWindows
 		{
 			logMsg(message + nl);
 		}
-
-		internal static void SetupForm(IntPtr parent, Rectangle mainClientRect)
-		{
-			SetupFormMainClientRect(parent, mainClientRect);
-			SetupFormChildCurr();
-		}
-
-		internal static void SetupFormMainClientRect(IntPtr parent, Rectangle mainClientRect)
-		{
-			Command.MForm.RevitMainWorkArea = mainClientRect;
-
-			WINDOWINFO wip = new WINDOWINFO(true);
-			GetWindowInfo(parent, ref wip);
-
-			logMsgln("      win info win rect| " + ListRect(wip.rcWindow));
-			logMsgln("   win info client rect| " + ListRect(wip.rcClient));
-
-			Command.MForm.ParentRectForm = NewRectangle(wip.rcWindow);
-			Command.MForm.ParentRectClient = NewRectangle(wip.rcClient);
-		}
-
-		internal static void SetupFormChildCurr()
-		{
-			int idx = 0;
-
-			foreach (RevitWindow rw in RevitWindow.ChildWindows)
-			{
-				Command.MForm.SetChildCurr(idx++, rw.Current, rw.WindowTitle);
-			}
-
-//			foreach (RevitWindow rw in RevitWindow.ChildWinMinimized)
-//			{
-//				Command.MForm.SetChildCurr(idx++, rw.Current, rw.WindowTitle, true);
-//			}
 //
-//			foreach (RevitWindow rw in RevitWindow.ChildWinOther)
+//		internal static void SetupForm(IntPtr parent, Rectangle mainClientRect)
+//		{
+//			SetupFormMainClientRect(parent, mainClientRect);
+//			SetupFormChildCurr();
+//		}
+//
+//		internal static void SetupFormMainClientRect(IntPtr parent, Rectangle mainClientRect)
+//		{
+//			Command.MForm.RevitMainWorkArea = mainClientRect;
+//
+//			WINDOWINFO wip = new WINDOWINFO(true);
+//			GetWindowInfo(parent, ref wip);
+//
+//			logMsgln("      win info win rect| " + ListRect(wip.rcWindow));
+//			logMsgln("   win info client rect| " + ListRect(wip.rcClient));
+//
+//			Command.MForm.ParentRectForm = NewRectangle(wip.rcWindow);
+//			Command.MForm.ParentRectClient = NewRectangle(wip.rcClient);
+//		}
+//
+//		internal static void SetupFormChildCurr()
+//		{
+//			int idx = 0;
+//
+//			foreach (RevitWindow rw in RevitWindow.ChildWindows)
 //			{
 //				Command.MForm.SetChildCurr(idx++, rw.Current, rw.WindowTitle);
 //			}
-
-
-		}
+//
+////			foreach (RevitWindow rw in RevitWindow.ChildWinMinimized)
+////			{
+////				Command.MForm.SetChildCurr(idx++, rw.Current, rw.WindowTitle, true);
+////			}
+////
+////			foreach (RevitWindow rw in RevitWindow.ChildWinOther)
+////			{
+////				Command.MForm.SetChildCurr(idx++, rw.Current, rw.WindowTitle);
+////			}
+//
+//
+//		}
 
 		internal static Rectangle ParentWindow { get; private set; }
 		internal static Rectangle DisplayScreenRect { get; private set; }

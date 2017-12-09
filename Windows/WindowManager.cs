@@ -1,16 +1,16 @@
 ﻿#region Using directives
 
 using System;
-using System.Collections.Generic;
-using System.Windows.Interop;
-using Autodesk.Revit.DB.Events;
+using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Rectangle = System.Drawing.Rectangle;
 
 using static RevitWindows.RevitWindow;
 using static RevitWindows.WindowApiUtilities;
 using static RevitWindows.WindowUtilities;
+using static RevitWindows.WindowManagerUtilities;
 using static RevitWindows.WindowListingUtilities;
+using static RevitWindows.WindowManager.WindowLayoutStyle;
 
 #endregion
 
@@ -24,51 +24,114 @@ namespace RevitWindows
 	class WindowManager
 	{
 		internal const bool DISPLAY_INFO = false;
-//
-//		internal const int MIN_WIN_IN_CASCADE = 3;
-//		internal const int MIN_WIDTH_PIX = 600; // pixels
-//		internal const int MIN_HEIGHT_PIX = 400; // pixels
-//		internal const double MIN_WIDTH_PCT = 0.40; // percent
-//
-//		private int _topSelected;
-//		private int _leftSelected;
-//		private int _bottomSelected;
-//		private int _rightSelected;
-//		
-//		private int _topMinimized;
-//		private int _leftMinimized;
-//		private int _rightMinMax;
-//		
-//		private int _heightMinimized = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
-//		private int _widthMinimized = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
-//		
-//		private int _heightNotSel = GetSystemMetrics(SystemMetric.SM_CYMINTRACK);
-//		private int _widthNotSel = GetSystemMetrics(SystemMetric.SM_CXMINTRACK);
-//		
-//		private int _indexNormal;
-//		private int _indexMinimized;
-//		private int _row;
-//		
-//		private int _winAdjVert = TitleBarHeight;
-//		private int _winAdjHoriz = TitleBarHeight;
 
 		private readonly WindowManagerUtilities _winMgrUtil;
-
-		private IntPtr _active = IntPtr.Zero;
 
 		internal static string messageStatus = "";
 		internal static string messageError = "";
 
 		private const string MSG_01 = "Could not Organize windows";
 
+		private static IntPtr _parent;
+
 		internal string MessageStatus => messageStatus;
 		internal string MessageError => messageError;
 
+		internal static UIApplication Uiapp;
+		internal static UIDocument Uidoc;
+		internal static Application App;
+		internal static Document Doc;
 
-		public WindowManager()
+		private static WindowLayoutStyle _currWinLayoutStyle = ACTIVE_LEFT_OVERLAP;
+
+
+		public WindowManager(ExternalCommandData commandData)
 		{
+			if (commandData == null) return;
+
 			_winMgrUtil = new WindowManagerUtilities();
 
+			Uiapp = commandData.Application;
+			Uidoc = Uiapp.ActiveUIDocument;
+			App = Uiapp.Application;
+			Doc = Uidoc.Document;
+
+			Parent = GetMainWinHandle(Doc);
+
+			GetScreenMetrics(_parent);
+
+			NonCurrHeight = MinWindowHeight;
+			NotCurrWidth = MinWindowWidth;
+
+			WinAdjHoriz = TitleBarHeight;
+			WinAdjVert = TitleBarHeight;
+		}
+
+		internal enum WindowLayoutStyle
+		{
+			PROPER_CASCADE,
+			WINDOWS_CASCADE,
+			ACTIVE_LEFT,
+			ACTIVE_TOP,
+			ACTIVE_RIGHT,
+			ACTIVE_BOTTOM,
+			ACTIVE_LEFT_OVERLAP
+		}
+
+		internal bool UpdateWindowLayout()
+		{
+			if (_parent == IntPtr.Zero ||
+				Uiapp == null)
+			{
+				return false;
+			}
+
+			bool result = InitializeRevitWindows();
+
+			if (!result)
+			{
+				return false;
+			}
+
+			if (AdjustWindowLayout((int) _currWinLayoutStyle))
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		internal static IntPtr Parent
+		{
+			get { return _parent; }
+			set { _parent = value; }
+		}
+
+		internal WindowLayoutStyle CurrWinLayoutStyle
+		{
+			get
+			{
+				return _currWinLayoutStyle;
+			}
+
+			set
+			{
+				_currWinLayoutStyle = value;
+			}
+		}
+
+		private bool InitializeRevitWindows()
+		{
+//			GetScreenMetrics(_parent);
+
+			// get the list of child windows
+			if (!GetRevitChildWindows(_parent) ||
+				CurrDocWinCount == 0)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		internal bool AdjustWindowLayout(int windowLayoutStyle)
@@ -76,11 +139,10 @@ namespace RevitWindows
 			bool result = false;
 			int row = 0;
 
-//			InsureOneChildWindow();
-
 			switch (windowLayoutStyle)
 			{
-				case 0:
+				// proper sort
+				case (int) PROPER_CASCADE:
 					// for this, sort the windows first
 					SortChildWindows();
 
@@ -97,7 +159,8 @@ namespace RevitWindows
 					_winMgrUtil.RepositionWindows();
 
 					break;
-				case 1:
+					// windows sort
+				case (int) WINDOWS_CASCADE:
 					SortChildWindows();
 
 					result = _winMgrUtil.OrganizeByBadCascade();
@@ -113,7 +176,7 @@ namespace RevitWindows
 					_winMgrUtil.RepositionWindows();
 
 					break;
-				case 2: // left side
+				case (int) ACTIVE_LEFT: // left side
 					SortChildWindows();
 
 					result = _winMgrUtil.OrganizeByActOnLeft();
@@ -129,7 +192,7 @@ namespace RevitWindows
 					_winMgrUtil.RepositionWindows();
 					break;
 				// bottom side
-				case 3:
+				case (int) ACTIVE_BOTTOM:
 					SortChildWindows();
 
 					result = _winMgrUtil.OrganizeByActOnBottom();
@@ -146,7 +209,7 @@ namespace RevitWindows
 
 					break;
 				// right side
-				case 4:
+				case (int) ACTIVE_RIGHT:
 					SortChildWindows();
 
 					result = _winMgrUtil.OrganizeByActOnRight();
@@ -162,7 +225,7 @@ namespace RevitWindows
 					_winMgrUtil.RepositionWindows();
 					break;
 				// top side
-				case 5:
+				case (int) ACTIVE_TOP:
 					SortChildWindows();
 
 					result = _winMgrUtil.OrganizeByActOnTop();
@@ -178,7 +241,7 @@ namespace RevitWindows
 					_winMgrUtil.RepositionWindows();
 					break;
 				// left - stacked
-				case 6:
+				case (int) ACTIVE_LEFT_OVERLAP:
 					SortChildWindows();
 
 					result = _winMgrUtil.OrganizeByActOnLeftOverlapped();

@@ -7,7 +7,7 @@ using static Autodesk.Revit.DB.ViewType;
 
 using static RevitWindows.WindowApiUtilities;
 using static RevitWindows.WindowUtilities;
-using static RevitWindows.ProjectSelectForm;
+using static RevitWindows.WindowManager;
 
 namespace RevitWindows
 {

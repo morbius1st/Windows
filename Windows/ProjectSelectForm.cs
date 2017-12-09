@@ -9,6 +9,7 @@ using Application = Autodesk.Revit.ApplicationServices.Application;
 using static RevitWindows.WindowUtilities;
 using static RevitWindows.WindowListingUtilities;
 using static RevitWindows.RevitWindow;
+using static RevitWindows.WindowManager;
 
 //using static UtilityLibrary.MessageUtilities;
 
@@ -33,10 +34,10 @@ namespace RevitWindows
 {
 	public partial class ProjectSelectForm : Form
 	{
-		internal static UIApplication Uiapp;
-		internal static UIDocument Uidoc;
-		internal static Application App;
-		internal static Document Doc;
+//		internal static UIApplication Uiapp;
+//		internal static UIDocument Uidoc;
+//		internal static Application App;
+//		internal static Document Doc;
 
 		private static IntPtr _parent;
 
@@ -47,9 +48,9 @@ namespace RevitWindows
 			"Proper Cascade", 
 			"Window's Cascade",
 			"At Left", 
-			"At Bottom", 
-			"At Right", 
 			"At Top",
+			"At Right", 
+			"At Bottom", 
 			"At Left - Overlapped"
 		};
 
@@ -116,7 +117,7 @@ namespace RevitWindows
 				_winStyles.IndexOf((string) cboWinStyle.SelectedItem);
 
 			WindowManager winMgr =
-				new WindowManager();
+				new WindowManager(null);
 
 			if (!winMgr.AdjustWindowLayout(windowLayoutStyle))
 			{

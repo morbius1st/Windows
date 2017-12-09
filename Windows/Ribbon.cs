@@ -1,15 +1,15 @@
 #region Namespaces
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
-using System.Windows.Media.Imaging;
-using Autodesk.Revit.DB.Events;
-using Autodesk.Revit.UI;
 
-using ComboBox = Autodesk.Revit.UI.ComboBox;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.DB.Events;
+using Autodesk.Revit.ApplicationServices;
+
+using static RevitWindows.WindowManager;
+using static RevitWindows.WindowApiUtilities;
 
 #endregion
 
@@ -17,9 +17,10 @@ namespace RevitWindows
 {
 	class Ribbon : IExternalApplication
 	{
-		// application: launch with revit - setup interface elements
-		// display information
-		
+		private const bool AUTO_UPDATE_ON_OPEN_VIEW = true;
+		private const bool AUTO_UPDATE_ON_ACTIVATE_DOCUMENT = true;
+
+
 		private const string PANEL_NAME = "Revit Windows";
 		private const string TAB_NAME = "AO Tools";
 
@@ -29,7 +30,13 @@ namespace RevitWindows
 		private const string SMALLICON = "information16.png";
 		private const string LARGEICON = "information32.png";
 
-		internal UIApplication uiApp;
+		private bool EventsRegistered;
+
+		private static bool makeButton = false;
+
+		private UIControlledApplication UiCtrlApp;
+
+//		internal UIApplication uiApp;
 //		internal UIControlledApplication uiCtrlApp;
 
 //		public static PulldownButton pb;
@@ -38,12 +45,11 @@ namespace RevitWindows
 
 		public Result OnStartup(UIControlledApplication app)
 		{
+			UiCtrlApp = app;
+
 			try
 			{
-//				uiCtrlApp = app;
-
-				app.ControlledApplication.ApplicationInitialized += OnAppInitalized;
-
+//				UiCtrlApp.ControlledApplication.ApplicationInitialized += OnAppInitalized;
 
 				// create the ribbon tab first - this is the top level
 				// ui item.  below this will be the panel that is "on" the tab
@@ -57,7 +63,7 @@ namespace RevitWindows
 				// first try to create the tab
 				try
 				{
-					app.CreateRibbonTab(tabName);
+					UiCtrlApp.CreateRibbonTab(tabName);
 				}
 				catch (Exception)
 				{
@@ -73,7 +79,7 @@ namespace RevitWindows
 				// get the Panel within the tab name
 				List<RibbonPanel> rp = new List<RibbonPanel>();
 
-				rp = app.GetRibbonPanels(tabName);
+				rp = UiCtrlApp.GetRibbonPanels(tabName);
 
 				foreach (RibbonPanel rpx in rp)
 				{
@@ -90,9 +96,8 @@ namespace RevitWindows
 				{
 					// create the ribbon panel on the tab given the tab's name
 					// FYI - leave off the ribbon panel's name to put onto the "add-in" tab
-					ribbonPanel = app.CreateRibbonPanel(tabName, panelName);
+					ribbonPanel = UiCtrlApp.CreateRibbonPanel(tabName, panelName);
 				}
-
 
 				//add a stacked pair of stacked pull down buttons to the panel
 				if (!AddStackedPullDownhButtons(ribbonPanel))
@@ -103,83 +108,245 @@ namespace RevitWindows
 					return Result.Failed;
 				}
 
-				return Result.Succeeded;
+//				RegisterDocEvents();
 
-
-
-				//				//add a split pull down button to the panel
-				//				if (!AddStackedComboBoxes(ribbonPanel))
-				//				{
-				//					TaskDialog td = new TaskDialog("Revit Windows");
-				//					td.TitleAutoPrefix = false;
-				//					td.MainInstruction = "Failed to Add the Stacked ComboBoxes!";
-				//					td.MainIcon = TaskDialogIcon.TaskDialogIconWarning;
-				//					td.CommonButtons = TaskDialogCommonButtons.Ok;
-				//
-				//					td.Show();
-				//
-				//					// create the split button failed
-				//					MessageBox.Show("Failed to Add the Stacked ComboBoxes!", "Information",
-				//						MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-				//					return Result.Failed;
-				//				}
-				//
-				//				// example
-				//				// add a button to the panel
-				//				ribbonPanel.AddItem(
-				//					createButton("ModifyPoints1", "Modify\nPoints", "ModifyPoints",
-				//						"Modify the points of a topography surface", SMALLICON, LARGEICON));
-				//
-				//				// example 1
-				//				//add a split pull down button to the panel
-				//				if (!AddPullDownButton(ribbonPanel))
-				//				{
-				//					// create the split button failed
-				//					MessageBox.Show("Failed to Add the Pull Down Button!", "Information",
-				//						MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-				//					return Result.Failed;
-				//				}
-				//
-				//				// example 2
-				//				//add a stacked pair of push buttons to the panel
-				//				if (!AddStackedPushButtons(ribbonPanel))
-				//				{
-				//					// create the split button failed
-				//					MessageBox.Show("Failed to Add the Stacked Push Buttons!", "Information",
-				//						MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-				//					return Result.Failed;
-				//				}
-				//
-				//				// example 3
-				//				//add a stacked pair of push buttons and a text box to the panel
-				//				if (!AddStackedPushButtonsAndTextBox(ribbonPanel))
-				//				{
-				//					// create the split button failed
-				//					MessageBox.Show("Failed to Add the Stacked Push Buttons and TextBox!", "Information",
-				//						MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-				//					return Result.Failed;
-				//				}
-
-
+				/*
+				 * examples of how to add various buttons goes here
+				 *
+				 */
 
 			}
 			catch (Exception e)
 			{
 				Debug.WriteLine("exception " + e.Message);
+
+				TaskDialog td = new TaskDialog("Revit Windows");
+				td.TitleAutoPrefix = false;
+				td.MainInstruction = "Failed to Add to Ribbon";
+				td.MainIcon = TaskDialogIcon.TaskDialogIconWarning;
+				td.CommonButtons = TaskDialogCommonButtons.Ok;
+
 				return Result.Failed;
 			}
 
+			
 			return Result.Succeeded;
 		}
 
-		private void OnAppInitalized(object sender, ApplicationInitializedEventArgs e)
+//		private void OnAppInitalized(object sender, ApplicationInitializedEventArgs e)
+//		{
+//			UiCtrlApp.ControlledApplication.ApplicationInitialized -= OnAppInitalized;
+//			Autodesk.Revit.ApplicationServices.Application app = 
+//				(Autodesk.Revit.ApplicationServices.Application) sender;
+//
+//		}
+
+		private bool AddStackedPullDownhButtons(RibbonPanel rp)
 		{
-			Autodesk.Revit.ApplicationServices.Application app = 
-				sender as Autodesk.Revit.ApplicationServices.Application;
+			SplitButton pb0;
+			SplitButton pb1;
 
-			uiApp = new UIApplication(app);
+			SplitButtonData pdData0 = new SplitButtonData("pullDownButton0", "function select");
+			pdData0.Image = RibbonUtil.GetBitmapImage(SMALLICON);
 
+			SplitButtonData pdData1 = new SplitButtonData("pullDownButton1", "auto activate");
+			pdData1.Image = RibbonUtil.GetBitmapImage(SMALLICON);
+
+
+			IList<RibbonItem> ris = rp.AddStackedItems(pdData0, pdData1);
+
+			pb0 = ris[0] as SplitButton;
+			pb1 = ris[1] as SplitButton;
+
+			PushButtonData pbd;
+
+			// pull down button 0
+			pbd = createButton("button00", "Proper Cascade        ", "OrganizeProperCascade",
+				"Organize by Proper Cascade", SMALLICON, LARGEICON);
+			pb0.AddPushButton(pbd);
+
+			pbd = createButton("button01", "Window's Cascade      ", "OrganizeWindowsCascade",
+				"Organize by Windows Cascade", SMALLICON, LARGEICON);
+			pb0.AddPushButton(pbd);
+
+			pbd = createButton("button02", "Active Left Stacked ", "OrganizeLeft",
+				"Place the Active Window on the Left", SMALLICON, LARGEICON);
+			pb0.AddPushButton(pbd);
+
+			pbd = createButton("button03", "Active Top Stacked ", "OrganizeTop",
+				"Place the Active Window on the Top", SMALLICON, LARGEICON);
+			pb0.AddPushButton(pbd);
+
+			pbd = createButton("button04", "Active Right Stacked ", "OrganizeRight",
+				"Place the Active Window on the Right", SMALLICON, LARGEICON);
+			pb0.AddPushButton(pbd);
+
+			pbd = createButton("button05", "Active Bottom Stacked ", "OrganizeBottom",
+				"Place the Active Window on the Bottom", SMALLICON, LARGEICON);
+			pb0.AddPushButton(pbd);
+
+			pbd = createButton("button06", "Active Left Overlapped", "OrganizeLeftOverlapped",
+				"Place the Active Window on the Left\nand Overlap Remaining Windows", SMALLICON, LARGEICON);
+			pb0.AddPushButton(pbd);
+
+			// pull down button 1
+			pbd = createButton("button10", "Activate Auto On", "AutoActivateOn",
+				"Turn on AutoActivate", SMALLICON, LARGEICON);
+			pb1.AddPushButton(pbd);
+
+			pbd = createButton("button11", "Activate Auto Off", "AutoActivateOff",
+				"Turn off AutoActivate", SMALLICON, LARGEICON);
+			pb1.AddPushButton(pbd);
+
+
+			return true;
 		}
+
+		private PushButtonData createButton(string ButtonName, string ButtonText, 
+			string className, string ToolTip, string smallIcon, string largeIcon)
+		{
+			PushButtonData pbd;
+
+			try
+			{
+				pbd = new PushButtonData(ButtonName, ButtonText, AddInPath, string.Concat(CLASSPATH, className))
+				{
+					Image = RibbonUtil.GetBitmapImage(smallIcon),
+					LargeImage = RibbonUtil.GetBitmapImage(largeIcon),
+					ToolTip = ToolTip
+				};
+			}
+			catch (Exception e)
+			{
+				if (!makeButton)
+				{
+					TaskDialog.Show("make button", "failed");
+					makeButton = true;
+				}
+				return null;
+			}
+
+			return pbd;
+		}
+
+		// process when shutting down
+		public Result OnShutdown(UIControlledApplication a)
+		{
+			try
+			{
+				return Result.Succeeded;
+			}
+			catch (Exception e)
+			{
+				return Result.Failed;
+			}
+		}
+
+//		bool RegisterDocEvents()
+//		{
+//			if (EventsRegistered) return true;
+//
+//			try
+//			{
+//				//				_app.DocumentOpened += new EventHandler<DocumentOpenedEventArgs>(DocOpenEvent);
+//				//				_app.DocumentCreated += new EventHandler<DocumentCreatedEventArgs>(DocCreateEvent);
+//
+//				Uiapp.ViewActivated += ViewActivated;
+//				Uiapp.ApplicationClosing += AppClosing;
+//			}
+//			catch (Exception)
+//			{
+//				return false;
+//			}
+//
+//			EventsRegistered = true;
+//
+//			return true;
+//		}
+//
+//		private void ViewActivated(object sender, ViewActivatedEventArgs args)
+//		{
+//			Autodesk.Revit.DB.View vPrev = args.PreviousActiveView;
+//			View vCurr = args.CurrentActiveView;
+//
+//			if (AUTO_UPDATE_ON_ACTIVATE_DOCUMENT &&
+//				!vPrev.Document.Title.ToLower().Equals(vCurr.Document.Title.ToLower()))
+//			{
+//				_formProjSel.UpdateWindowLayout();
+//			}
+//			//			else if (AUTO_UPDATE_ON_OPEN_VIEW)
+//			//			{
+//			//				_formProjSel.UpdateWindowLayoutDelay();
+//			//			}
+//		}
+//
+//		private void AppClosing(object sender, ApplicationClosingEventArgs args)
+//		{
+//			Uiapp.ViewActivated -= ViewActivated;
+//			Uiapp.ApplicationClosing -= AppClosing;
+//
+//		}
+
+
+
+		/*
+				 * examples of how to add various buttons
+				 *
+				 */
+		//				//add a split pull down button to the panel
+		//				if (!AddStackedComboBoxes(ribbonPanel))
+		//				{
+		//					TaskDialog td = new TaskDialog("Revit Windows");
+		//					td.TitleAutoPrefix = false;
+		//					td.MainInstruction = "Failed to Add the Stacked ComboBoxes!";
+		//					td.MainIcon = TaskDialogIcon.TaskDialogIconWarning;
+		//					td.CommonButtons = TaskDialogCommonButtons.Ok;
+		//
+		//					td.Show();
+		//
+		//					// create the split button failed
+		//					MessageBox.Show("Failed to Add the Stacked ComboBoxes!", "Information",
+		//						MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+		//					return Result.Failed;
+		//				}
+		//
+		//				// example
+		//				// add a button to the panel
+		//				ribbonPanel.AddItem(
+		//					createButton("ModifyPoints1", "Modify\nPoints", "ModifyPoints",
+		//						"Modify the points of a topography surface", SMALLICON, LARGEICON));
+		//
+		//				// example 1
+		//				//add a split pull down button to the panel
+		//				if (!AddPullDownButton(ribbonPanel))
+		//				{
+		//					// create the split button failed
+		//					MessageBox.Show("Failed to Add the Pull Down Button!", "Information",
+		//						MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+		//					return Result.Failed;
+		//				}
+		//
+		//				// example 2
+		//				//add a stacked pair of push buttons to the panel
+		//				if (!AddStackedPushButtons(ribbonPanel))
+		//				{
+		//					// create the split button failed
+		//					MessageBox.Show("Failed to Add the Stacked Push Buttons!", "Information",
+		//						MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+		//					return Result.Failed;
+		//				}
+		//
+		//				// example 3
+		//				//add a stacked pair of push buttons and a text box to the panel
+		//				if (!AddStackedPushButtonsAndTextBox(ribbonPanel))
+		//				{
+		//					// create the split button failed
+		//					MessageBox.Show("Failed to Add the Stacked Push Buttons and TextBox!", "Information",
+		//						MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+		//					return Result.Failed;
+		//				}
+
+
 		//
 		//		// add a pair of combo boxes - first is the function selection and 
 		//		// the second is basically a check box replacement since revit
@@ -307,50 +474,10 @@ namespace RevitWindows
 		//		}
 		//
 		//
-		private bool AddStackedPullDownhButtons(RibbonPanel rp)
-		{
-			SplitButton pb0;
-			SplitButton pb1;
-
-			SplitButtonData pdData0 = new SplitButtonData("pullDownButton0", "function select");
-			pdData0.Image = RibbonUtil.GetBitmapImage(SMALLICON);
-
-			SplitButtonData pdData1 = new SplitButtonData("pullDownButton1", "auto activate");
-			pdData1.Image = RibbonUtil.GetBitmapImage(SMALLICON);
 
 
-			IList<RibbonItem> ris = rp.AddStackedItems(pdData0, pdData1);
-
-			pb0 = ris[0] as SplitButton;
-			pb1 = ris[1] as SplitButton;
-
-			PushButtonData pbd;
-
-			// pull down button 0
-			pbd = createButton("button00", "text 00", "OrganizeProperCascade",
-				"Organize by Proper Cascade", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
-
-			pbd = createButton("button01", "text 01", "OrganizeWindowsCascade",
-				"Organize by Windows Cascade", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
-
-			pbd = createButton("button02", "text 02", "OrganizeRight",
-				"Organize by Active Window on the Right", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
-
-			// pull down button 1
-			pbd = createButton("button10", "text 10", "AutoActivateOn",
-				"Turn on AutoActivate", SMALLICON, LARGEICON);
-			pb1.AddPushButton(pbd);
-
-			pbd = createButton("button11", "text 11", "AutoActivateOff",
-				"Turn off AutoActivate", SMALLICON, LARGEICON);
-			pb1.AddPushButton(pbd);
 
 
-			return true;
-		}
 
 
 
@@ -393,48 +520,6 @@ namespace RevitWindows
 		//
 		//			return true;
 		//		}
-
-		private static bool x = false;
-
-		private PushButtonData createButton(string ButtonName, string ButtonText, 
-			string className, string ToolTip, string smallIcon, string largeIcon)
-		{
-			PushButtonData pbd;
-
-			try
-			{
-				pbd = new PushButtonData(ButtonName, ButtonText, AddInPath, string.Concat(CLASSPATH, className))
-				{
-					Image = RibbonUtil.GetBitmapImage(smallIcon),
-					LargeImage = RibbonUtil.GetBitmapImage(largeIcon),
-					ToolTip = ToolTip
-				};
-			}
-			catch (Exception e)
-			{
-				if (!x)
-				{
-					TaskDialog.Show("make button", "failed");
-					x = true;
-				}
-				return null;
-			}
-
-			return pbd;
-		}
-
-		// process when shutting down
-		public Result OnShutdown(UIControlledApplication a)
-		{
-			try
-			{
-				return Result.Succeeded;
-			}
-			catch (Exception e)
-			{
-				return Result.Failed;
-			}
-		}
 
 	}
 }

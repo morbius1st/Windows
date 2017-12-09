@@ -79,17 +79,48 @@ namespace RevitWindows
 		private int _minimizedHeight = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
 		private int _minimizedWidth = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
 
-		private int _nonCurrHeight = MinWindowHeight;
-		private int _notCurrWidth = MinWindowWidth;
+		private static int _nonCurrHeight;
+		private static int _notCurrWidth;
 
-//		private int _indexNormal;
-//		private int _indexMinimized;
-//		private int _row;
+		//		private int _indexNormal;
+		//		private int _indexMinimized;
+		//		private int _row;
 
-		private int _winAdjHoriz = TitleBarHeight;
-		private int _winAdjVert = TitleBarHeight;
+		private static int _winAdjHoriz;
 
 		private WindowManagerUtilities winMgrUtil;
+
+
+		internal static int NonCurrHeight
+		{
+			get { return _nonCurrHeight; }
+
+			set { _nonCurrHeight = value; }
+		}
+
+		internal static int NotCurrWidth
+		{
+			get { return _notCurrWidth; }
+
+			set { _notCurrWidth = value; }
+		}
+
+		public static int WinAdjHoriz
+		{
+			get { return _winAdjHoriz; }
+
+			set { _winAdjHoriz = value; }
+		}
+
+		private static int _winAdjVert;
+
+		public static int WinAdjVert
+		{
+			get { return _winAdjVert; }
+
+			set { _winAdjVert = value; }
+		}
+
 
 		// proper cascade = cascade from top right to bottom left - 
 		// keep right edge at right margin and bottom edge at bottom margin

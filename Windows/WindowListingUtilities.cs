@@ -11,8 +11,7 @@ using Rectangle = System.Drawing.Rectangle;
 using static RevitWindows.WindowUtilities;
 using static RevitWindows.WindowApiUtilities;
 using static RevitWindows.RevitWindow;
-using static RevitWindows.Command;
-using static RevitWindows.ProjectSelectForm;
+using static RevitWindows.WindowManager;
 
 
 #endregion
@@ -29,10 +28,10 @@ namespace RevitWindows
 		internal const string nl = "\r\n";
 		internal const string pattRect = "x1|{0,5:D} y1|{1,5:D} x2|{2,5:D} y2|{3,5:D}";
 
-		static internal void ListDocuments()
-		{
-			logMsg(_formProjSel.ToString());
-		}
+//		static internal void ListDocuments()
+//		{
+//			logMsg(_formProjSel.ToString());
+//		}
 
 
 		static internal void ListSystemInformation(IntPtr parent, int titleBarHeight)
