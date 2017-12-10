@@ -2,10 +2,12 @@
 
 using System;
 using System.Drawing;
-
-using static RevitWindows.WindowUtilities;
+using System.Drawing.Drawing2D;
 using static RevitWindows.RevitWindow;
+using static RevitWindows.WindowUtilities;
 using static RevitWindows.WindowApiUtilities;
+using static RevitWindows.WindowManager;
+
 
 using static UtilityLibrary.MessageUtilities;
 
@@ -30,8 +32,8 @@ namespace RevitWindows
 		private const int MIN_WIN_IN_CASCADE = 3;
 		private const int MIN_WIDTH_PIX = 533; // pixels
 		private const int MIN_HEIGHT_PIX = 300; // pixels
-		private const double MIN_WIDTH_PCT = 0.33; // percent
-		private const double MIN_HEIGHT_PCT = MIN_WIDTH_PCT; // percent
+		private const double MIN_WIDTH_CASCADE_PCT = 0.33; // percent
+		private const double MIN_HEIGHT_CASCADE_PCT = MIN_WIDTH_CASCADE_PCT; // percent
 
 		private const double COL_ADJUST_HORIZ = 0.5;
 		private const double COL_ADJUST_VERT = 0.5;
@@ -40,24 +42,24 @@ namespace RevitWindows
 		private const double BAD_CASCADE_HEIGHT_PCT = 0.6;
 
 		// 0.0 means no size increase - must be greater than zero
-		private const double NON_ACT_WIDTH_INCREASE_PCT = 0.0;
+		private const double NON_ACT_WIDTH_INCREASE_TILE_PCT = 1.0;
 		// 1.O means a 100% (double) increase above the minimim size
 		// must be greater than zero
-		private const double NON_ACT_HEIGHT_INCREASE_PCT = 1.0;
-		private const double ACTIVE_VIEW_MIN_WIDTH_PCT = 0.60;
-		private const double ACTIVE_VIEW_MIN_HEIGHT_PCT = 0.60;
-
-		// 1.O means a 100% (double) increase above the minimim size
-		// must be greater than zero
-		private const double NON_ACT_WIDTH_INCREASE_OVERLAP_PCT = 0.0;
-		// 0.O means no increase above the minimim size
-		// must be greater than zero
-		private const double NON_ACT_HEIGHT_INCREASE_OVERLAP_PCT = 1.0;
+		private const double NON_ACT_HEIGHT_INCREASE_TILE_PCT = 1.0;
+		// how much larger / smaller to make the non_active windows
+		// each time the increase / decrease buttons are pressed
+		private const double NON_ACT_PCT_ADJUST_TILE_AMT = 0.25;
+		//
+		private const double ACTIVE_VIEW_MIN_WIDTH_TILE_PCT = 0.60;
+		private const double ACTIVE_VIEW_MIN_HEIGHT_TILE_PCT = 0.60;
 
 
 		// instance variables
-		private int _availableWidth;
-		private int _availableHeight;
+		private readonly IntPtr _parent;
+
+
+		private static bool _initalized = false;
+
 
 		private int _selectedTop;
 		private int _selectedLeft;
@@ -76,50 +78,147 @@ namespace RevitWindows
 		private int _minimizedLeft;
 		private int _minMaxRight;
 
-		private int _minimizedHeight = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
-		private int _minimizedWidth = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
+
+
+		private static int _availableWidth;
+		private static int _availableHeight;
+
+		private static int _minimizedWidth;
+		private static int _minimizedHeight;
+
+		private static int _selectedMinWidth;
+		private static int _selectedMinHeight;
 
 		private static int _nonCurrHeight;
 		private static int _notCurrWidth;
 
-		//		private int _indexNormal;
-		//		private int _indexMinimized;
-		//		private int _row;
-
 		private static int _winAdjHoriz;
-
-		private WindowManagerUtilities winMgrUtil;
-
-
-		internal static int NonCurrHeight
-		{
-			get { return _nonCurrHeight; }
-
-			set { _nonCurrHeight = value; }
-		}
-
-		internal static int NotCurrWidth
-		{
-			get { return _notCurrWidth; }
-
-			set { _notCurrWidth = value; }
-		}
-
-		public static int WinAdjHoriz
-		{
-			get { return _winAdjHoriz; }
-
-			set { _winAdjHoriz = value; }
-		}
-
 		private static int _winAdjVert;
 
-		public static int WinAdjVert
-		{
-			get { return _winAdjVert; }
+		private static double _nonActiveWidthIncreasePct;
+		private static double _nonActiveHeightIncreasePct;
 
-			set { _winAdjVert = value; }
+//		internal static void ListIncPct(int pos)
+//		{
+//			logMsgFmtln("non act width inc pct| ", " pos (" + pos + ")  " +
+//				_nonActiveWidthIncreasePct);
+//		}
+
+		internal bool AdjustNonActWidth(WindowLayoutStyle winLayoutStyle, bool increase)
+		{
+			// must be one of these layout styles
+			// otherwise ignore
+			if (winLayoutStyle != WindowLayoutStyle.ACTIVE_LEFT &&
+				winLayoutStyle != WindowLayoutStyle.ACTIVE_LEFT_OVERLAP &&
+				winLayoutStyle != WindowLayoutStyle.ACTIVE_RIGHT)
+			{
+				return true;
+			}
+
+			double proposedWidthAdjust;
+
+			if (!increase)
+			{
+				proposedWidthAdjust = _nonActiveWidthIncreasePct - NON_ACT_PCT_ADJUST_TILE_AMT;
+				if (proposedWidthAdjust >= 0)
+				{
+					_nonActiveWidthIncreasePct = proposedWidthAdjust;
+					return true;
+				}
+				else return false;
+			}
+
+			proposedWidthAdjust = _nonActiveWidthIncreasePct 
+				+ NON_ACT_PCT_ADJUST_TILE_AMT;
+
+			if (CalcTotalSize(proposedWidthAdjust,
+				MinWindowWidth, _selectedMinWidth) > _availableWidth)
+			{
+				return false;
+			}
+
+			_nonActiveWidthIncreasePct = proposedWidthAdjust;
+
+			return true;
 		}
+
+		internal bool AdjustNonActHeight(WindowLayoutStyle winLayoutStyle, bool increase)
+		{
+			// must be one of these layout styles
+			// otherwise ignore
+			if (winLayoutStyle != WindowLayoutStyle.ACTIVE_TOP &&
+				winLayoutStyle != WindowLayoutStyle.ACTIVE_BOTTOM)
+			{
+				return true;
+			}
+
+			double proposedHeightIncrease;
+
+			if (!increase)
+			{
+				proposedHeightIncrease = _nonActiveHeightIncreasePct - NON_ACT_PCT_ADJUST_TILE_AMT;
+				if (proposedHeightIncrease >= 0)
+				{
+					_nonActiveHeightIncreasePct = proposedHeightIncrease;
+					return true;
+				}
+				else return false;
+			}
+
+			proposedHeightIncrease = _nonActiveHeightIncreasePct 
+				+ NON_ACT_PCT_ADJUST_TILE_AMT;
+
+			if (CalcTotalSize(proposedHeightIncrease,
+				MinWindowWidth, _selectedMinWidth) > _availableWidth)
+			{
+				return false;
+			}
+
+			_nonActiveHeightIncreasePct = proposedHeightIncrease;
+
+			return true;
+		}
+
+		private int CalcTotalSize(double proposedIncPct, int minWinSize, int selMinSize)
+		{
+			return selMinSize + (int) (minWinSize * (1.0 + proposedIncPct));
+		}
+
+		internal WindowManagerUtilities(IntPtr parent)
+		{
+			_parent = parent;
+
+			GetScreenMetrics(_parent);
+
+			if (!_initalized)
+			{
+				Initalize();
+
+				_initalized = true;
+			}
+		}
+
+		internal void Initalize()
+		{
+			_nonCurrHeight = MinWindowHeight;
+			_notCurrWidth = MinWindowWidth;
+
+			_winAdjHoriz = TitleBarHeight;
+			_winAdjVert = TitleBarHeight;
+
+			_minimizedHeight = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
+			_minimizedWidth = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
+
+			_availableWidth = ParentWindow.Width - MarginLeft - MarginRight;
+			_availableHeight = ParentWindow.Height - MarginTop - MarginBottom;
+
+			_nonActiveWidthIncreasePct = NON_ACT_WIDTH_INCREASE_TILE_PCT;
+			_nonActiveHeightIncreasePct = NON_ACT_HEIGHT_INCREASE_TILE_PCT;
+
+			_selectedMinWidth = (int) (_availableWidth * ACTIVE_VIEW_MIN_WIDTH_TILE_PCT);
+			_selectedMinHeight = (int) (_availableHeight * ACTIVE_VIEW_MIN_HEIGHT_TILE_PCT);
+		}
+
 
 
 		// proper cascade = cascade from top right to bottom left - 
@@ -217,8 +316,8 @@ namespace RevitWindows
 		{
 			if (CurrDocWinCount == 0) { return false; }
 
-			int minWinHeight = Math.Max((int) (ParentWindow.Height * MIN_HEIGHT_PCT), MIN_HEIGHT_PIX);
-			int minWinWidth = Math.Max((int) (ParentWindow.Width * MIN_WIDTH_PCT), MIN_WIDTH_PIX);
+			int minWinHeight = Math.Max((int) (ParentWindow.Height * MIN_HEIGHT_CASCADE_PCT), MIN_HEIGHT_PIX);
+			int minWinWidth = Math.Max((int) (ParentWindow.Width * MIN_WIDTH_CASCADE_PCT), MIN_WIDTH_PIX);
 
 			int maxWindowsHoriz = (ParentWindow.Width - MarginRight
 				- MarginLeft - minWinWidth) / _winAdjHoriz;
@@ -464,6 +563,7 @@ namespace RevitWindows
 
 		internal bool OrganizeByActOnRight()
 		{
+			
 			// need at least 3 selected windows
 			if (CurrDocWinCount == 0 ||
 				CurrDocWinCount < MIN_WIN_IN_CASCADE)
@@ -545,17 +645,14 @@ namespace RevitWindows
 		// basically, the non-active width is fixed and the active window can grow
 		int ValidateActOnLeftOrRight()
 		{
-			_availableWidth = ParentWindow.Width - MarginLeft - MarginRight;
-			_availableHeight = ParentWindow.Height - MarginTop - MarginBottom;
-
 			// calc the minimum width
-			_selectedWidth = (int) (_availableWidth * ACTIVE_VIEW_MIN_WIDTH_PCT);
+			_selectedWidth = _selectedMinWidth;
 			_selectedHeight = _availableHeight;
 
 			// this is fixed
-			_nonActiveWidth = (int) (MinWindowWidth * (1.0 + NON_ACT_WIDTH_INCREASE_PCT));
+			_nonActiveWidth = (int) (MinWindowWidth * (1.0 + _nonActiveWidthIncreasePct));
 			// this is a minimum - it can grow
-			_nonActiveHeight = (int) (MinWindowHeight * (1.0 + NON_ACT_HEIGHT_INCREASE_PCT));
+			_nonActiveHeight = (int) (MinWindowHeight * (1.0 + _nonActiveWidthIncreasePct));
 
 			int totalNonActHeight = _nonActiveHeight * (CurrDocWinCount - 1);
 			int numOfCols = (int) Math.Ceiling((double) totalNonActHeight / _availableHeight);
@@ -739,18 +836,18 @@ namespace RevitWindows
 		// basically, the non-active height is fixed and the active window can grow
 		int ValidateActOnTopOrBottom()
 		{
-			_availableWidth = ParentWindow.Width - MarginLeft - MarginRight;
-			_availableHeight = ParentWindow.Height - MarginTop - MarginBottom;
+//			_availableWidth = ParentWindow.Width - MarginLeft - MarginRight;
+//			_availableHeight = ParentWindow.Height - MarginTop - MarginBottom;
 
 			// calc the width
 			_selectedWidth = _availableWidth;
 			// calc the min height
-			_selectedHeight = (int) (_availableHeight * ACTIVE_VIEW_MIN_HEIGHT_PCT);
+			_selectedHeight = _selectedMinHeight;
 
 			// this is a minimum - it can grow
-			_nonActiveWidth = (int) (MinWindowWidth * (1.0 + NON_ACT_WIDTH_INCREASE_PCT));
+			_nonActiveWidth = (int) (MinWindowWidth * (1.0 + _nonActiveWidthIncreasePct));
 			// this is fixed
-			_nonActiveHeight = (int) (MinWindowHeight * (1.0 + NON_ACT_HEIGHT_INCREASE_PCT));
+			_nonActiveHeight = (int) (MinWindowHeight * (1.0 + _nonActiveHeightIncreasePct));
 
 			int totalNonActWidth = _nonActiveWidth * (CurrDocWinCount - 1);
 			int numOfRows = (int) Math.Ceiling((double) totalNonActWidth / _availableWidth);
@@ -853,10 +950,6 @@ namespace RevitWindows
 				}
 			}
 			return true;
-
-
-
-			return true;
 		}
 
 		// validates based on minimum active window width and checking if there is enough
@@ -865,19 +958,19 @@ namespace RevitWindows
 		// also the non-active windows are overlapped so that just their title bar is visible (minimum)
 		int ValidateActOnLeftOrRightOverlapped()
 		{
-			_availableWidth = ParentWindow.Width - MarginLeft - MarginRight;
-			_availableHeight = ParentWindow.Height - MarginTop - MarginBottom;
+//			_availableWidth = ParentWindow.Width - MarginLeft - MarginRight;
+//			_availableHeight = ParentWindow.Height - MarginTop - MarginBottom;
 
 			// calc the minimum width
-			_selectedWidth = (int) (_availableWidth * ACTIVE_VIEW_MIN_WIDTH_PCT);
+			_selectedWidth = _selectedMinWidth;
 			_selectedHeight = _availableHeight;
 
 			// this is fixed
-			_nonActiveWidth = (int) (MinWindowWidth * (1.0 + NON_ACT_WIDTH_INCREASE_OVERLAP_PCT));
+			_nonActiveWidth = (int) (MinWindowWidth * (1.0 + _nonActiveWidthIncreasePct));
 			// this is a minimum - it can grow - how ever this is the overlapping distance
 			// there the last window will be "full height"
 			_nonActiveSpacingVert = MinWindowHeight;
-			_nonActiveHeight = (int) (MinWindowHeight * (1.0 + NON_ACT_HEIGHT_INCREASE_OVERLAP_PCT));
+			_nonActiveHeight = (int) (MinWindowHeight * (1.0 + _nonActiveHeightIncreasePct));
 			// this is basically fixed but can grow a little to fill in the space
 			_nonActiveLastHeight = _nonActiveHeight;
 
@@ -901,23 +994,23 @@ namespace RevitWindows
 			}
 
 			int numOfRows = (int) Math.Ceiling((double) (CurrDocWinCount - 1) / numOfCols);
-
-			clearConsole();
-
-			logMsg(nl);
-			logMsgFmtln("** adjustments| ", "before");
-			logMsgFmtln("CurrDocWinCount| ", CurrDocWinCount);
-			logMsgFmtln("_availableHeight| ", _availableHeight);
-			logMsgFmtln("_selectedHeight| ", _selectedHeight);
-			logMsgFmtln("_nonActiveSpacingVert| ", _nonActiveSpacingVert);
-			logMsgFmtln("_nonActiveHeight| ", _nonActiveHeight);
-			logMsgFmtln("_nonActiveLastHeight| ", _nonActiveLastHeight);
-			logMsgFmtln("lastHeightRemainder| ", lastHeightRemainder);
-			logMsgFmtln("adjAvailableHeight| ", adjAvailableHeight);
-			logMsgFmtln("totalNonActHeight| ", totalNonActHeight);
-			logMsgFmtln("totalNonActWidth| ", totalNonActWidth);
-			logMsgFmtln("numOfCols| ", numOfCols);
-			logMsgFmtln("numOfRows| ", numOfRows);
+//
+//			clearConsole();
+//
+//			logMsg(nl);
+//			logMsgFmtln("** adjustments| ", "before");
+//			logMsgFmtln("CurrDocWinCount| ", CurrDocWinCount);
+//			logMsgFmtln("_availableHeight| ", _availableHeight);
+//			logMsgFmtln("_selectedHeight| ", _selectedHeight);
+//			logMsgFmtln("_nonActiveSpacingVert| ", _nonActiveSpacingVert);
+//			logMsgFmtln("_nonActiveHeight| ", _nonActiveHeight);
+//			logMsgFmtln("_nonActiveLastHeight| ", _nonActiveLastHeight);
+//			logMsgFmtln("lastHeightRemainder| ", lastHeightRemainder);
+//			logMsgFmtln("adjAvailableHeight| ", adjAvailableHeight);
+//			logMsgFmtln("totalNonActHeight| ", totalNonActHeight);
+//			logMsgFmtln("totalNonActWidth| ", totalNonActWidth);
+//			logMsgFmtln("numOfCols| ", numOfCols);
+//			logMsgFmtln("numOfRows| ", numOfRows);
 //			logMsgFmtln("| ", );
 
 
@@ -935,21 +1028,21 @@ namespace RevitWindows
 				_nonActiveLastHeight = _availableHeight - (_nonActiveSpacingVert * (numOfRows - 1));
 			}
 			_selectedWidth = _availableWidth - (numOfCols * _nonActiveWidth);
-
-			logMsg(nl);
-			logMsgFmtln("** adjustments| ", "after");
-			logMsgFmtln("CurrDocWinCount| ", CurrDocWinCount);
-			logMsgFmtln("_availableHeight| ", _availableHeight);
-			logMsgFmtln("_selectedHeight| ", _selectedHeight);
-			logMsgFmtln("_nonActiveSpacingVert| ", _nonActiveSpacingVert);
-			logMsgFmtln("_nonActiveHeight| ", _nonActiveHeight);
-			logMsgFmtln("_nonActiveLastHeight| ", _nonActiveLastHeight);
-			logMsgFmtln("lastHeightRemainder| ", lastHeightRemainder);
-			logMsgFmtln("adjAvailableHeight| ", adjAvailableHeight);
-			logMsgFmtln("totalNonActHeight| ", totalNonActHeight);
-			logMsgFmtln("totalNonActWidth| ", totalNonActWidth);
-			logMsgFmtln("numOfCols| ", numOfCols);
-			logMsgFmtln("numOfRows| ", numOfRows);
+//
+//			logMsg(nl);
+//			logMsgFmtln("** adjustments| ", "after");
+//			logMsgFmtln("CurrDocWinCount| ", CurrDocWinCount);
+//			logMsgFmtln("_availableHeight| ", _availableHeight);
+//			logMsgFmtln("_selectedHeight| ", _selectedHeight);
+//			logMsgFmtln("_nonActiveSpacingVert| ", _nonActiveSpacingVert);
+//			logMsgFmtln("_nonActiveHeight| ", _nonActiveHeight);
+//			logMsgFmtln("_nonActiveLastHeight| ", _nonActiveLastHeight);
+//			logMsgFmtln("lastHeightRemainder| ", lastHeightRemainder);
+//			logMsgFmtln("adjAvailableHeight| ", adjAvailableHeight);
+//			logMsgFmtln("totalNonActHeight| ", totalNonActHeight);
+//			logMsgFmtln("totalNonActWidth| ", totalNonActWidth);
+//			logMsgFmtln("numOfCols| ", numOfCols);
+//			logMsgFmtln("numOfRows| ", numOfRows);
 			//			logMsgFmtln("| ", );
 
 			return numOfCols;

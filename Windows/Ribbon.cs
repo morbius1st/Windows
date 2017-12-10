@@ -33,15 +33,9 @@ namespace RevitWindows
 		private bool EventsRegistered;
 
 		private static bool makeButton = false;
+		private static bool makeToggButton = false;
 
 		private UIControlledApplication UiCtrlApp;
-
-//		internal UIApplication uiApp;
-//		internal UIControlledApplication uiCtrlApp;
-
-//		public static PulldownButton pb;
-//		public static SplitButton sb;
-
 
 		public Result OnStartup(UIControlledApplication app)
 		{
@@ -49,8 +43,6 @@ namespace RevitWindows
 
 			try
 			{
-//				UiCtrlApp.ControlledApplication.ApplicationInitialized += OnAppInitalized;
-
 				// create the ribbon tab first - this is the top level
 				// ui item.  below this will be the panel that is "on" the tab
 				// and below this will be a pull down or split button that is "on" the panel;
@@ -99,6 +91,16 @@ namespace RevitWindows
 					ribbonPanel = UiCtrlApp.CreateRibbonPanel(tabName, panelName);
 				}
 
+				//add a split button to the panel
+				if (!AddSplitButton(ribbonPanel))
+				{
+					// create the stacked split button failed
+					MessageBox.Show("Failed to Add the Split Buttons!", "Information",
+						MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+					return Result.Failed;
+				}
+
+
 				//add a stacked pair of stacked pull down buttons to the panel
 				if (!AddStackedPullDownhButtons(ribbonPanel))
 				{
@@ -133,74 +135,123 @@ namespace RevitWindows
 			return Result.Succeeded;
 		}
 
-//		private void OnAppInitalized(object sender, ApplicationInitializedEventArgs e)
-//		{
-//			UiCtrlApp.ControlledApplication.ApplicationInitialized -= OnAppInitalized;
-//			Autodesk.Revit.ApplicationServices.Application app = 
-//				(Autodesk.Revit.ApplicationServices.Application) sender;
-//
-//		}
+		private bool AddSplitButton(RibbonPanel rp)
+		{
+			try
+			{
+				SplitButtonData sbData = new SplitButtonData("splitButton01", "function select");
+				sbData.Image = RibbonUtil.GetBitmapImage(LARGEICON);
+				sbData.LargeImage = RibbonUtil.GetBitmapImage(LARGEICON);
+
+				SplitButton sb = rp.AddItem(sbData) as SplitButton;
+
+				PushButtonData pbd;
+
+				pbd = createButton("SplitBtn01", "Proper\nCascade", "OrganizeProperCascade",
+					"Organize Revit Windows by Proper Cascade", SMALLICON, LARGEICON);
+				sb.AddPushButton(pbd);
+
+				pbd = createButton("SplitBtn02", "Window's\nCascade", "OrganizeWindowsCascade",
+					"Organize Revit Windows by Windows Cascade", SMALLICON, LARGEICON);
+				sb.AddPushButton(pbd);
+
+				pbd = createButton("SplitBtn03", "Active on\nLeft Tiled", "OrganizeLeft",
+					"Place the Active Window on the Left", SMALLICON, LARGEICON);
+				sb.AddPushButton(pbd);
+
+				pbd = createButton("SplitBtn04", "Active on\nTop Tiled", "OrganizeTop",
+					"Place the Active Window on the Top", SMALLICON, LARGEICON);
+				sb.AddPushButton(pbd);
+
+				pbd = createButton("SplitBtn05", "Active on\nRight Tiled", "OrganizeRight",
+					"Place the Active Window on the Right", SMALLICON, LARGEICON);
+				sb.AddPushButton(pbd);
+
+				pbd = createButton("SplitBtn06", "Active on\nBottom Tiled", "OrganizeBottom",
+					"Place the Active Window on the Bottom", SMALLICON, LARGEICON);
+				sb.AddPushButton(pbd);
+
+				pbd = createButton("SplitBtn07", "Active to\nLeft Stacked", "OrganizeLeftOverlapped",
+					"Place the Active Window on the Left\nand Stack Remaining Windows", SMALLICON, LARGEICON);
+				sb.AddPushButton(pbd);
+			}
+			catch
+			{
+				return false;
+			}
+
+			return true;
+		}
 
 		private bool AddStackedPullDownhButtons(RibbonPanel rp)
 		{
-			SplitButton pb0;
-			SplitButton pb1;
+			SplitButton sb0;
+			SplitButton sb1;
+			PushButton pb0;
 
-			SplitButtonData pdData0 = new SplitButtonData("pullDownButton0", "function select");
-			pdData0.Image = RibbonUtil.GetBitmapImage(SMALLICON);
+			SplitButtonData sbData0 = new SplitButtonData("pullDownButton0", "function select");
+			sbData0.Image = RibbonUtil.GetBitmapImage(SMALLICON);
 
-			SplitButtonData pdData1 = new SplitButtonData("pullDownButton1", "auto activate");
-			pdData1.Image = RibbonUtil.GetBitmapImage(SMALLICON);
+			SplitButtonData sbData1 = new SplitButtonData("pullDownButton1", "auto activate");
+			sbData1.Image = RibbonUtil.GetBitmapImage(SMALLICON);
 
+			PushButtonData pbData0 = createButton("pushButton0", "Settings", "Settings", 
+				"Revit Windows Settings", SMALLICON, LARGEICON);
+			
+			IList<RibbonItem> ris = rp.AddStackedItems(sbData0, sbData1, pbData0);
 
-			IList<RibbonItem> ris = rp.AddStackedItems(pdData0, pdData1);
-
-			pb0 = ris[0] as SplitButton;
-			pb1 = ris[1] as SplitButton;
+			sb0 = ris[0] as SplitButton;
+			sb1 = ris[1] as SplitButton;
 
 			PushButtonData pbd;
 
 			// pull down button 0
-			pbd = createButton("button00", "Proper Cascade        ", "OrganizeProperCascade",
-				"Organize by Proper Cascade", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
+			pbd = createButton("button00", "Side Views Larger ", "IncreaseSideViewSize",
+				"Make the Active View Larger", SMALLICON, LARGEICON);
+			sb0.AddPushButton(pbd);
 
-			pbd = createButton("button01", "Window's Cascade      ", "OrganizeWindowsCascade",
-				"Organize by Windows Cascade", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
-
-			pbd = createButton("button02", "Active Left Stacked ", "OrganizeLeft",
-				"Place the Active Window on the Left", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
-
-			pbd = createButton("button03", "Active Top Stacked ", "OrganizeTop",
-				"Place the Active Window on the Top", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
-
-			pbd = createButton("button04", "Active Right Stacked ", "OrganizeRight",
-				"Place the Active Window on the Right", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
-
-			pbd = createButton("button05", "Active Bottom Stacked ", "OrganizeBottom",
-				"Place the Active Window on the Bottom", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
-
-			pbd = createButton("button06", "Active Left Overlapped", "OrganizeLeftOverlapped",
-				"Place the Active Window on the Left\nand Overlap Remaining Windows", SMALLICON, LARGEICON);
-			pb0.AddPushButton(pbd);
+			pbd = createButton("button01", "Side Views Smaller", "DecreaseSideViewSize",
+				"Make the Active View Smaller", SMALLICON, LARGEICON);
+			sb0.AddPushButton(pbd);
 
 			// pull down button 1
 			pbd = createButton("button10", "Activate Auto On", "AutoActivateOn",
 				"Turn on AutoActivate", SMALLICON, LARGEICON);
-			pb1.AddPushButton(pbd);
+			sb1.AddPushButton(pbd);
 
 			pbd = createButton("button11", "Activate Auto Off", "AutoActivateOff",
 				"Turn off AutoActivate", SMALLICON, LARGEICON);
-			pb1.AddPushButton(pbd);
-
+			sb1.AddPushButton(pbd);
 
 			return true;
 		}
+
+//		private ToggleButtonData createToggleButton(string ButtonName, string ButtonText,
+//			string className, string ToolTip, string smallIcon, string largeIcon)
+//		{
+//			ToggleButtonData tbd;
+//
+//			try
+//			{
+//				tbd = new ToggleButtonData(ButtonName, ButtonText, AddInPath, string.Concat(CLASSPATH, className))
+//				{
+//					Image = RibbonUtil.GetBitmapImage(smallIcon),
+//					LargeImage = RibbonUtil.GetBitmapImage(largeIcon),
+//					ToolTip = ToolTip
+//				};
+//			}
+//			catch
+//			{
+//				if (!makeToggButton)
+//				{
+//					TaskDialog.Show("make toggle button", "failed");
+//					makeToggButton = true;
+//				}
+//				return null;
+//			}
+//			return tbd;
+//		}
+
 
 		private PushButtonData createButton(string ButtonName, string ButtonText, 
 			string className, string ToolTip, string smallIcon, string largeIcon)

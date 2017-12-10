@@ -49,22 +49,14 @@ namespace RevitWindows
 		{
 			if (commandData == null) return;
 
-			_winMgrUtil = new WindowManagerUtilities();
-
 			Uiapp = commandData.Application;
 			Uidoc = Uiapp.ActiveUIDocument;
 			App = Uiapp.Application;
 			Doc = Uidoc.Document;
 
-			Parent = GetMainWinHandle(Doc);
+			_parent = GetMainWinHandle(Doc);
 
-			GetScreenMetrics(_parent);
-
-			NonCurrHeight = MinWindowHeight;
-			NotCurrWidth = MinWindowWidth;
-
-			WinAdjHoriz = TitleBarHeight;
-			WinAdjVert = TitleBarHeight;
+			_winMgrUtil = new WindowManagerUtilities(_parent);
 		}
 
 		internal enum WindowLayoutStyle
@@ -109,15 +101,20 @@ namespace RevitWindows
 
 		internal WindowLayoutStyle CurrWinLayoutStyle
 		{
-			get
-			{
-				return _currWinLayoutStyle;
-			}
+			get { return _currWinLayoutStyle; }
+			set { _currWinLayoutStyle = value; }
+		}
 
-			set
-			{
-				_currWinLayoutStyle = value;
-			}
+		internal bool AdjustNonActWidth(bool increase)
+		{
+
+			return _winMgrUtil.AdjustNonActWidth(_currWinLayoutStyle, increase);
+		}
+
+		internal bool AdjustNonActHeight(bool increase)
+		{
+
+			return _winMgrUtil.AdjustNonActHeight(_currWinLayoutStyle, increase);
 		}
 
 		private bool InitializeRevitWindows()

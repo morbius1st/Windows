@@ -8,9 +8,7 @@ using Application = Autodesk.Revit.ApplicationServices.Application;
 
 using static RevitWindows.WindowManager.WindowLayoutStyle;
 using static RevitWindows.WindowManager;
-using static RevitWindows.RevitWindow;
-using static RevitWindows.WindowUtilities;
-using static UtilityLibrary.MessageUtilities;
+using static RevitWindows.WindowManagerUtilities;
 
 #endregion
 
@@ -24,10 +22,14 @@ namespace RevitWindows
 	[Transaction(TransactionMode.Manual)]
 	abstract class OrganizeRevitWindows : IExternalCommand
 	{
+		internal static WindowManager winMgr = null;
+
 		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
 		{
-			WindowManager winMgr =
-				new WindowManager(commandData);
+			if (winMgr == null)
+			{
+				winMgr = new WindowManager(commandData);
+			}
 
 			winMgr.CurrWinLayoutStyle = GetValue();
 
@@ -107,5 +109,47 @@ namespace RevitWindows
 	}
 
 
+	[Transaction(TransactionMode.Manual)]
+	class Settings : IExternalCommand
+	{
+		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+		{
+			TaskDialog.Show("Organize Revit Windows", "Settings");
+			return Result.Succeeded;
+		}
+	}
+
+
+	abstract class AdjustSideViewSize : IExternalCommand
+	{
+		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+		{
+			//			TaskDialog.Show("Organize Revit Windows", "Adjust Active View Size| " + GetValue());
+			if (!OrganizeRevitWindows.winMgr.AdjustNonActWidth(GetValue())
+				&& !OrganizeRevitWindows.winMgr.AdjustNonActHeight(GetValue()))
+			{
+				return Result.Cancelled;
+			}
+			if (!OrganizeRevitWindows.winMgr.UpdateWindowLayout())
+			{
+				return Result.Failed;
+			}
+			return Result.Succeeded;
+		}
+
+		protected abstract bool GetValue();
+	}
+
+	[Transaction(TransactionMode.Manual)]
+	class  IncreaseSideViewSize : AdjustSideViewSize
+	{
+		protected override bool GetValue() { return true; }
+	}
+
+	[Transaction(TransactionMode.Manual)]
+	class  DecreaseSideViewSize : AdjustSideViewSize
+	{
+		protected override bool GetValue() { return false; }
+	}
 
 }
