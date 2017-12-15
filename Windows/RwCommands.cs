@@ -1,6 +1,7 @@
 ﻿#region Using directives
 
 using System;
+using System.Diagnostics;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -86,11 +87,49 @@ namespace RevitWindows
 		protected override WindowLayoutStyle GetValue() { return ACTIVE_LEFT_OVERLAP; }
 	}
 
+	[Transaction(TransactionMode.Manual)]
+	class ToggAutoActivate : IExternalCommand
+	{
+		internal static bool AutoActivate = true;
+
+		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+		{
+			if (AutoActivate)
+			{
+				AutoActivate = false;
+				Ribbon.pb01.ItemText = "Turn Auto Activate: On";
+			}
+			else
+			{
+				AutoActivate = true;
+				Ribbon.pb01.ItemText = "Turn Auto Activate: Off";
+
+			}
+
+			TaskDialog.Show("Organize Revit Windows", "Toggle Auto Activate| "
+				+ AutoActivate);
+
+
+			return Result.Succeeded;
+		}
+	}
+
+
 	abstract class ToggleAutoActivate : IExternalCommand
 	{
 		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
 		{
-			TaskDialog.Show("Organize Revit Windows", "Auto Activate| " + GetValue());
+			//			TaskDialog.Show("Organize Revit Windows", "Auto Activate| " + GetValue());
+
+			_autoUpdateOnActivateWindow = GetValue();
+
+			if (_autoUpdateOnActivateWindow)
+			{
+				if (!OrganizeRevitWindows.winMgr.UpdateWindowLayout())
+				{
+					return Result.Failed;
+				}
+			}
 
 			return Result.Succeeded;
 		}
@@ -118,7 +157,6 @@ namespace RevitWindows
 			return Result.Succeeded;
 		}
 	}
-
 
 	abstract class AdjustSideViewSize : IExternalCommand
 	{

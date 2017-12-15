@@ -5,8 +5,8 @@ using System.Diagnostics;
 using System.Windows.Forms;
 
 using Autodesk.Revit.UI;
-using Autodesk.Revit.DB.Events;
-using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.UI.Events;
+using View = Autodesk.Revit.DB.View;
 
 using static RevitWindows.WindowManager;
 using static RevitWindows.WindowApiUtilities;
@@ -18,6 +18,7 @@ namespace RevitWindows
 	class Ribbon : IExternalApplication
 	{
 		private const bool AUTO_UPDATE_ON_OPEN_VIEW = true;
+		private const bool AUTO_UPDATE_ON_ACTIVATE_VIEW = true;
 		private const bool AUTO_UPDATE_ON_ACTIVATE_DOCUMENT = true;
 
 
@@ -30,19 +31,26 @@ namespace RevitWindows
 		private const string SMALLICON = "information16.png";
 		private const string LARGEICON = "information32.png";
 
-		private bool EventsRegistered;
+		private static bool _eventsRegistered = false;
 
 		private static bool makeButton = false;
 		private static bool makeToggButton = false;
 
-		private UIControlledApplication UiCtrlApp;
+		private static UIControlledApplication _uiCtrlApp;
+		private static UIApplication _uiApp;
+
+		internal static PushButton pb01;
+		//		internal static PushButtonData pbData0;
 
 		public Result OnStartup(UIControlledApplication app)
 		{
-			UiCtrlApp = app;
+			_uiCtrlApp = app;
 
 			try
 			{
+				_uiCtrlApp.Idling += OnIdling;
+
+
 				// create the ribbon tab first - this is the top level
 				// ui item.  below this will be the panel that is "on" the tab
 				// and below this will be a pull down or split button that is "on" the panel;
@@ -55,7 +63,7 @@ namespace RevitWindows
 				// first try to create the tab
 				try
 				{
-					UiCtrlApp.CreateRibbonTab(tabName);
+					_uiCtrlApp.CreateRibbonTab(tabName);
 				}
 				catch (Exception)
 				{
@@ -71,7 +79,7 @@ namespace RevitWindows
 				// get the Panel within the tab name
 				List<RibbonPanel> rp = new List<RibbonPanel>();
 
-				rp = UiCtrlApp.GetRibbonPanels(tabName);
+				rp = _uiCtrlApp.GetRibbonPanels(tabName);
 
 				foreach (RibbonPanel rpx in rp)
 				{
@@ -88,7 +96,7 @@ namespace RevitWindows
 				{
 					// create the ribbon panel on the tab given the tab's name
 					// FYI - leave off the ribbon panel's name to put onto the "add-in" tab
-					ribbonPanel = UiCtrlApp.CreateRibbonPanel(tabName, panelName);
+					ribbonPanel = _uiCtrlApp.CreateRibbonPanel(tabName, panelName);
 				}
 
 				//add a split button to the panel
@@ -134,6 +142,7 @@ namespace RevitWindows
 			
 			return Result.Succeeded;
 		}
+
 
 		private bool AddSplitButton(RibbonPanel rp)
 		{
@@ -183,11 +192,13 @@ namespace RevitWindows
 			return true;
 		}
 
+		
+
 		private bool AddStackedPullDownhButtons(RibbonPanel rp)
 		{
 			SplitButton sb0;
 			SplitButton sb1;
-			PushButton pb0;
+			
 
 			SplitButtonData sbData0 = new SplitButtonData("pullDownButton0", "function select");
 			sbData0.Image = RibbonUtil.GetBitmapImage(SMALLICON);
@@ -195,13 +206,17 @@ namespace RevitWindows
 			SplitButtonData sbData1 = new SplitButtonData("pullDownButton1", "auto activate");
 			sbData1.Image = RibbonUtil.GetBitmapImage(SMALLICON);
 
-			PushButtonData pbData0 = createButton("pushButton0", "Settings", "Settings", 
+			PushButtonData pbData0 = createButton("pushButton0", "Turn Auto Activate: On", "ToggAutoActivate", 
+				"Revit Windows Settings", SMALLICON, LARGEICON);
+
+			PushButtonData pbData1 = createButton("pushButton1", "Settings", "Settings", 
 				"Revit Windows Settings", SMALLICON, LARGEICON);
 			
-			IList<RibbonItem> ris = rp.AddStackedItems(sbData0, sbData1, pbData0);
+			IList<RibbonItem> ris = rp.AddStackedItems(sbData0, pbData0, pbData1);
 
 			sb0 = ris[0] as SplitButton;
-			sb1 = ris[1] as SplitButton;
+//			sb1 = ris[1] as SplitButton;
+			pb01 = ris[1] as PushButton;
 
 			PushButtonData pbd;
 
@@ -214,44 +229,17 @@ namespace RevitWindows
 				"Make the Active View Smaller", SMALLICON, LARGEICON);
 			sb0.AddPushButton(pbd);
 
-			// pull down button 1
-			pbd = createButton("button10", "Activate Auto On", "AutoActivateOn",
-				"Turn on AutoActivate", SMALLICON, LARGEICON);
-			sb1.AddPushButton(pbd);
-
-			pbd = createButton("button11", "Activate Auto Off", "AutoActivateOff",
-				"Turn off AutoActivate", SMALLICON, LARGEICON);
-			sb1.AddPushButton(pbd);
-
+//			// pull down button 1
+//			pbd = createButton("button10", "Activate Auto On", "AutoActivateOn",
+//				"Turn on AutoActivate", SMALLICON, LARGEICON);
+//			sb1.AddPushButton(pbd);
+//
+//			pbd = createButton("button11", "Activate Auto Off", "AutoActivateOff",
+//				"Turn off AutoActivate", SMALLICON, LARGEICON);
+//			sb1.AddPushButton(pbd);
+//
 			return true;
 		}
-
-//		private ToggleButtonData createToggleButton(string ButtonName, string ButtonText,
-//			string className, string ToolTip, string smallIcon, string largeIcon)
-//		{
-//			ToggleButtonData tbd;
-//
-//			try
-//			{
-//				tbd = new ToggleButtonData(ButtonName, ButtonText, AddInPath, string.Concat(CLASSPATH, className))
-//				{
-//					Image = RibbonUtil.GetBitmapImage(smallIcon),
-//					LargeImage = RibbonUtil.GetBitmapImage(largeIcon),
-//					ToolTip = ToolTip
-//				};
-//			}
-//			catch
-//			{
-//				if (!makeToggButton)
-//				{
-//					TaskDialog.Show("make toggle button", "failed");
-//					makeToggButton = true;
-//				}
-//				return null;
-//			}
-//			return tbd;
-//		}
-
 
 		private PushButtonData createButton(string ButtonName, string ButtonText, 
 			string className, string ToolTip, string smallIcon, string largeIcon)
@@ -293,50 +281,67 @@ namespace RevitWindows
 			}
 		}
 
-//		bool RegisterDocEvents()
-//		{
-//			if (EventsRegistered) return true;
-//
-//			try
-//			{
-//				//				_app.DocumentOpened += new EventHandler<DocumentOpenedEventArgs>(DocOpenEvent);
-//				//				_app.DocumentCreated += new EventHandler<DocumentCreatedEventArgs>(DocCreateEvent);
-//
-//				Uiapp.ViewActivated += ViewActivated;
-//				Uiapp.ApplicationClosing += AppClosing;
-//			}
-//			catch (Exception)
-//			{
-//				return false;
-//			}
-//
-//			EventsRegistered = true;
-//
-//			return true;
-//		}
-//
-//		private void ViewActivated(object sender, ViewActivatedEventArgs args)
-//		{
-//			Autodesk.Revit.DB.View vPrev = args.PreviousActiveView;
-//			View vCurr = args.CurrentActiveView;
-//
+
+		private void OnIdling(object sender, Autodesk.Revit.UI.Events.IdlingEventArgs e)
+		{
+			_uiCtrlApp.Idling -= OnIdling;
+
+			_uiApp = sender as UIApplication;
+
+			RegisterDocEvents();
+		}
+
+
+		bool RegisterDocEvents()
+		{
+			if (_eventsRegistered) return true;
+			_eventsRegistered = true;
+
+			try
+			{
+				//				_app.DocumentOpened += new EventHandler<DocumentOpenedEventArgs>(DocOpenEvent);
+				//				_app.DocumentCreated += new EventHandler<DocumentCreatedEventArgs>(DocCreateEvent);
+
+				_uiApp.ViewActivated += ViewActivated;
+				_uiApp.ViewActivated += ViewActivated;
+				_uiApp.ApplicationClosing += AppClosing;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+			return true;
+		}
+
+		private void ViewActivated(object sender, ViewActivatedEventArgs args)
+		{
+			View vPrev = args.PreviousActiveView;
+			View vCurr = args.CurrentActiveView;
+
 //			if (AUTO_UPDATE_ON_ACTIVATE_DOCUMENT &&
 //				!vPrev.Document.Title.ToLower().Equals(vCurr.Document.Title.ToLower()))
 //			{
-//				_formProjSel.UpdateWindowLayout();
+//				OrganizeRevitWindows.winMgr.UpdateWindowLayout();
 //			}
-//			//			else if (AUTO_UPDATE_ON_OPEN_VIEW)
-//			//			{
-//			//				_formProjSel.UpdateWindowLayoutDelay();
-//			//			}
-//		}
-//
-//		private void AppClosing(object sender, ApplicationClosingEventArgs args)
-//		{
-//			Uiapp.ViewActivated -= ViewActivated;
-//			Uiapp.ApplicationClosing -= AppClosing;
-//
-//		}
+
+			if (WindowManager._autoUpdateOnActivateWindow &&
+				!vPrev.Title.ToLower().Equals(vCurr.Title.ToLower()))
+			{
+				OrganizeRevitWindows.winMgr.UpdateWindowLayout();
+			}
+
+			//			else if (AUTO_UPDATE_ON_OPEN_VIEW)
+			//			{
+			//				_formProjSel.UpdateWindowLayoutDelay();
+			//			}
+		}
+
+		private void AppClosing(object sender, ApplicationClosingEventArgs args)
+		{
+			Uiapp.ViewActivated -= ViewActivated;
+			Uiapp.ApplicationClosing -= AppClosing;
+
+		}
 
 
 

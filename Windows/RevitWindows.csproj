@@ -59,6 +59,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
@@ -82,6 +83,12 @@
     <Compile Include="Ribbon.cs" />
     <Compile Include="RibbonUtil.cs" />
     <Compile Include="RwCommands.cs" />
+    <Compile Include="UserSettings.cs" />
+    <Compile Include="UserSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>UserSettings.settings</DependentUpon>
+    </Compile>
     <Compile Include="WindowListingUtilities.cs" />
     <Compile Include="WindowManager.cs" />
     <Compile Include="WindowApiUtilities.cs" />
@@ -102,6 +109,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Images\information32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="UserSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>UserSettings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -42,6 +42,8 @@ namespace RevitWindows
 		internal static Application App;
 		internal static Document Doc;
 
+		internal static bool _autoUpdateOnActivateWindow = true;
+
 		private static WindowLayoutStyle _currWinLayoutStyle = ACTIVE_LEFT_OVERLAP;
 
 
