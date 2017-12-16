@@ -39,12 +39,16 @@ namespace RevitWindows
 		private static UIControlledApplication _uiCtrlApp;
 		private static UIApplication _uiApp;
 
+		internal static SettingsForm _settingsForm;
+
 		internal static PushButton pb01;
 		//		internal static PushButtonData pbData0;
 
 		public Result OnStartup(UIControlledApplication app)
 		{
 			_uiCtrlApp = app;
+
+			_settingsForm = new SettingsForm();
 
 			try
 			{
@@ -209,7 +213,7 @@ namespace RevitWindows
 			PushButtonData pbData0 = createButton("pushButton0", "Turn Auto Activate: On", "ToggAutoActivate", 
 				"Revit Windows Settings", SMALLICON, LARGEICON);
 
-			PushButtonData pbData1 = createButton("pushButton1", "Settings", "Settings", 
+			PushButtonData pbData1 = createButton("pushButton1", "Settings", "SettingsFormShow", 
 				"Revit Windows Settings", SMALLICON, LARGEICON);
 			
 			IList<RibbonItem> ris = rp.AddStackedItems(sbData0, pbData0, pbData1);

@@ -1,0 +1,1995 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="lblMinViews.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="lblMinViews.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 20</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="lblMinViews.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblMinViews.Size" type="System.Drawing.Size, System.Drawing">
+    <value>147, 13</value>
+  </data>
+  <data name="lblMinViews.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblMinViews.Text" xml:space="preserve">
+    <value>Minimum Number of Windows</value>
+  </data>
+  <data name="&gt;&gt;lblMinViews.Name" xml:space="preserve">
+    <value>lblMinViews</value>
+  </data>
+  <data name="&gt;&gt;lblMinViews.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMinViews.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblMinViews.ZOrder" xml:space="preserve">
+    <value>19</value>
+  </data>
+  <data name="lblCascadeViewMinWidth.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeViewMinWidth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 107</value>
+  </data>
+  <data name="lblCascadeViewMinWidth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeViewMinWidth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>153, 13</value>
+  </data>
+  <data name="lblCascadeViewMinWidth.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblCascadeViewMinWidth.Text" xml:space="preserve">
+    <value>Cascade: View Minimum Width</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeViewMinWidth.Name" xml:space="preserve">
+    <value>lblCascadeViewMinWidth</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeViewMinWidth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeViewMinWidth.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeViewMinWidth.ZOrder" xml:space="preserve">
+    <value>18</value>
+  </data>
+  <data name="gbApplicationSettings.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 250</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnTileMainViewMaxSize.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnTileMainViewMaxSize.Name" xml:space="preserve">
+    <value>btnTileMainViewMaxSize</value>
+  </data>
+  <data name="&gt;&gt;btnTileMainViewMaxSize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnTileMainViewMaxSize.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnTileMainViewMaxSize.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 227</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnTileSideViewMaxSizeInc.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnTileSideViewMaxSizeInc.Name" xml:space="preserve">
+    <value>btnTileSideViewMaxSizeInc</value>
+  </data>
+  <data name="&gt;&gt;btnTileSideViewMaxSizeInc.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnTileSideViewMaxSizeInc.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnTileSideViewMaxSizeInc.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 204</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnTileSideViewSizeAdjust.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnTileSideViewSizeAdjust.Name" xml:space="preserve">
+    <value>btnTileSideViewSizeAdjust</value>
+  </data>
+  <data name="&gt;&gt;btnTileSideViewSizeAdjust.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnTileSideViewSizeAdjust.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnTileSideViewSizeAdjust.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 171</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnCascadeWinViewMaxSize.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeWinViewMaxSize.Name" xml:space="preserve">
+    <value>btnCascadeWinViewMaxSize</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeWinViewMaxSize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeWinViewMaxSize.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeWinViewMaxSize.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 148</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnCascadeProperViewMaxSize.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeProperViewMaxSize.Name" xml:space="preserve">
+    <value>btnCascadeProperViewMaxSize</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeProperViewMaxSize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeProperViewMaxSize.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeProperViewMaxSize.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 125</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnCascadeViewMinHeight.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeViewMinHeight.Name" xml:space="preserve">
+    <value>btnCascadeViewMinHeight</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeViewMinHeight.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeViewMinHeight.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeViewMinHeight.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 102</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnCascadeViewMinWidth.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeViewMinWidth.Name" xml:space="preserve">
+    <value>btnCascadeViewMinWidth</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeViewMinWidth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeViewMinWidth.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeViewMinWidth.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 79</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnCascadeMaxColOffset.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeMaxColOffset.Name" xml:space="preserve">
+    <value>btnCascadeMaxColOffset</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeMaxColOffset.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeMaxColOffset.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnCascadeMaxColOffset.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="btnMinViews.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnMinViews.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnMinViews.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnMinViews.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnMinViews.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnMinViews.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 14</value>
+  </data>
+  <data name="btnMinViews.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnMinViews.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="btnMinViews.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnMinViews.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnMinViews.Name" xml:space="preserve">
+    <value>btnMinViews</value>
+  </data>
+  <data name="&gt;&gt;btnMinViews.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnMinViews.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnMinViews.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="btnMargMaxScrnPct.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnMargMaxScrnPct.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnMargMaxScrnPct.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnMargMaxScrnPct.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="btnMargMaxScrnPct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 46</value>
+  </data>
+  <data name="btnMargMaxScrnPct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnMargMaxScrnPct.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="btnMargMaxScrnPct.Text" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="btnMargMaxScrnPct.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;btnMargMaxScrnPct.Name" xml:space="preserve">
+    <value>btnMargMaxScrnPct</value>
+  </data>
+  <data name="&gt;&gt;btnMargMaxScrnPct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnMargMaxScrnPct.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;btnMargMaxScrnPct.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="lblCascadeWinViewMaxSize.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeWinViewMaxSize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 176</value>
+  </data>
+  <data name="lblCascadeWinViewMaxSize.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeWinViewMaxSize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>203, 13</value>
+  </data>
+  <data name="lblCascadeWinViewMaxSize.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblCascadeWinViewMaxSize.Text" xml:space="preserve">
+    <value>Cascade (Window's): View Maximum Size</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeWinViewMaxSize.Name" xml:space="preserve">
+    <value>lblCascadeWinViewMaxSize</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeWinViewMaxSize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeWinViewMaxSize.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeWinViewMaxSize.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="lblTileSideViewSizeAdjust.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblTileSideViewSizeAdjust.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 209</value>
+  </data>
+  <data name="lblTileSideViewSizeAdjust.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblTileSideViewSizeAdjust.Size" type="System.Drawing.Size, System.Drawing">
+    <value>194, 13</value>
+  </data>
+  <data name="lblTileSideViewSizeAdjust.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblTileSideViewSizeAdjust.Text" xml:space="preserve">
+    <value>Tile: Side View Size Adjustment Amount</value>
+  </data>
+  <data name="&gt;&gt;lblTileSideViewSizeAdjust.Name" xml:space="preserve">
+    <value>lblTileSideViewSizeAdjust</value>
+  </data>
+  <data name="&gt;&gt;lblTileSideViewSizeAdjust.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTileSideViewSizeAdjust.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblTileSideViewSizeAdjust.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="lblMargMaxScrnPct.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblMargMaxScrnPct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 52</value>
+  </data>
+  <data name="lblMargMaxScrnPct.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblMargMaxScrnPct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>183, 13</value>
+  </data>
+  <data name="lblMargMaxScrnPct.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblMargMaxScrnPct.Text" xml:space="preserve">
+    <value>Margins: Maximum Percent of Screen</value>
+  </data>
+  <data name="&gt;&gt;lblMargMaxScrnPct.Name" xml:space="preserve">
+    <value>lblMargMaxScrnPct</value>
+  </data>
+  <data name="&gt;&gt;lblMargMaxScrnPct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMargMaxScrnPct.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblMargMaxScrnPct.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="lblTileSideViewMaxSizeInc.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblTileSideViewMaxSizeInc.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 232</value>
+  </data>
+  <data name="lblTileSideViewMaxSizeInc.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblTileSideViewMaxSizeInc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 13</value>
+  </data>
+  <data name="lblTileSideViewMaxSizeInc.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblTileSideViewMaxSizeInc.Text" xml:space="preserve">
+    <value>Tile: Side Views Maximum Size Increase</value>
+  </data>
+  <data name="&gt;&gt;lblTileSideViewMaxSizeInc.Name" xml:space="preserve">
+    <value>lblTileSideViewMaxSizeInc</value>
+  </data>
+  <data name="&gt;&gt;lblTileSideViewMaxSizeInc.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTileSideViewMaxSizeInc.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblTileSideViewMaxSizeInc.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="lblCascadeMaxColOffset.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeMaxColOffset.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 84</value>
+  </data>
+  <data name="lblCascadeMaxColOffset.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeMaxColOffset.Size" type="System.Drawing.Size, System.Drawing">
+    <value>168, 13</value>
+  </data>
+  <data name="lblCascadeMaxColOffset.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblCascadeMaxColOffset.Text" xml:space="preserve">
+    <value>Cascade: Maximum Column Offset</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMaxColOffset.Name" xml:space="preserve">
+    <value>lblCascadeMaxColOffset</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMaxColOffset.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMaxColOffset.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMaxColOffset.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="lblTileMainViewMaxSize.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblTileMainViewMaxSize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 255</value>
+  </data>
+  <data name="lblTileMainViewMaxSize.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblTileMainViewMaxSize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 13</value>
+  </data>
+  <data name="lblTileMainViewMaxSize.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblTileMainViewMaxSize.Text" xml:space="preserve">
+    <value>Tile: Main View Maximum Size</value>
+  </data>
+  <data name="&gt;&gt;lblTileMainViewMaxSize.Name" xml:space="preserve">
+    <value>lblTileMainViewMaxSize</value>
+  </data>
+  <data name="&gt;&gt;lblTileMainViewMaxSize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTileMainViewMaxSize.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblTileMainViewMaxSize.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="lblCascadeViewMinHeight.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeViewMinHeight.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 130</value>
+  </data>
+  <data name="lblCascadeViewMinHeight.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeViewMinHeight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 13</value>
+  </data>
+  <data name="lblCascadeViewMinHeight.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblCascadeViewMinHeight.Text" xml:space="preserve">
+    <value>Cascade: View Minimum Height</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeViewMinHeight.Name" xml:space="preserve">
+    <value>lblCascadeViewMinHeight</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeViewMinHeight.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeViewMinHeight.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeViewMinHeight.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="lblCascadeProperViewMaxSize.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeProperViewMaxSize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 153</value>
+  </data>
+  <data name="lblCascadeProperViewMaxSize.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeProperViewMaxSize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>188, 13</value>
+  </data>
+  <data name="lblCascadeProperViewMaxSize.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblCascadeProperViewMaxSize.Text" xml:space="preserve">
+    <value>Cascade (Proper): View Maximum Size</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeProperViewMaxSize.Name" xml:space="preserve">
+    <value>lblCascadeProperViewMaxSize</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeProperViewMaxSize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeProperViewMaxSize.Parent" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeProperViewMaxSize.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
+  <data name="gbApplicationSettings.Location" type="System.Drawing.Point, System.Drawing">
+    <value>412, 12</value>
+  </data>
+  <data name="gbApplicationSettings.Size" type="System.Drawing.Size, System.Drawing">
+    <value>358, 285</value>
+  </data>
+  <data name="gbApplicationSettings.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="gbApplicationSettings.Text" xml:space="preserve">
+    <value>Fixed Application Settings</value>
+  </data>
+  <data name="&gt;&gt;gbApplicationSettings.Name" xml:space="preserve">
+    <value>gbApplicationSettings</value>
+  </data>
+  <data name="&gt;&gt;gbApplicationSettings.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbApplicationSettings.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbApplicationSettings.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="gbUserSettings.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="button6.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="button6.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="button6.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="button6.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="button6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>344, 116</value>
+  </data>
+  <data name="button6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="button6.TabIndex" type="System.Int32, mscorlib">
+    <value>26</value>
+  </data>
+  <data name="&gt;&gt;button6.Name" xml:space="preserve">
+    <value>button6</value>
+  </data>
+  <data name="&gt;&gt;button6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button6.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;button6.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="button5.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="button5.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="button5.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="button5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="button5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>344, 93</value>
+  </data>
+  <data name="button5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="button5.TabIndex" type="System.Int32, mscorlib">
+    <value>25</value>
+  </data>
+  <data name="&gt;&gt;button5.Name" xml:space="preserve">
+    <value>button5</value>
+  </data>
+  <data name="&gt;&gt;button5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button5.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;button5.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="button4.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="button4.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="button4.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="button4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="button4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>344, 70</value>
+  </data>
+  <data name="button4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="button4.TabIndex" type="System.Int32, mscorlib">
+    <value>24</value>
+  </data>
+  <data name="&gt;&gt;button4.Name" xml:space="preserve">
+    <value>button4</value>
+  </data>
+  <data name="&gt;&gt;button4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button4.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;button4.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="textBox4.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="textBox4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>263, 121</value>
+  </data>
+  <data name="textBox4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 13</value>
+  </data>
+  <data name="textBox4.TabIndex" type="System.Int32, mscorlib">
+    <value>23</value>
+  </data>
+  <data name="&gt;&gt;textBox4.Name" xml:space="preserve">
+    <value>textBox4</value>
+  </data>
+  <data name="&gt;&gt;textBox4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox4.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;textBox4.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="textBox3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="textBox3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>263, 98</value>
+  </data>
+  <data name="textBox3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 13</value>
+  </data>
+  <data name="textBox3.TabIndex" type="System.Int32, mscorlib">
+    <value>22</value>
+  </data>
+  <data name="&gt;&gt;textBox3.Name" xml:space="preserve">
+    <value>textBox3</value>
+  </data>
+  <data name="&gt;&gt;textBox3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox3.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;textBox3.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="textBox2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="textBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>263, 75</value>
+  </data>
+  <data name="textBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 13</value>
+  </data>
+  <data name="textBox2.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="&gt;&gt;textBox2.Name" xml:space="preserve">
+    <value>textBox2</value>
+  </data>
+  <data name="&gt;&gt;textBox2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox2.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;textBox2.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="button3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="button3.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="button3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>260, 14</value>
+  </data>
+  <data name="button3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="button3.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="button3.Text" xml:space="preserve">
+    <value>On / Off</value>
+  </data>
+  <data name="&gt;&gt;button3.Name" xml:space="preserve">
+    <value>button3</value>
+  </data>
+  <data name="&gt;&gt;button3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button3.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;button3.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="button1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="button1.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="button1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="button1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>344, 47</value>
+  </data>
+  <data name="button1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="button1.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="&gt;&gt;button1.Name" xml:space="preserve">
+    <value>button1</value>
+  </data>
+  <data name="&gt;&gt;button1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button1.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="textBox1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="textBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>263, 52</value>
+  </data>
+  <data name="textBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 13</value>
+  </data>
+  <data name="textBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="&gt;&gt;textBox1.Name" xml:space="preserve">
+    <value>textBox1</value>
+  </data>
+  <data name="&gt;&gt;textBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox1.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;textBox1.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="button2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="button2.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="button2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAAd0SU1FB+AKDQQDMR+winsAAAFvSURBVDhPrZO7SgNREIYXohG08lZEtFDQxkrw
+        BWwVrKwDojaKlQ/gY/gUxhOReCMaCCwIogELKy9NEDFG8BJ198wZ5+zOyV7T+cMHm/zzz87OnrXS1FWU
+        GxkBVUvAL4HWHvwQFbpe4ZJ0ZYU7QUUtL2QoAK5dAW7fAmb3vf+eiVGOBKK7jkeCzFxVotH6tRv2+jjq
+        ixp8hcw2/QcOfkuFDigcOYp4dY6SBKyGjDaZIuBQCTB3KPUeEj6RNw3OYwbOnElUPLrWgk1NYjXEo2nw
+        GTamTlyctwG3boDjiLOVSNDwahpEjBw/64frh5VS3tuI13lwg8QCh0vB9vOXHXfQNA3KMQMvmsH4g7TI
+        DhPcmwbLYaOHDozR8ZP0fm/WUqdY8htoCXgxxnQ5GH/nTqLdSH0DD5xkCRgjlDYnTyW26PC8OwoLdSpO
+        3ll/I72cDEnAAOEvdJeJBjUNopsTHaRPmKAvkCcigHgjFrniv2RZf3GVHMbE5srzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="button2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="button2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>344, 15</value>
+  </data>
+  <data name="button2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="button2.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="&gt;&gt;button2.Name" xml:space="preserve">
+    <value>button2</value>
+  </data>
+  <data name="&gt;&gt;button2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;button2.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;button2.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="TileSideViewHeightIncreasePct.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="TileSideViewHeightIncreasePct.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="TileSideViewHeightIncreasePct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 397</value>
+  </data>
+  <data name="TileSideViewHeightIncreasePct.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="TileSideViewHeightIncreasePct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 13</value>
+  </data>
+  <data name="TileSideViewHeightIncreasePct.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="TileSideViewHeightIncreasePct.Text" xml:space="preserve">
+    <value>Tiled: Side View Height Increase</value>
+  </data>
+  <data name="&gt;&gt;TileSideViewHeightIncreasePct.Name" xml:space="preserve">
+    <value>TileSideViewHeightIncreasePct</value>
+  </data>
+  <data name="&gt;&gt;TileSideViewHeightIncreasePct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TileSideViewHeightIncreasePct.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;TileSideViewHeightIncreasePct.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="TileSideViewWidthIncreasePct.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="TileSideViewWidthIncreasePct.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="TileSideViewWidthIncreasePct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 374</value>
+  </data>
+  <data name="TileSideViewWidthIncreasePct.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="TileSideViewWidthIncreasePct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>158, 13</value>
+  </data>
+  <data name="TileSideViewWidthIncreasePct.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="TileSideViewWidthIncreasePct.Text" xml:space="preserve">
+    <value>Tiled: Side View Width Increase</value>
+  </data>
+  <data name="&gt;&gt;TileSideViewWidthIncreasePct.Name" xml:space="preserve">
+    <value>TileSideViewWidthIncreasePct</value>
+  </data>
+  <data name="&gt;&gt;TileSideViewWidthIncreasePct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TileSideViewWidthIncreasePct.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;TileSideViewWidthIncreasePct.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="TileMainViewMinHeightPct.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="TileMainViewMinHeightPct.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="TileMainViewMinHeightPct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 342</value>
+  </data>
+  <data name="TileMainViewMinHeightPct.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="TileMainViewMinHeightPct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>163, 13</value>
+  </data>
+  <data name="TileMainViewMinHeightPct.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="TileMainViewMinHeightPct.Text" xml:space="preserve">
+    <value>Tiled: Main View Minimum Height</value>
+  </data>
+  <data name="&gt;&gt;TileMainViewMinHeightPct.Name" xml:space="preserve">
+    <value>TileMainViewMinHeightPct</value>
+  </data>
+  <data name="&gt;&gt;TileMainViewMinHeightPct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TileMainViewMinHeightPct.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;TileMainViewMinHeightPct.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="lblTileMainViewMinWidthPct.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblTileMainViewMinWidthPct.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblTileMainViewMinWidthPct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 319</value>
+  </data>
+  <data name="lblTileMainViewMinWidthPct.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblTileMainViewMinWidthPct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 13</value>
+  </data>
+  <data name="lblTileMainViewMinWidthPct.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="lblTileMainViewMinWidthPct.Text" xml:space="preserve">
+    <value>Tiled: Main View Minimum Width</value>
+  </data>
+  <data name="&gt;&gt;lblTileMainViewMinWidthPct.Name" xml:space="preserve">
+    <value>lblTileMainViewMinWidthPct</value>
+  </data>
+  <data name="&gt;&gt;lblTileMainViewMinWidthPct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTileMainViewMinWidthPct.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblTileMainViewMinWidthPct.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="lblCascadeBadMinHeightPct.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeBadMinHeightPct.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblCascadeBadMinHeightPct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 287</value>
+  </data>
+  <data name="lblCascadeBadMinHeightPct.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeBadMinHeightPct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>211, 13</value>
+  </data>
+  <data name="lblCascadeBadMinHeightPct.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lblCascadeBadMinHeightPct.Text" xml:space="preserve">
+    <value>Cascade (Window's): View Minimum Height</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeBadMinHeightPct.Name" xml:space="preserve">
+    <value>lblCascadeBadMinHeightPct</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeBadMinHeightPct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeBadMinHeightPct.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeBadMinHeightPct.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="lblCascadeBadMinWidthPct.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeBadMinWidthPct.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblCascadeBadMinWidthPct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 264</value>
+  </data>
+  <data name="lblCascadeBadMinWidthPct.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeBadMinWidthPct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>208, 13</value>
+  </data>
+  <data name="lblCascadeBadMinWidthPct.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lblCascadeBadMinWidthPct.Text" xml:space="preserve">
+    <value>Cascade (Window's): View Minimum Width</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeBadMinWidthPct.Name" xml:space="preserve">
+    <value>lblCascadeBadMinWidthPct</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeBadMinWidthPct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeBadMinWidthPct.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeBadMinWidthPct.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="lblCascadeColAdjVert.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeColAdjVert.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblCascadeColAdjVert.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 176</value>
+  </data>
+  <data name="lblCascadeColAdjVert.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeColAdjVert.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 13</value>
+  </data>
+  <data name="lblCascadeColAdjVert.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="lblCascadeColAdjVert.Text" xml:space="preserve">
+    <value>Cascade: Vertical Offset</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeColAdjVert.Name" xml:space="preserve">
+    <value>lblCascadeColAdjVert</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeColAdjVert.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeColAdjVert.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeColAdjVert.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="lblCascadeColAdjHoriz.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeColAdjHoriz.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblCascadeColAdjHoriz.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 153</value>
+  </data>
+  <data name="lblCascadeColAdjHoriz.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeColAdjHoriz.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 13</value>
+  </data>
+  <data name="lblCascadeColAdjHoriz.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="lblCascadeColAdjHoriz.Text" xml:space="preserve">
+    <value>Cascade: Horizontal Offset</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeColAdjHoriz.Name" xml:space="preserve">
+    <value>lblCascadeColAdjHoriz</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeColAdjHoriz.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeColAdjHoriz.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeColAdjHoriz.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
+  <data name="lblCascadeMinHeightPct.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeMinHeightPct.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblCascadeMinHeightPct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 232</value>
+  </data>
+  <data name="lblCascadeMinHeightPct.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeMinHeightPct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>170, 13</value>
+  </data>
+  <data name="lblCascadeMinHeightPct.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="lblCascadeMinHeightPct.Text" xml:space="preserve">
+    <value>Cascade (Proper): Minimum Height</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMinHeightPct.Name" xml:space="preserve">
+    <value>lblCascadeMinHeightPct</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMinHeightPct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMinHeightPct.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMinHeightPct.ZOrder" xml:space="preserve">
+    <value>18</value>
+  </data>
+  <data name="lblCascadeMinWidthPct.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCascadeMinWidthPct.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblCascadeMinWidthPct.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 209</value>
+  </data>
+  <data name="lblCascadeMinWidthPct.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblCascadeMinWidthPct.Size" type="System.Drawing.Size, System.Drawing">
+    <value>167, 13</value>
+  </data>
+  <data name="lblCascadeMinWidthPct.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="lblCascadeMinWidthPct.Text" xml:space="preserve">
+    <value>Cascade (Proper): Minimum Width</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMinWidthPct.Name" xml:space="preserve">
+    <value>lblCascadeMinWidthPct</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMinWidthPct.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMinWidthPct.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblCascadeMinWidthPct.ZOrder" xml:space="preserve">
+    <value>19</value>
+  </data>
+  <data name="lblMarginBottom.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblMarginBottom.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblMarginBottom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 121</value>
+  </data>
+  <data name="lblMarginBottom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblMarginBottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 13</value>
+  </data>
+  <data name="lblMarginBottom.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lblMarginBottom.Text" xml:space="preserve">
+    <value>Margin Bottom</value>
+  </data>
+  <data name="&gt;&gt;lblMarginBottom.Name" xml:space="preserve">
+    <value>lblMarginBottom</value>
+  </data>
+  <data name="&gt;&gt;lblMarginBottom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMarginBottom.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblMarginBottom.ZOrder" xml:space="preserve">
+    <value>20</value>
+  </data>
+  <data name="lblMarginRight.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblMarginRight.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblMarginRight.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 98</value>
+  </data>
+  <data name="lblMarginRight.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblMarginRight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 13</value>
+  </data>
+  <data name="lblMarginRight.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="lblMarginRight.Text" xml:space="preserve">
+    <value>Margin Right</value>
+  </data>
+  <data name="&gt;&gt;lblMarginRight.Name" xml:space="preserve">
+    <value>lblMarginRight</value>
+  </data>
+  <data name="&gt;&gt;lblMarginRight.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMarginRight.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblMarginRight.ZOrder" xml:space="preserve">
+    <value>21</value>
+  </data>
+  <data name="lblMarginTop.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblMarginTop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblMarginTop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 75</value>
+  </data>
+  <data name="lblMarginTop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblMarginTop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 13</value>
+  </data>
+  <data name="lblMarginTop.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lblMarginTop.Text" xml:space="preserve">
+    <value>Margin Top</value>
+  </data>
+  <data name="&gt;&gt;lblMarginTop.Name" xml:space="preserve">
+    <value>lblMarginTop</value>
+  </data>
+  <data name="&gt;&gt;lblMarginTop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMarginTop.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblMarginTop.ZOrder" xml:space="preserve">
+    <value>22</value>
+  </data>
+  <data name="lblMarginLeft.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblMarginLeft.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblMarginLeft.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 52</value>
+  </data>
+  <data name="lblMarginLeft.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblMarginLeft.Size" type="System.Drawing.Size, System.Drawing">
+    <value>60, 13</value>
+  </data>
+  <data name="lblMarginLeft.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="lblMarginLeft.Text" xml:space="preserve">
+    <value>Margin Left</value>
+  </data>
+  <data name="&gt;&gt;lblMarginLeft.Name" xml:space="preserve">
+    <value>lblMarginLeft</value>
+  </data>
+  <data name="&gt;&gt;lblMarginLeft.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblMarginLeft.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblMarginLeft.ZOrder" xml:space="preserve">
+    <value>23</value>
+  </data>
+  <data name="lblAutoActivate.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblAutoActivate.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 20</value>
+  </data>
+  <data name="lblAutoActivate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="lblAutoActivate.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 13</value>
+  </data>
+  <data name="lblAutoActivate.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblAutoActivate.Text" xml:space="preserve">
+    <value>Auto Update Layout</value>
+  </data>
+  <data name="&gt;&gt;lblAutoActivate.Name" xml:space="preserve">
+    <value>lblAutoActivate</value>
+  </data>
+  <data name="&gt;&gt;lblAutoActivate.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblAutoActivate.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;lblAutoActivate.ZOrder" xml:space="preserve">
+    <value>24</value>
+  </data>
+  <data name="pictureBox1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>260, 48</value>
+  </data>
+  <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 21</value>
+  </data>
+  <data name="pictureBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="&gt;&gt;pictureBox1.Name" xml:space="preserve">
+    <value>pictureBox1</value>
+  </data>
+  <data name="&gt;&gt;pictureBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pictureBox1.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;pictureBox1.ZOrder" xml:space="preserve">
+    <value>25</value>
+  </data>
+  <data name="pictureBox2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="pictureBox2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="pictureBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>260, 71</value>
+  </data>
+  <data name="pictureBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 21</value>
+  </data>
+  <data name="pictureBox2.TabIndex" type="System.Int32, mscorlib">
+    <value>27</value>
+  </data>
+  <data name="&gt;&gt;pictureBox2.Name" xml:space="preserve">
+    <value>pictureBox2</value>
+  </data>
+  <data name="&gt;&gt;pictureBox2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pictureBox2.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;pictureBox2.ZOrder" xml:space="preserve">
+    <value>26</value>
+  </data>
+  <data name="pictureBox3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="pictureBox3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="pictureBox3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>260, 94</value>
+  </data>
+  <data name="pictureBox3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 21</value>
+  </data>
+  <data name="pictureBox3.TabIndex" type="System.Int32, mscorlib">
+    <value>28</value>
+  </data>
+  <data name="&gt;&gt;pictureBox3.Name" xml:space="preserve">
+    <value>pictureBox3</value>
+  </data>
+  <data name="&gt;&gt;pictureBox3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pictureBox3.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;pictureBox3.ZOrder" xml:space="preserve">
+    <value>27</value>
+  </data>
+  <data name="pictureBox4.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="pictureBox4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="pictureBox4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>260, 117</value>
+  </data>
+  <data name="pictureBox4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 21</value>
+  </data>
+  <data name="pictureBox4.TabIndex" type="System.Int32, mscorlib">
+    <value>29</value>
+  </data>
+  <data name="&gt;&gt;pictureBox4.Name" xml:space="preserve">
+    <value>pictureBox4</value>
+  </data>
+  <data name="&gt;&gt;pictureBox4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pictureBox4.Parent" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;pictureBox4.ZOrder" xml:space="preserve">
+    <value>28</value>
+  </data>
+  <data name="gbUserSettings.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 12</value>
+  </data>
+  <data name="gbUserSettings.Size" type="System.Drawing.Size, System.Drawing">
+    <value>378, 433</value>
+  </data>
+  <data name="gbUserSettings.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="gbUserSettings.Text" xml:space="preserve">
+    <value>Your Settings</value>
+  </data>
+  <data name="&gt;&gt;gbUserSettings.Name" xml:space="preserve">
+    <value>gbUserSettings</value>
+  </data>
+  <data name="&gt;&gt;gbUserSettings.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbUserSettings.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbUserSettings.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btnCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="btnCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>695, 424</value>
+  </data>
+  <data name="btnCancel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCancel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Name" xml:space="preserve">
+    <value>btnCancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnOK.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="btnOK.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnOK.Location" type="System.Drawing.Point, System.Drawing">
+    <value>614, 424</value>
+  </data>
+  <data name="btnOK.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnOK.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="btnOK.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Name" xml:space="preserve">
+    <value>btnOK</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnOK.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>782, 459</value>
+  </data>
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>SettingsForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+</root>

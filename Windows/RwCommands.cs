@@ -149,11 +149,14 @@ namespace RevitWindows
 
 
 	[Transaction(TransactionMode.Manual)]
-	class Settings : IExternalCommand
+	class SettingsFormShow : IExternalCommand
 	{
 		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
 		{
-			TaskDialog.Show("Organize Revit Windows", "Settings");
+//			TaskDialog.Show("Organize Revit Windows", "Settings");
+
+			Ribbon._settingsForm.ShowDialog();
+
 			return Result.Succeeded;
 		}
 	}

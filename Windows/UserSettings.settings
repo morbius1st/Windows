@@ -2,62 +2,80 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RevitWindows" GeneratedClassName="UserSettings">
   <Profiles />
   <Settings>
-    <Setting Name="autoActivate" Type="System.Boolean" Scope="User">
+    <Setting Name="AutoActivate" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="marginLeft" Type="System.Int32" Scope="User">
+    <Setting Name="MarginLeft" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="marginTop" Type="System.Int32" Scope="User">
+    <Setting Name="MarginTop" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="marginRight" Type="System.Int32" Scope="User">
+    <Setting Name="MarginRight" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="marginBottom" Type="System.Int32" Scope="User">
+    <Setting Name="MarginBottom" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>
     </Setting>
-    <Setting Name="cascadeMinWindows" Type="System.Byte" Scope="User">
+    <Setting Name="CasadeMinWindows" Type="System.Byte" Scope="Application">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="cascadeMinWidthPix" Type="System.Int32" Scope="User">
+    <Setting Name="CascadeMinWidthPix" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">533</Value>
     </Setting>
-    <Setting Name="cascadeMinHeightPix" Type="System.Int32" Scope="User">
+    <Setting Name="CascadeMinHeightPix" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">300</Value>
     </Setting>
-    <Setting Name="cascadeMinWidthPct" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.33</Value>
-    </Setting>
-    <Setting Name="cascadeMinHeightPct" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.33</Value>
-    </Setting>
-    <Setting Name="cascadeColAdjHoriz" Type="System.Double" Scope="User">
+    <Setting Name="CascadeMinWidthPct" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.5</Value>
     </Setting>
-    <Setting Name="cascadeColAdjVert" Type="System.Double" Scope="User">
+    <Setting Name="CascadeMinHeightPct" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.5</Value>
     </Setting>
-    <Setting Name="cascadeBadWidthPct" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.6</Value>
+    <Setting Name="CascadeColAdjHoriz" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
     </Setting>
-    <Setting Name="cascadeBadHeightPct" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.6</Value>
+    <Setting Name="CascadeColAdjVert" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
     </Setting>
-    <Setting Name="tileMainViewMinWidthPct" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.6</Value>
+    <Setting Name="CascadeBadMinWidthPct" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
     </Setting>
-    <Setting Name="tileMainViewMinHeightPct" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0.6</Value>
+    <Setting Name="CascadeBadMinHeightPct" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
     </Setting>
-    <Setting Name="tileSideViewWidthIncreasePct" Type="System.Double" Scope="User">
+    <Setting Name="TileMainViewMinWidthPct" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="TileMainViewMinHeightPct" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="TileSideViewWidthIncreasePct" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="tileSideViewHeightIncreasePct" Type="System.Double" Scope="User">
+    <Setting Name="TileSideViewHeightIncreasePct" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="tileSideViewSizeAdjustAmt" Type="System.Double" Scope="User">
+    <Setting Name="TileSideViewSizeAdjustAmt" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">0.25</Value>
+    </Setting>
+    <Setting Name="MarginMaxPct" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">0.2</Value>
+    </Setting>
+    <Setting Name="CascadeMaxSizePct" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">0.75</Value>
+    </Setting>
+    <Setting Name="CascadeMaxColAdjust" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">1.5</Value>
+    </Setting>
+    <Setting Name="CascadeBadMaxSizePct" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">0.75</Value>
+    </Setting>
+    <Setting Name="TileSideViewMaxIncreasePct" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="TileMainViewMaxSizePct" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">0.75</Value>
     </Setting>
   </Settings>
 </SettingsFile>

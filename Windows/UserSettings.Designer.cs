@@ -26,228 +26,270 @@ namespace RevitWindows {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool autoActivate {
+        public bool AutoActivate {
             get {
-                return ((bool)(this["autoActivate"]));
+                return ((bool)(this["AutoActivate"]));
             }
             set {
-                this["autoActivate"] = value;
+                this["AutoActivate"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int marginLeft {
+        public int MarginLeft {
             get {
-                return ((int)(this["marginLeft"]));
+                return ((int)(this["MarginLeft"]));
             }
             set {
-                this["marginLeft"] = value;
+                this["MarginLeft"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int marginTop {
+        public int MarginTop {
             get {
-                return ((int)(this["marginTop"]));
+                return ((int)(this["MarginTop"]));
             }
             set {
-                this["marginTop"] = value;
+                this["MarginTop"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int marginRight {
+        public int MarginRight {
             get {
-                return ((int)(this["marginRight"]));
+                return ((int)(this["MarginRight"]));
             }
             set {
-                this["marginRight"] = value;
+                this["MarginRight"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("30")]
-        public int marginBottom {
+        public int MarginBottom {
             get {
-                return ((int)(this["marginBottom"]));
+                return ((int)(this["MarginBottom"]));
             }
             set {
-                this["marginBottom"] = value;
+                this["MarginBottom"] = value;
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public byte cascadeMinWindows {
+        public byte CasadeMinWindows {
             get {
-                return ((byte)(this["cascadeMinWindows"]));
-            }
-            set {
-                this["cascadeMinWindows"] = value;
+                return ((byte)(this["CasadeMinWindows"]));
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("533")]
-        public int cascadeMinWidthPix {
+        public int CascadeMinWidthPix {
             get {
-                return ((int)(this["cascadeMinWidthPix"]));
-            }
-            set {
-                this["cascadeMinWidthPix"] = value;
+                return ((int)(this["CascadeMinWidthPix"]));
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("300")]
-        public int cascadeMinHeightPix {
+        public int CascadeMinHeightPix {
             get {
-                return ((int)(this["cascadeMinHeightPix"]));
-            }
-            set {
-                this["cascadeMinHeightPix"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.33")]
-        public double cascadeMinWidthPct {
-            get {
-                return ((double)(this["cascadeMinWidthPct"]));
-            }
-            set {
-                this["cascadeMinWidthPct"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.33")]
-        public double cascadeMinHeightPct {
-            get {
-                return ((double)(this["cascadeMinHeightPct"]));
-            }
-            set {
-                this["cascadeMinHeightPct"] = value;
+                return ((int)(this["CascadeMinHeightPix"]));
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
-        public double cascadeColAdjHoriz {
+        public double CascadeMinWidthPct {
             get {
-                return ((double)(this["cascadeColAdjHoriz"]));
+                return ((double)(this["CascadeMinWidthPct"]));
             }
             set {
-                this["cascadeColAdjHoriz"] = value;
+                this["CascadeMinWidthPct"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
-        public double cascadeColAdjVert {
+        public double CascadeMinHeightPct {
             get {
-                return ((double)(this["cascadeColAdjVert"]));
+                return ((double)(this["CascadeMinHeightPct"]));
             }
             set {
-                this["cascadeColAdjVert"] = value;
+                this["CascadeMinHeightPct"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
-        public double cascadeBadWidthPct {
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double CascadeColAdjHoriz {
             get {
-                return ((double)(this["cascadeBadWidthPct"]));
+                return ((double)(this["CascadeColAdjHoriz"]));
             }
             set {
-                this["cascadeBadWidthPct"] = value;
+                this["CascadeColAdjHoriz"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
-        public double cascadeBadHeightPct {
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double CascadeColAdjVert {
             get {
-                return ((double)(this["cascadeBadHeightPct"]));
+                return ((double)(this["CascadeColAdjVert"]));
             }
             set {
-                this["cascadeBadHeightPct"] = value;
+                this["CascadeColAdjVert"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
-        public double tileMainViewMinWidthPct {
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double CascadeBadMinWidthPct {
             get {
-                return ((double)(this["tileMainViewMinWidthPct"]));
+                return ((double)(this["CascadeBadMinWidthPct"]));
             }
             set {
-                this["tileMainViewMinWidthPct"] = value;
+                this["CascadeBadMinWidthPct"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
-        public double tileMainViewMinHeightPct {
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double CascadeBadMinHeightPct {
             get {
-                return ((double)(this["tileMainViewMinHeightPct"]));
+                return ((double)(this["CascadeBadMinHeightPct"]));
             }
             set {
-                this["tileMainViewMinHeightPct"] = value;
+                this["CascadeBadMinHeightPct"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double TileMainViewMinWidthPct {
+            get {
+                return ((double)(this["TileMainViewMinWidthPct"]));
+            }
+            set {
+                this["TileMainViewMinWidthPct"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double TileMainViewMinHeightPct {
+            get {
+                return ((double)(this["TileMainViewMinHeightPct"]));
+            }
+            set {
+                this["TileMainViewMinHeightPct"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public double tileSideViewWidthIncreasePct {
+        public double TileSideViewWidthIncreasePct {
             get {
-                return ((double)(this["tileSideViewWidthIncreasePct"]));
+                return ((double)(this["TileSideViewWidthIncreasePct"]));
             }
             set {
-                this["tileSideViewWidthIncreasePct"] = value;
+                this["TileSideViewWidthIncreasePct"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public double tileSideViewHeightIncreasePct {
+        public double TileSideViewHeightIncreasePct {
             get {
-                return ((double)(this["tileSideViewHeightIncreasePct"]));
+                return ((double)(this["TileSideViewHeightIncreasePct"]));
             }
             set {
-                this["tileSideViewHeightIncreasePct"] = value;
+                this["TileSideViewHeightIncreasePct"] = value;
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.25")]
-        public double tileSideViewSizeAdjustAmt {
+        public double TileSideViewSizeAdjustAmt {
             get {
-                return ((double)(this["tileSideViewSizeAdjustAmt"]));
+                return ((double)(this["TileSideViewSizeAdjustAmt"]));
             }
-            set {
-                this["tileSideViewSizeAdjustAmt"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.2")]
+        public double MarginMaxPct {
+            get {
+                return ((double)(this["MarginMaxPct"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.75")]
+        public double CascadeMaxSizePct {
+            get {
+                return ((double)(this["CascadeMaxSizePct"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
+        public double CascadeMaxColAdjust {
+            get {
+                return ((double)(this["CascadeMaxColAdjust"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.75")]
+        public double CascadeBadMaxSizePct {
+            get {
+                return ((double)(this["CascadeBadMaxSizePct"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public double TileSideViewMaxIncreasePct {
+            get {
+                return ((double)(this["TileSideViewMaxIncreasePct"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.75")]
+        public double TileMainViewMaxSizePct {
+            get {
+                return ((double)(this["TileMainViewMaxSizePct"]));
             }
         }
     }
