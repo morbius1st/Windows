@@ -61,11 +61,11 @@ namespace RevitWindows.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OK.
+        ///   Looks up a localized string similar to Auto Update causes a layout update when a side view is selected.
         /// </summary>
-        internal static string LblOK {
+        internal static string helpAutoUpdate {
             get {
-                return ResourceManager.GetString("LblOK", resourceCulture);
+                return ResourceManager.GetString("helpAutoUpdate", resourceCulture);
             }
         }
     }

@@ -29,7 +29,7 @@ namespace RevitWindows
 		{
 			if (winMgr == null)
 			{
-				winMgr = new WindowManager(commandData);
+				winMgr = WindowManager.GetInstance(commandData);
 			}
 
 			winMgr.CurrWinLayoutStyle = GetValue();
@@ -94,68 +94,65 @@ namespace RevitWindows
 
 		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
 		{
-			if (AutoActivate)
-			{
-				AutoActivate = false;
-				Ribbon.pb01.ItemText = "Turn Auto Activate: On";
-			}
-			else
-			{
-				AutoActivate = true;
-				Ribbon.pb01.ItemText = "Turn Auto Activate: Off";
-
-			}
-
-			TaskDialog.Show("Organize Revit Windows", "Toggle Auto Activate| "
-				+ AutoActivate);
-
+			Us.AutoUpdateFlipState();
+			Ribbon.pb01.ItemText = "Auto Update: " + Us.AutoUpdateGetDescription();
 
 			return Result.Succeeded;
 		}
 	}
 
 
-	abstract class ToggleAutoActivate : IExternalCommand
-	{
-		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-		{
-			//			TaskDialog.Show("Organize Revit Windows", "Auto Activate| " + GetValue());
-
-			_autoUpdateOnActivateWindow = GetValue();
-
-			if (_autoUpdateOnActivateWindow)
-			{
-				if (!OrganizeRevitWindows.winMgr.UpdateWindowLayout())
-				{
-					return Result.Failed;
-				}
-			}
-
-			return Result.Succeeded;
-		}
-
-		protected abstract bool GetValue();
-	}
-
-	[Transaction(TransactionMode.Manual)]
-	class AutoActivateOn : ToggleAutoActivate {
-		protected override bool GetValue() { return true; }
-	}
-
-	[Transaction(TransactionMode.Manual)]
-	class AutoActivateOff : ToggleAutoActivate {
-		protected override bool GetValue() { return false; }
-	}
+//	abstract class ToggleAutoActivate : IExternalCommand
+//	{
+//		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+//		{
+//			//			TaskDialog.Show("Organize Revit Windows", "Auto Activate| " + GetValue());
+//
+//			_autoUpdateOnActivateWindow = GetValue();
+//
+//			if (_autoUpdateOnActivateWindow)
+//			{
+//				if (!OrganizeRevitWindows.winMgr.UpdateWindowLayout())
+//				{
+//					return Result.Failed;
+//				}
+//			}
+//
+//			return Result.Succeeded;
+//		}
+//
+//		protected abstract bool GetValue();
+//	}
+//
+//	[Transaction(TransactionMode.Manual)]
+//	class AutoActivateOn : ToggleAutoActivate {
+//		protected override bool GetValue() { return true; }
+//	}
+//
+//	[Transaction(TransactionMode.Manual)]
+//	class AutoActivateOff : ToggleAutoActivate {
+//		protected override bool GetValue() { return false; }
+//	}
 
 
 	[Transaction(TransactionMode.Manual)]
 	class SettingsFormShow : IExternalCommand
 	{
+		private static SettingsForm _settingsForm;
+
 		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
 		{
-//			TaskDialog.Show("Organize Revit Windows", "Settings");
+			if (OrganizeRevitWindows.winMgr == null)
+			{
+				OrganizeRevitWindows.winMgr = WindowManager.GetInstance(commandData);
+			}
 
-			Ribbon._settingsForm.ShowDialog();
+			if (_settingsForm == null)
+			{
+				_settingsForm = new SettingsForm();
+			}
+
+			_settingsForm.ShowDialog();
 
 			return Result.Succeeded;
 		}

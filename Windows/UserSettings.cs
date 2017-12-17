@@ -10,8 +10,7 @@ namespace RevitWindows {
     //  The SettingsSaving event is raised before the setting values are saved.
     internal sealed partial class UserSettings {
         
-        public UserSettings() {
-        }
+        public UserSettings() { }
         
 //        private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) {
 //            // Add code to handle the SettingChangingEvent event here.
@@ -20,5 +19,28 @@ namespace RevitWindows {
 //        private void SettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {
 //            // Add code to handle the SettingsSaving event here.
 //        }
+
+		internal string AutoUpdateGetDescription()
+		{
+			if (AutoUpdate)
+			{
+				return "On - Turn Off";
+			} 
+			return "Off - Turn On";
+		}
+
+		internal void AutoUpdateFlipState()
+		{
+			AutoUpdate = !AutoUpdate;
+			UserSettings.Default.Save();
+		}
+
+		internal void Test()
+		{
+			
+		}
+
+
+
     }
 }

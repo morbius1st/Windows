@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RevitWindows" GeneratedClassName="UserSettings">
   <Profiles />
   <Settings>
-    <Setting Name="AutoActivate" Type="System.Boolean" Scope="User">
+    <Setting Name="AutoUpdate" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="MarginLeft" Type="System.Int32" Scope="User">
@@ -17,19 +17,19 @@
     <Setting Name="MarginBottom" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>
     </Setting>
-    <Setting Name="CasadeMinWindows" Type="System.Byte" Scope="Application">
+    <Setting Name="MinViews" Type="System.Byte" Scope="Application">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="CascadeMinWidthPix" Type="System.Int32" Scope="Application">
+    <Setting Name="CascadeViewMinWidthPix" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">533</Value>
     </Setting>
-    <Setting Name="CascadeMinHeightPix" Type="System.Int32" Scope="Application">
+    <Setting Name="CascadeViewMinHeightPix" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">300</Value>
     </Setting>
-    <Setting Name="CascadeMinWidthPct" Type="System.Double" Scope="User">
+    <Setting Name="CascadeViewMinWidthPct" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.5</Value>
     </Setting>
-    <Setting Name="CascadeMinHeightPct" Type="System.Double" Scope="User">
+    <Setting Name="CascadeViewMinHeightPct" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.5</Value>
     </Setting>
     <Setting Name="CascadeColAdjHoriz" Type="System.Double" Scope="User">
@@ -38,10 +38,10 @@
     <Setting Name="CascadeColAdjVert" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.5</Value>
     </Setting>
-    <Setting Name="CascadeBadMinWidthPct" Type="System.Double" Scope="User">
+    <Setting Name="CascadeBadViewMinWidthPct" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.5</Value>
     </Setting>
-    <Setting Name="CascadeBadMinHeightPct" Type="System.Double" Scope="User">
+    <Setting Name="CascadeBadViewMinHeightPct" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.5</Value>
     </Setting>
     <Setting Name="TileMainViewMinWidthPct" Type="System.Double" Scope="User">
@@ -56,22 +56,22 @@
     <Setting Name="TileSideViewHeightIncreasePct" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="TileSideViewSizeAdjustAmt" Type="System.Double" Scope="Application">
+    <Setting Name="TileSideViewSizeAdjustAmtPct" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">0.25</Value>
     </Setting>
-    <Setting Name="MarginMaxPct" Type="System.Double" Scope="Application">
+    <Setting Name="MarginMaxScreenPct" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">0.2</Value>
     </Setting>
-    <Setting Name="CascadeMaxSizePct" Type="System.Double" Scope="Application">
+    <Setting Name="CascadeProperMaxViewSizePct" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">0.75</Value>
     </Setting>
-    <Setting Name="CascadeMaxColAdjust" Type="System.Double" Scope="Application">
+    <Setting Name="CascadeMaxColAdjPct" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">1.5</Value>
     </Setting>
-    <Setting Name="CascadeBadMaxSizePct" Type="System.Double" Scope="Application">
+    <Setting Name="CascadeBadMaxViewSizePct" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">0.75</Value>
     </Setting>
-    <Setting Name="TileSideViewMaxIncreasePct" Type="System.Double" Scope="Application">
+    <Setting Name="TileSideViewMaxSizeIncreasePct" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="TileMainViewMaxSizePct" Type="System.Double" Scope="Application">

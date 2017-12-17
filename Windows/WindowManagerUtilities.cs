@@ -95,7 +95,7 @@ namespace RevitWindows
 		private static double _nonActiveWidthIncreasePct;
 		private static double _nonActiveHeightIncreasePct;
 
-		private UserSettings us;
+//		internal static UserSettings us;
 
 		internal WindowManagerUtilities(IntPtr parent)
 		{
@@ -103,46 +103,65 @@ namespace RevitWindows
 
 			GetScreenMetrics(_parent);
 
+//			us = new UserSettings();
+
 			if (!_initalized)
 			{
 				Initalize();
 
 				_initalized = true;
 			}
+		}
 
-			us = new UserSettings();
+		internal void Initalize()
+		{
+			_nonCurrHeight = MinWindowHeight;
+			_notCurrWidth = MinWindowWidth;
+
+			_winAdjHoriz = TitleBarHeight;
+			_winAdjVert = TitleBarHeight;
+
+			_minimizedHeight = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
+			_minimizedWidth = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
+
+			_availableWidth = ParentWindow.Width - Us.MarginLeft - Us.MarginRight;
+			_availableHeight = ParentWindow.Height - Us.MarginTop - Us.MarginBottom;
+
+			_nonActiveWidthIncreasePct = Us.TileSideViewWidthIncreasePct;
+			_nonActiveHeightIncreasePct = Us.TileSideViewHeightIncreasePct;
+
+			_selectedMinWidth = (int) (_availableWidth * Us.TileMainViewMinWidthPct);
+			_selectedMinHeight = (int) (_availableHeight * Us.TileMainViewMinHeightPct);
 		}
 
 		//		void x()
 		//		{
-		//			us.MarginLeft;						// x - min 0 - max 20%
-		//			us.MarginTop;						// x - min 0 - max 20%
-		//			us.MarginRight;						// x - min 0 - max 20%
-		//			us.MarginBottom;					// x - min 0 - max 20%
+		//			Us.MarginLeft;						// x - min 0 - max 20%
+		//			Us.MarginTop;						// x - min 0 - max 20%
+		//			Us.MarginRight;						// x - min 0 - max 20%
+		//			Us.MarginBottom;					// x - min 0 - max 20%
 		//
-		//			us.CascadeMinWidthPix;				// *
-		//			us.CascadeMinHeightPix;				// *
+		//			Us.CascadeMinWidthPix;				// *
+		//			Us.CascadeMinHeightPix;				// *
 
-		//			us.CascadeMinWidthPct;				// x - min .25 - max .75
-		//			us.CascadeMinHeightPct;				// x - min .25 - max .75
+		//			Us.CascadeMinWidthPct;				// x - min .25 - max .75
+		//			Us.CascadeMinHeightPct;				// x - min .25 - max .75
 		//
-		//			us.CascadeColAdjHoriz;				// x - min .5 - max 1.5
-		//			us.CascadeColAdjVert;				// x - min .5 - max 1.5
+		//			Us.CascadeColAdjHoriz;				// x - min .5 - max 1.5
+		//			Us.CascadeColAdjVert;				// x - min .5 - max 1.5
 		//
-		//			us.CascadeBadWidthPct;				// x - min .25 - max .75
-		//			us.CascadeBadHeightPct;				// x - min .25 - max .75
+		//			Us.CascadeBadWidthPct;				// x - min .25 - max .75
+		//			Us.CascadeBadHeightPct;				// x - min .25 - max .75
 		//
-		//			us.TileSideViewWidthIncreasePct;	// x - min 0.0 - max 5.0
-		//			us.TileSideViewHeightIncreasePct;	// x - min 0.0 - max 5.0
+		//			Us.TileSideViewWidthIncreasePct;	// x - min 0.0 - max 5.0
+		//			Us.TileSideViewHeightIncreasePct;	// x - min 0.0 - max 5.0
 		//
-		//			us.TileSideViewSizeAdjustAmt;		// *
+		//			Us.TileSideViewSizeAdjustAmt;		// *
 		//
-		//			us.TileMainViewMinWidthPct;			// x - min .25 - max .75
-		//			us.TileMainViewMinHeightPct;		// x - min .25 - max .75
+		//			Us.TileMainViewMinWidthPct;			// x - min .25 - max .75
+		//			Us.TileMainViewMinHeightPct;		// x - min .25 - max .75
 		//
 		//		}
-
-
 
 		internal bool AdjustNonActWidth(WindowLayoutStyle winLayoutStyle, bool increase)
 		{
@@ -160,7 +179,7 @@ namespace RevitWindows
 
 			if (!increase)
 			{
-				proposedWidthAdjust = _nonActiveWidthIncreasePct - TILE_SIDE_VIEW_PCT_ADJUST_AMT;
+				proposedWidthAdjust = _nonActiveWidthIncreasePct - Us.TileSideViewSizeAdjustAmtPct;
 				if (proposedWidthAdjust >= 0)
 				{
 					_nonActiveWidthIncreasePct = proposedWidthAdjust;
@@ -170,7 +189,7 @@ namespace RevitWindows
 			}
 
 			proposedWidthAdjust = _nonActiveWidthIncreasePct 
-				+ TILE_SIDE_VIEW_PCT_ADJUST_AMT;
+				+ Us.TileSideViewSizeAdjustAmtPct;
 
 			if (CalcTotalSize(proposedWidthAdjust,
 				MinWindowWidth, _selectedMinWidth) > _availableWidth)
@@ -197,7 +216,7 @@ namespace RevitWindows
 
 			if (!increase)
 			{
-				proposedHeightIncrease = _nonActiveHeightIncreasePct - TILE_SIDE_VIEW_PCT_ADJUST_AMT;
+				proposedHeightIncrease = _nonActiveHeightIncreasePct - Us.TileSideViewSizeAdjustAmtPct;
 				if (proposedHeightIncrease >= 0)
 				{
 					_nonActiveHeightIncreasePct = proposedHeightIncrease;
@@ -207,7 +226,7 @@ namespace RevitWindows
 			}
 
 			proposedHeightIncrease = _nonActiveHeightIncreasePct 
-				+ TILE_SIDE_VIEW_PCT_ADJUST_AMT;
+				+ Us.TileSideViewSizeAdjustAmtPct;
 
 			if (CalcTotalSize(proposedHeightIncrease,
 				MinWindowWidth, _selectedMinWidth) > _availableWidth)
@@ -224,28 +243,6 @@ namespace RevitWindows
 		{
 			return selMinSize + (int) (minWinSize * (1.0 + proposedIncPct));
 		}
-
-		internal void Initalize()
-		{
-			_nonCurrHeight = MinWindowHeight;
-			_notCurrWidth = MinWindowWidth;
-
-			_winAdjHoriz = TitleBarHeight;
-			_winAdjVert = TitleBarHeight;
-
-			_minimizedHeight = GetSystemMetrics(SystemMetric.SM_CYMINIMIZED);
-			_minimizedWidth = GetSystemMetrics(SystemMetric.SM_CXMINIMIZED);
-
-			_availableWidth = ParentWindow.Width - us.MarginLeft - us.MarginRight;
-			_availableHeight = ParentWindow.Height - us.MarginTop - us.MarginBottom;
-
-			_nonActiveWidthIncreasePct = TILE_SIDE_VIEW_WIDTH_INCREASE_PCT;
-			_nonActiveHeightIncreasePct = TILE_SIDE_VIEW_HEIGHT_INCREASE_PCT;
-
-			_selectedMinWidth = (int) (_availableWidth * TILE_MAIN_VIEW_MIN_WIDTH_PCT);
-			_selectedMinHeight = (int) (_availableHeight * TILE_MAIN_VIEW_MIN_HEIGHT_PCT);
-		}
-
 
 
 		// proper cascade = cascade from top right to bottom left - 
@@ -280,7 +277,7 @@ namespace RevitWindows
 		internal bool OrganizeByProperCascade()
 		{
 			if (CurrDocWinCount == 0 ||
-				CurrDocWinCount < us.CasadeMinWindows)
+				CurrDocWinCount < Us.MinViews)
 			{
 				messageError = 
 					"At least three windows are needed in order to organize";
@@ -302,10 +299,10 @@ namespace RevitWindows
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
 
-			_selectedTop = us.MarginTop;
-			_selectedLeft = us.MarginLeft + CurrDocWinCount * _winAdjHoriz;
-			_selectedRight = ParentWindow.Width - us.MarginRight;
-			_selectedBottom = ParentWindow.Height - us.MarginBottom;
+			_selectedTop = Us.MarginTop;
+			_selectedLeft = Us.MarginLeft + CurrDocWinCount * _winAdjHoriz;
+			_selectedRight = ParentWindow.Width - Us.MarginRight;
+			_selectedBottom = ParentWindow.Height - Us.MarginBottom;
 
 			_minimizedTop = ParentWindow.Height;
 			_minimizedLeft = 0;
@@ -345,14 +342,14 @@ namespace RevitWindows
 		{
 			if (CurrDocWinCount == 0) { return false; }
 
-			int minWinHeight = Math.Max((int) (ParentWindow.Height * CASCADE_MIN_HEIGHT_PCT), CASCADE_MIN_HEIGHT_PIX);
-			int minWinWidth = Math.Max((int) (ParentWindow.Width * CASCADE_MIN_WIDTH_PCT), CASCADE_MIN_WIDTH_PIX);
+			int minWinHeight = Math.Max((int) (ParentWindow.Height * Us.CascadeViewMinHeightPct), Us.CascadeViewMinHeightPix);
+			int minWinWidth = Math.Max((int) (ParentWindow.Width * Us.CascadeViewMinWidthPct), Us.CascadeViewMinWidthPix);
 
-			int maxWindowsHoriz = (ParentWindow.Width - us.MarginRight
-				- us.MarginLeft - minWinWidth) / _winAdjHoriz;
+			int maxWindowsHoriz = (ParentWindow.Width - Us.MarginRight
+				- Us.MarginLeft - minWinWidth) / _winAdjHoriz;
 
-			int maxWindowsVert = (ParentWindow.Height - us.MarginTop
-				- us.MarginBottom - minWinHeight) / _winAdjVert;
+			int maxWindowsVert = (ParentWindow.Height - Us.MarginTop
+				- Us.MarginBottom - minWinHeight) / _winAdjVert;
 
 			// can all of the windows be cascaded?
 			if (maxWindowsHoriz < CurrDocWinCount
@@ -406,7 +403,7 @@ namespace RevitWindows
 		internal bool OrganizeByBadCascade()
 		{
 			if (CurrDocWinCount == 0 ||
-				CurrDocWinCount < us.CasadeMinWindows)
+				CurrDocWinCount < Us.MinViews)
 			{
 				WindowManager.messageError =
 					"At least three windows are needed in order to organize";
@@ -423,10 +420,10 @@ namespace RevitWindows
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
 
-			_selectedTop = us.MarginTop;
-			_selectedLeft = us.MarginLeft + CurrDocWinCount * _winAdjHoriz;
-			_selectedRight = ParentWindow.Width - us.MarginRight;
-			_selectedBottom = ParentWindow.Height - us.MarginBottom;
+			_selectedTop = Us.MarginTop;
+			_selectedLeft = Us.MarginLeft + CurrDocWinCount * _winAdjHoriz;
+			_selectedRight = ParentWindow.Width - Us.MarginRight;
+			_selectedBottom = ParentWindow.Height - Us.MarginBottom;
 
 			_minimizedTop = ParentWindow.Height;
 			_minimizedLeft = 0;
@@ -472,8 +469,8 @@ namespace RevitWindows
 		bool ValidateBadCascade()
 		{
 			// determine the window width and height
-			_selectedWidth = (int) (ParentWindow.Width * CASCADE_BAD_WIDTH_PCT);
-			_selectedHeight = (int) (ParentWindow.Height * CASCADE_BAD_HEIGHT_PCT);
+			_selectedWidth = (int) (ParentWindow.Width * Us.CascadeBadViewMinWidthPct);
+			_selectedHeight = (int) (ParentWindow.Height * Us.CascadeBadViewMinHeightPct);
 
 			// make sure that the window width and height is at least 2x the minimum window height and width
 			_selectedWidth = _selectedWidth > MinWindowWidth * 2 ? _selectedWidth : MinWindowWidth * 2;
@@ -481,8 +478,8 @@ namespace RevitWindows
 
 			// make sure there is enough height and width to actually cascade the windows
 			// allow for 3 times the offset amount
-			if (us.MarginTop + _selectedHeight + us.MarginBottom + _winAdjVert * us.CasadeMinWindows >= ParentWindow.Height
-				|| us.MarginLeft + _selectedWidth + us.MarginRight + _winAdjHoriz * us.CasadeMinWindows >= ParentWindow.Width)
+			if (Us.MarginTop + _selectedHeight + Us.MarginBottom + _winAdjVert * Us.MinViews >= ParentWindow.Height
+				|| Us.MarginLeft + _selectedWidth + Us.MarginRight + _winAdjHoriz * Us.MinViews >= ParentWindow.Width)
 			{
 				return false;
 			}
@@ -492,16 +489,16 @@ namespace RevitWindows
 
 		Rectangle RectForBadCascade(int width, int height, ref int idx, ref int col)
 		{
-			int left = CalcTopLeft(idx, col, us.MarginLeft, _winAdjHoriz, CASCADE_COL_ADJ_HORIZ * MinWindowWidth);
-			int top = CalcTopLeft(idx, col, us.MarginTop, _winAdjVert, CASCADE_COL_ADJ_VERT * MinWindowHeight);
+			int left = CalcTopLeft(idx, col, Us.MarginLeft, _winAdjHoriz, Us.CascadeColAdjHoriz * MinWindowWidth);
+			int top = CalcTopLeft(idx, col, Us.MarginTop, _winAdjVert, Us.CascadeColAdjVert * MinWindowHeight);
 
-			if (left + width + us.MarginRight > ParentWindow.Width ||
-				top + height + us.MarginBottom > ParentWindow.Height)
+			if (left + width + Us.MarginRight > ParentWindow.Width ||
+				top + height + Us.MarginBottom > ParentWindow.Height)
 			{
 				idx = 0;
 				col++;
-				left = CalcTopLeft(idx, col, us.MarginLeft, _winAdjHoriz, CASCADE_COL_ADJ_HORIZ * MinWindowWidth);
-				top = CalcTopLeft(idx, col, us.MarginTop, _winAdjVert, CASCADE_COL_ADJ_VERT * MinWindowHeight);
+				left = CalcTopLeft(idx, col, Us.MarginLeft, _winAdjHoriz, Us.CascadeColAdjHoriz * MinWindowWidth);
+				top = CalcTopLeft(idx, col, Us.MarginTop, _winAdjVert, Us.CascadeColAdjVert * MinWindowHeight);
 			}
 
 			return new Rectangle(left, top, width, height);
@@ -516,7 +513,7 @@ namespace RevitWindows
 		{
 			// need at least 3 selected windows
 			if (CurrDocWinCount == 0 ||
-				CurrDocWinCount < us.CasadeMinWindows)
+				CurrDocWinCount < Us.MinViews)
 			{
 				WindowManager.messageError =
 					"At least three windows are needed in order to organize";
@@ -537,8 +534,8 @@ namespace RevitWindows
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
 
-			_selectedTop = us.MarginTop;
-			_selectedLeft = us.MarginLeft;
+			_selectedTop = Us.MarginTop;
+			_selectedLeft = Us.MarginLeft;
 
 			_minimizedTop = ParentWindow.Height;
 			_minimizedLeft = 0;
@@ -565,9 +562,9 @@ namespace RevitWindows
 				}
 				else if (rw.IsCurrDoc)
 				{
-					if (_selectedTop + _nonActiveHeight > _availableHeight + us.MarginTop)
+					if (_selectedTop + _nonActiveHeight > _availableHeight + Us.MarginTop)
 					{
-						_selectedTop = us.MarginTop;
+						_selectedTop = Us.MarginTop;
 						_selectedLeft += _nonActiveWidth;
 					}
 
@@ -595,7 +592,7 @@ namespace RevitWindows
 			
 			// need at least 3 selected windows
 			if (CurrDocWinCount == 0 ||
-				CurrDocWinCount < us.CasadeMinWindows)
+				CurrDocWinCount < Us.MinViews)
 			{
 				WindowManager.messageError =
 					"At least three windows are needed in order to organize";
@@ -616,8 +613,8 @@ namespace RevitWindows
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
 
-			_selectedTop = us.MarginTop;
-			_selectedLeft = us.MarginLeft + numOfCols * _nonActiveWidth;
+			_selectedTop = Us.MarginTop;
+			_selectedLeft = Us.MarginLeft + numOfCols * _nonActiveWidth;
 
 			_minimizedTop = ParentWindow.Height;
 			_minimizedLeft = 0;
@@ -639,14 +636,14 @@ namespace RevitWindows
 					rw.Proposed =
 						new Rectangle(_selectedLeft, _selectedTop, _selectedWidth, _selectedHeight);
 
-					_selectedLeft = us.MarginLeft;
+					_selectedLeft = Us.MarginLeft;
 
 				}
 				else if (rw.IsCurrDoc)
 				{
-					if (_selectedTop + _nonActiveHeight > _availableHeight + us.MarginTop)
+					if (_selectedTop + _nonActiveHeight > _availableHeight + Us.MarginTop)
 					{
-						_selectedTop = us.MarginTop;
+						_selectedTop = Us.MarginTop;
 						_selectedLeft += _nonActiveWidth;
 					}
 
@@ -707,7 +704,7 @@ namespace RevitWindows
 		{
 			// need at least 3 selected windows
 			if (CurrDocWinCount == 0 ||
-				CurrDocWinCount < us.CasadeMinWindows)
+				CurrDocWinCount < Us.MinViews)
 			{
 				WindowManager.messageError =
 					"At least three windows are needed in order to organize";
@@ -728,8 +725,8 @@ namespace RevitWindows
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
 
-			_selectedTop = us.MarginTop;
-			_selectedLeft = us.MarginLeft;
+			_selectedTop = Us.MarginTop;
+			_selectedLeft = Us.MarginLeft;
 
 			_minimizedTop = ParentWindow.Height;
 			_minimizedLeft = 0;
@@ -756,10 +753,10 @@ namespace RevitWindows
 				}
 				else if (rw.IsCurrDoc)
 				{
-					if (_selectedLeft + _nonActiveWidth > us.MarginLeft + _availableWidth)
+					if (_selectedLeft + _nonActiveWidth > Us.MarginLeft + _availableWidth)
 					{
 						_selectedTop += _nonActiveHeight;
-						_selectedLeft = us.MarginLeft;
+						_selectedLeft = Us.MarginLeft;
 					}
 
 					rw.Proposed =
@@ -786,7 +783,7 @@ namespace RevitWindows
 		{
 			// need at least 3 selected windows
 			if (CurrDocWinCount == 0 ||
-				CurrDocWinCount < us.CasadeMinWindows)
+				CurrDocWinCount < Us.MinViews)
 			{
 				WindowManager.messageError =
 					"At least three windows are needed in order to organize";
@@ -807,8 +804,8 @@ namespace RevitWindows
 			bool gotFirstMinimized = false;
 			bool gotFirstNotSel = false;
 
-			_selectedTop = us.MarginTop + numOfRows * _nonActiveHeight;
-			_selectedLeft = us.MarginLeft;
+			_selectedTop = Us.MarginTop + numOfRows * _nonActiveHeight;
+			_selectedLeft = Us.MarginLeft;
 
 			_minimizedTop = ParentWindow.Height;
 			_minimizedLeft = 0;
@@ -830,15 +827,15 @@ namespace RevitWindows
 					rw.Proposed =
 						new Rectangle(_selectedLeft, _selectedTop, _selectedWidth, _selectedHeight);
 
-					_selectedTop = us.MarginTop;
+					_selectedTop = Us.MarginTop;
 
 				}
 				else if (rw.IsCurrDoc)
 				{
-					if (_selectedLeft + _nonActiveWidth > us.MarginLeft + _availableWidth)
+					if (_selectedLeft + _nonActiveWidth > Us.MarginLeft + _availableWidth)
 					{
 						_selectedTop += _nonActiveHeight;
-						_selectedLeft = us.MarginLeft;
+						_selectedLeft = Us.MarginLeft;
 					}
 
 					rw.Proposed =
@@ -902,7 +899,7 @@ namespace RevitWindows
 		{
 			// need at least 3 selected windows
 			if (CurrDocWinCount == 0 ||
-				CurrDocWinCount < us.CasadeMinWindows)
+				CurrDocWinCount < Us.MinViews)
 			{
 				WindowManager.messageError =
 					"At least three windows are needed in order to organize";
@@ -925,8 +922,8 @@ namespace RevitWindows
 
 			int tempNonActHeight = _nonActiveLastHeight;
 
-			_selectedTop = us.MarginTop;
-			_selectedLeft = us.MarginLeft;
+			_selectedTop = Us.MarginTop;
+			_selectedLeft = Us.MarginLeft;
 
 			_minimizedTop = ParentWindow.Height;
 			_minimizedLeft = 0;
@@ -949,15 +946,15 @@ namespace RevitWindows
 						new Rectangle(_selectedLeft, _selectedTop, _selectedWidth, _selectedHeight);
 
 					_selectedLeft += _selectedWidth;
-					_selectedTop = _availableHeight + us.MarginTop - tempNonActHeight;
+					_selectedTop = _availableHeight + Us.MarginTop - tempNonActHeight;
 
 				}
 				else if (rw.IsCurrDoc)
 				{
-					if (_selectedTop < us.MarginTop)
+					if (_selectedTop < Us.MarginTop)
 					{
 						_selectedLeft += _nonActiveWidth;
-						_selectedTop = us.MarginTop + _availableHeight - _nonActiveLastHeight;
+						_selectedTop = Us.MarginTop + _availableHeight - _nonActiveLastHeight;
 						tempNonActHeight = _nonActiveLastHeight;
 					}
 

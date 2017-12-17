@@ -1,16 +1,19 @@
 ﻿#region Using directives
 
 using System;
-using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
+using System.Configuration;
 
+
+using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.UI;
+using EnvDTE;
 using static RevitWindows.RevitWindow;
 using static RevitWindows.WindowApiUtilities;
 using static RevitWindows.WindowUtilities;
 using static RevitWindows.WindowManagerUtilities;
 using static RevitWindows.WindowListingUtilities;
 using static RevitWindows.WindowManager.WindowLayoutStyle;
+using Document = Autodesk.Revit.DB.Document;
 
 #endregion
 
@@ -25,14 +28,11 @@ namespace RevitWindows
 	{
 		internal const bool DISPLAY_INFO = false;
 
-		private readonly WindowManagerUtilities _winMgrUtil;
-
 		internal static string messageStatus = "";
 		internal static string messageError = "";
 
 		private const string MSG_01 = "Could not Organize windows";
 
-		private static IntPtr _parent;
 
 		internal string MessageStatus => messageStatus;
 		internal string MessageError => messageError;
@@ -42,25 +42,51 @@ namespace RevitWindows
 		internal static Application App;
 		internal static Document Doc;
 
+		internal static UserSettings Us;
+
 		internal static bool _autoUpdateOnActivateWindow = true;
 
 		private static WindowLayoutStyle _currWinLayoutStyle = ACTIVE_LEFT_OVERLAP;
+		private static IntPtr _parent;
 
+		private static WindowManager _WinMgr = null;
+		private static WindowManagerUtilities _winMgrUtil = null;
 
-		public WindowManager(ExternalCommandData commandData)
+		private WindowManager() { }
+
+		internal static WindowManager GetInstance(ExternalCommandData commandData)
 		{
-			if (commandData == null) return;
+			if (commandData == null) return null;
 
-			Uiapp = commandData.Application;
-			Uidoc = Uiapp.ActiveUIDocument;
-			App = Uiapp.Application;
-			Doc = Uidoc.Document;
+			if (_WinMgr == null)
+			{
+				_WinMgr = new WindowManager();
 
-			_parent = GetMainWinHandle(Doc);
+				Uiapp = commandData.Application;
+				Uidoc = Uiapp.ActiveUIDocument;
+				App = Uiapp.Application;
+				Doc = Uidoc.Document;
 
-			_winMgrUtil = new WindowManagerUtilities(_parent);
+				Us = new UserSettings();
+
+				_parent = GetMainWinHandle(Doc);
+
+				_winMgrUtil = new WindowManagerUtilities(_parent);
+			}
+
+			RevitWindows.Properties.Settings x = Properties.Settings.Default;
+			
+
+			TaskDialog.Show("revit windows", "test is| " + x.Alpha + " " + x.Beta);
+
+			x.Beta++;
+			x.Save();
+
+			TaskDialog.Show("revit windows", "test is| " + x.Alpha + " " + x.Beta);
+
+			return _WinMgr;
 		}
-
+		
 		internal enum WindowLayoutStyle
 		{
 			PROPER_CASCADE,

@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
-
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using View = Autodesk.Revit.DB.View;
 
 using static RevitWindows.WindowManager;
 using static RevitWindows.WindowApiUtilities;
+using Application = Autodesk.Revit.ApplicationServices.Application;
 
 #endregion
 
@@ -37,9 +38,8 @@ namespace RevitWindows
 		private static bool makeToggButton = false;
 
 		private static UIControlledApplication _uiCtrlApp;
-		private static UIApplication _uiApp;
 
-		internal static SettingsForm _settingsForm;
+		internal static UIApplication _uiApp;
 
 		internal static PushButton pb01;
 		//		internal static PushButtonData pbData0;
@@ -47,8 +47,6 @@ namespace RevitWindows
 		public Result OnStartup(UIControlledApplication app)
 		{
 			_uiCtrlApp = app;
-
-			_settingsForm = new SettingsForm();
 
 			try
 			{
@@ -210,7 +208,7 @@ namespace RevitWindows
 			SplitButtonData sbData1 = new SplitButtonData("pullDownButton1", "auto activate");
 			sbData1.Image = RibbonUtil.GetBitmapImage(SMALLICON);
 
-			PushButtonData pbData0 = createButton("pushButton0", "Turn Auto Activate: On", "ToggAutoActivate", 
+			PushButtonData pbData0 = createButton("pushButton0", "Auto Update: On - Turn Off", "ToggAutoActivate", 
 				"Revit Windows Settings", SMALLICON, LARGEICON);
 
 			PushButtonData pbData1 = createButton("pushButton1", "Settings", "SettingsFormShow", 
@@ -279,7 +277,7 @@ namespace RevitWindows
 			{
 				return Result.Succeeded;
 			}
-			catch (Exception e)
+			catch
 			{
 				return Result.Failed;
 			}
@@ -298,6 +296,7 @@ namespace RevitWindows
 
 		bool RegisterDocEvents()
 		{
+//			TaskDialog.Show("Revit Windows", "registering events 0");
 			if (_eventsRegistered) return true;
 			_eventsRegistered = true;
 
@@ -314,6 +313,7 @@ namespace RevitWindows
 			{
 				return false;
 			}
+
 			return true;
 		}
 

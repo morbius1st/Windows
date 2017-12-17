@@ -26,12 +26,12 @@ namespace RevitWindows {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AutoActivate {
+        public bool AutoUpdate {
             get {
-                return ((bool)(this["AutoActivate"]));
+                return ((bool)(this["AutoUpdate"]));
             }
             set {
-                this["AutoActivate"] = value;
+                this["AutoUpdate"] = value;
             }
         }
         
@@ -86,51 +86,51 @@ namespace RevitWindows {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public byte CasadeMinWindows {
+        public byte MinViews {
             get {
-                return ((byte)(this["CasadeMinWindows"]));
+                return ((byte)(this["MinViews"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("533")]
-        public int CascadeMinWidthPix {
+        public int CascadeViewMinWidthPix {
             get {
-                return ((int)(this["CascadeMinWidthPix"]));
+                return ((int)(this["CascadeViewMinWidthPix"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("300")]
-        public int CascadeMinHeightPix {
+        public int CascadeViewMinHeightPix {
             get {
-                return ((int)(this["CascadeMinHeightPix"]));
+                return ((int)(this["CascadeViewMinHeightPix"]));
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
-        public double CascadeMinWidthPct {
+        public double CascadeViewMinWidthPct {
             get {
-                return ((double)(this["CascadeMinWidthPct"]));
+                return ((double)(this["CascadeViewMinWidthPct"]));
             }
             set {
-                this["CascadeMinWidthPct"] = value;
+                this["CascadeViewMinWidthPct"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
-        public double CascadeMinHeightPct {
+        public double CascadeViewMinHeightPct {
             get {
-                return ((double)(this["CascadeMinHeightPct"]));
+                return ((double)(this["CascadeViewMinHeightPct"]));
             }
             set {
-                this["CascadeMinHeightPct"] = value;
+                this["CascadeViewMinHeightPct"] = value;
             }
         }
         
@@ -161,24 +161,24 @@ namespace RevitWindows {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
-        public double CascadeBadMinWidthPct {
+        public double CascadeBadViewMinWidthPct {
             get {
-                return ((double)(this["CascadeBadMinWidthPct"]));
+                return ((double)(this["CascadeBadViewMinWidthPct"]));
             }
             set {
-                this["CascadeBadMinWidthPct"] = value;
+                this["CascadeBadViewMinWidthPct"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
-        public double CascadeBadMinHeightPct {
+        public double CascadeBadViewMinHeightPct {
             get {
-                return ((double)(this["CascadeBadMinHeightPct"]));
+                return ((double)(this["CascadeBadViewMinHeightPct"]));
             }
             set {
-                this["CascadeBadMinHeightPct"] = value;
+                this["CascadeBadViewMinHeightPct"] = value;
             }
         }
         
@@ -233,54 +233,54 @@ namespace RevitWindows {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.25")]
-        public double TileSideViewSizeAdjustAmt {
+        public double TileSideViewSizeAdjustAmtPct {
             get {
-                return ((double)(this["TileSideViewSizeAdjustAmt"]));
+                return ((double)(this["TileSideViewSizeAdjustAmtPct"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.2")]
-        public double MarginMaxPct {
+        public double MarginMaxScreenPct {
             get {
-                return ((double)(this["MarginMaxPct"]));
+                return ((double)(this["MarginMaxScreenPct"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.75")]
-        public double CascadeMaxSizePct {
+        public double CascadeProperMaxViewSizePct {
             get {
-                return ((double)(this["CascadeMaxSizePct"]));
+                return ((double)(this["CascadeProperMaxViewSizePct"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
-        public double CascadeMaxColAdjust {
+        public double CascadeMaxColAdjPct {
             get {
-                return ((double)(this["CascadeMaxColAdjust"]));
+                return ((double)(this["CascadeMaxColAdjPct"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.75")]
-        public double CascadeBadMaxSizePct {
+        public double CascadeBadMaxViewSizePct {
             get {
-                return ((double)(this["CascadeBadMaxSizePct"]));
+                return ((double)(this["CascadeBadMaxViewSizePct"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public double TileSideViewMaxIncreasePct {
+        public double TileSideViewMaxSizeIncreasePct {
             get {
-                return ((double)(this["TileSideViewMaxIncreasePct"]));
+                return ((double)(this["TileSideViewMaxSizeIncreasePct"]));
             }
         }
         
