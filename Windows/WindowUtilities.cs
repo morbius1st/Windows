@@ -27,7 +27,11 @@ namespace RevitWindows
 		internal const string APP_NAME = "Revit Windows";
 
 		internal const int VIEW_TYPE_VOID = 199;
-		
+
+		internal static void TD(string message)
+		{
+			TaskDialog.Show("Revit Windows", message);
+		}
 
 		// an AutoDesk rectangle from a system rectangle
 		internal static Autodesk.Revit.DB.Rectangle ConvertTo(Rectangle r)

@@ -14,7 +14,7 @@ namespace RevitWindows
 		{
 			InitializeComponent();
 
-			btnAutoUpdate.Text = Us.AutoUpdateGetDescription();
+//			btnAutoUpdate.Text = Us.AutoUpdateGetDescription();
 
 			tbMarginLeft.Text = Us.MarginLeft.ToString();
 			tbMarginTop.Text = Us.MarginTop.ToString();
@@ -63,8 +63,8 @@ namespace RevitWindows
 
 		private void btnAutoUpdate_Click(object sender, EventArgs e)
 		{
-			Us.AutoUpdateFlipState();
-			btnAutoUpdate.Text = Us.AutoUpdateGetDescription();
+//			Us.AutoUpdateFlipState();
+//			btnAutoUpdate.Text = Us.AutoUpdateGetDescription();
 		}
 
 		private void hlpAutoUpdate_Click(object sender, EventArgs e)

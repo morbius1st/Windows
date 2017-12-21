@@ -94,8 +94,8 @@ namespace RevitWindows
 
 		public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
 		{
-			Us.AutoUpdateFlipState();
-			Ribbon.pb01.ItemText = "Auto Update: " + Us.AutoUpdateGetDescription();
+//			Us.AutoUpdateFlipState();
+//			Ribbon.pb01.ItemText = "Auto Update: " + Us.AutoUpdateGetDescription();
 
 			return Result.Succeeded;
 		}

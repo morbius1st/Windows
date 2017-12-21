@@ -1,4 +1,6 @@
-﻿namespace RevitWindows.Properties {
+﻿using System.Configuration;
+
+namespace RevitWindows.Properties {
     
     
     // This class allows you to handle specific events on the settings class:
@@ -24,5 +26,6 @@
         private void SettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {
             // Add code to handle the SettingsSaving event here.
         }
-    }
+
+	}
 }

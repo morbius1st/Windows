@@ -20,25 +20,25 @@ namespace RevitWindows {
 //            // Add code to handle the SettingsSaving event here.
 //        }
 
-		internal string AutoUpdateGetDescription()
-		{
-			if (AutoUpdate)
-			{
-				return "On - Turn Off";
-			} 
-			return "Off - Turn On";
-		}
-
-		internal void AutoUpdateFlipState()
-		{
-			AutoUpdate = !AutoUpdate;
-			UserSettings.Default.Save();
-		}
-
-		internal void Test()
-		{
-			
-		}
+//		internal string AutoUpdateGetDescription()
+//		{
+//			if (AutoUpdate)
+//			{
+//				return "On - Turn Off";
+//			} 
+//			return "Off - Turn On";
+//		}
+//
+//		internal void AutoUpdateFlipState()
+//		{
+//			AutoUpdate = !AutoUpdate;
+//			UserSettings.Default.Save();
+//		}
+//
+//		internal void Test()
+//		{
+//			
+//		}
 
 
 

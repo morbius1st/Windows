@@ -7,6 +7,7 @@ using System.Configuration;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.UI;
 using EnvDTE;
+using RevitWindows.Properties;
 using static RevitWindows.RevitWindow;
 using static RevitWindows.WindowApiUtilities;
 using static RevitWindows.WindowUtilities;
@@ -42,7 +43,7 @@ namespace RevitWindows
 		internal static Application App;
 		internal static Document Doc;
 
-		internal static UserSettings Us;
+		internal static Properties.UserSettings Us;
 
 		internal static bool _autoUpdateOnActivateWindow = true;
 
@@ -67,22 +68,35 @@ namespace RevitWindows
 				App = Uiapp.Application;
 				Doc = Uidoc.Document;
 
-				Us = new UserSettings();
+				Us = Properties.UserSettings.Default;
+
+
 
 				_parent = GetMainWinHandle(Doc);
 
 				_winMgrUtil = new WindowManagerUtilities(_parent);
 			}
 
-			RevitWindows.Properties.Settings x = Properties.Settings.Default;
-			
 
-			TaskDialog.Show("revit windows", "test is| " + x.Alpha + " " + x.Beta);
+			RevitWindows.Properties.UserSettings sx = Properties.UserSettings.Default;
 
-			x.Beta++;
-			x.Save();
 
-			TaskDialog.Show("revit windows", "test is| " + x.Alpha + " " + x.Beta);
+//			RevitWindows.Properties.Settings x = Properties.Settings.Default;
+//			
+//
+//			TaskDialog.Show("revit windows", "test is| " + x.Alpha + " " + x.Beta);
+//
+//			x.Beta++;
+//			x.Save();
+//
+//			TaskDialog.Show("revit windows", "test is| " + x.Alpha + " " + x.Beta);
+
+			TD("marg top| " + sx.MarginTop);
+
+			sx.MarginTop = 4;
+			sx.Save();
+
+			TD("marg top| " + sx.MarginTop);
 
 			return _WinMgr;
 		}
